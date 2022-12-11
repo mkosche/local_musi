@@ -526,6 +526,17 @@ class musi_table extends wunderbyte_table {
         return $this->outputbooking->render_col_text_link($data);
     }
 
+    public function col_courseid($values) {
+
+        if ($values->courseid != null && $values->courseid != 0) {
+            $url = new moodle_url('/course/view.php', ['id' => $values->courseid]);
+            $ret_html = html_writer::tag('i','',['class' => 'fa fa-graduation-cap']).' '.get_string('tocoursecontent','local_musi');
+            return html_writer::tag('a', $ret_html, ['href' => $url->out(false), 'class' => 'btn btn-info']);
+        }
+
+        return print_r($values,true);
+    }
+
     /**
      * Override wunderbyte_table function and use own renderer.
      *

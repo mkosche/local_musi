@@ -33,6 +33,7 @@ $string['pluginname'] = 'M:USI Dashboard';
 $string['shortcodeslistofbookingoptions'] = 'All courses as list';
 $string['shortcodeslistofbookingoptionsascards'] = 'All courses as cards';
 $string['shortcodeslistofmybookingoptionsascards'] = 'My courses as cards';
+$string['shortcodeslistofmybookingoptionsaslist'] = 'My courses as list';
 $string['shortcodeslistofteachersascards'] = 'List of teachers as cards';
 
 // List of all courses.
@@ -146,3 +147,6 @@ $string['contractformula'] = 'Contract formula';
 $string['contractformula_desc'] = 'Configure how contracts affect staff invoices and define special cases using a JSON formula.';
 $string['contractformulatest'] = 'Test the contract formula';
 $string['editcontractformula'] = 'Edit contract formula';
+
+// My Courses List
+$string['tocoursecontent'] = 'Course content';

@@ -534,7 +534,7 @@ class musi_table extends wunderbyte_table {
             return html_writer::tag('a', $ret_html, ['href' => $url->out(false), 'class' => 'btn btn-info']);
         }
 
-        return print_r($values,true);
+        return "";
     }
 
     /**

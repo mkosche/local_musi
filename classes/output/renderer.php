@@ -49,6 +49,17 @@ class renderer extends plugin_renderer_base {
         return $o;
     }
 
+    /** Function to render the card_content_quicklinks
+     * @param mixed $data
+     * @return string
+     */
+    public function render_card_quicklinks($data) {
+        $o = '';
+        $data = $data->export_for_template($this);
+        $o .= $this->render_from_template('local_musi/dashboard_card_quicklinks', $data);
+        return $o;
+    }
+
     /** Function to render the cards table
      * @param any $data
      * @param string $data

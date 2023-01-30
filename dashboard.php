@@ -21,7 +21,6 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-use local_musi\output\dashboard;
 
 require_once(__DIR__ . '/../../config.php');
 
@@ -65,9 +64,16 @@ $PAGE->requires->js_call_amd(
     ]
 );
 
+
+
+// Add dynamic tabs to our page.
+$main_tabs = new local_musi\output\main_tabs();
+$tabsoutput = new core\output\dynamic_tabs($main_tabs->get_main_tabs());
+$tabs = $tabsoutput->export_for_template($OUTPUT);
+
 // Render the page content via mustache templates.
-$output = $PAGE->get_renderer('local_musi');
-$data = new dashboard();
-echo $output->render_dashboard($data);
+//$output = $PAGE->get_renderer('local_musi');
+//$data = new dashboard();
+echo $OUTPUT->render_from_template('local_musi/dynamic_sidebar_menu',$tabs);
 
 echo $OUTPUT->footer();

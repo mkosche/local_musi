@@ -94,6 +94,8 @@ $string['coursesboughtcashier'] = 'Courses bought at cashier';
 $string['paymentsaborted'] = 'Aborted payments';
 $string['bookinganswersdeleted'] = "Deleted booking answers";
 
+$string['quicklinks'] = 'Quicklinks';
+$string['quicklinks_desc'] = 'Overview of the most important links.';
 $string['settingsandreports'] = 'Settings & Reports';
 $string['settingsandreports_desc'] = 'Various settings and reports relevant for M:USI.';
 $string['editentities'] = 'Edit entities';

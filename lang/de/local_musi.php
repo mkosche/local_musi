@@ -94,6 +94,8 @@ $string['coursesboughtcashier'] = 'Gekaufte Kurse (Kassa)';
 $string['paymentsaborted'] = 'Abgebrochene Zahlungen';
 $string['bookinganswersdeleted'] = "Gelöschte Buchungen";
 
+$string['quicklinks'] = 'Quicklinks';
+$string['quicklinks_desc'] = 'Die wichtigsten Links auf einen Blick';
 $string['settingsandreports'] = 'Einstellungen & Berichte';
 $string['settingsandreports_desc'] = 'Verschiedene Einstellungen und Berichte, die für M:USI relevant sind.';
 $string['editentities'] = 'Sportstätten bearbeiten';

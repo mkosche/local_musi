@@ -60,6 +60,8 @@ $string['coursesboughtcashier'] = 'Courses bought at cashier';
 $string['paymentsaborted'] = 'Aborted payments';
 $string['bookinganswersdeleted'] = "Deleted booking answers";
 
+$string['quicklinks'] = 'Quicklinks';
+$string['quicklinks_desc'] = 'Overview of the most important links.';
 $string['settingsandreports'] = 'Settings & Reports';
 $string['settingsandreports_desc'] = 'Various settings and reports relevant for M:USI.';
 $string['editentities'] = 'Edit entities';
@@ -148,7 +150,7 @@ $string['dayofweek'] = "Weekday";
 $string['sport'] = "Sport";
 
 // Nav.
-$string['musi'] = 'MUSI';
+$string['musi'] = 'M:USI';
 $string['cachier'] = 'Cashiers desk';
 $string['entities'] = 'Sport locations';
 $string['coursename'] = "Coursename";

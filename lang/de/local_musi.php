@@ -59,6 +59,8 @@ $string['coursesboughtcashier'] = 'Gekaufte Kurse (Kassa)';
 $string['paymentsaborted'] = 'Abgebrochene Zahlungen';
 $string['bookinganswersdeleted'] = "Gelöschte Buchungen";
 
+$string['quicklinks'] = 'Quicklinks';
+$string['quicklinks_desc'] = 'Die wichtigsten Links auf einen Blick';
 $string['settingsandreports'] = 'Einstellungen & Berichte';
 $string['settingsandreports_desc'] = 'Verschiedene Einstellungen und Berichte, die für M:USI relevant sind.';
 $string['editentities'] = 'Sportstätten bearbeiten';
@@ -144,7 +146,7 @@ $string['coursesiteacharchive'] = 'Kurse, die ich in vergangenen Semestern unter
 $string['musi:canedit'] = 'Nutzer:in darf verwalten';
 
 // Nav.
-$string['musi'] = 'MUSI';
+$string['musi'] = 'M:USI';
 $string['cachier'] = 'Kassa';
 $string['entities'] = 'Sportstätten';
 

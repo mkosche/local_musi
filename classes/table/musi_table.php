@@ -60,6 +60,9 @@ class musi_table extends wunderbyte_table {
     /** @var context_module $buyforuser */
     private $context = null;
 
+    /** @var boolean $show_units */
+    private $show_units = false;
+
     /**
      * Constructor
      * @param string $uniqueid all tables have to have a unique id, this is used
@@ -128,6 +131,16 @@ class musi_table extends wunderbyte_table {
         // Render col_teacher using a template.
         $settings = singleton_service::get_instance_of_booking_option_settings($values->id, $values);
         $data = new col_teacher($values->id, $settings);
+
+        $num_items = count($data->teachers);
+        $i = 0;
+        foreach ($data->teachers as $key=>&$value){
+            if(++$i === $num_items) {
+                $value['last'] = true;
+            }else{
+                $value['last'] = false;
+            }
+        }
         return $this->outputmusi->render_col_teacher($data);
     }
 
@@ -140,7 +153,6 @@ class musi_table extends wunderbyte_table {
      * @throws dml_exception
      */
     public function col_price($values) {
-
         // Render col_price using a template.
         $settings = singleton_service::get_instance_of_booking_option_settings($values->id, $values);
 
@@ -447,13 +459,14 @@ class musi_table extends wunderbyte_table {
         $settings = singleton_service::get_instance_of_booking_option_settings($values->id, $values);
 
         $units = null;
-        if (!empty($settings->dayofweektime)) {
-            $units = dates_handler::calculate_and_render_educational_units($settings->dayofweektime);
-        }
 
         if (!empty($settings->dayofweektime)) {
-            $ret = $settings->dayofweektime;
-            if (!$this->is_downloading() && !empty($units)) {
+            $local_weekdays = dates_handler::get_localized_weekdays(current_language());
+            $dayinfo = dates_handler::prepare_day_info($settings->dayofweektime);
+            $ret = $local_weekdays[$dayinfo['day']].', '.$dayinfo['starttime'].' -- '.$dayinfo['endtime'];
+
+            if (!$this->is_downloading() && !empty($units) && $this->show_units) {
+                $units = dates_handler::calculate_and_render_educational_units($settings->dayofweektime);
                 $ret .= " ($units)";
             }
         }
@@ -618,6 +631,17 @@ class musi_table extends wunderbyte_table {
         }
 
         return $this->outputbooking->render_col_text_link($data);
+    }
+
+    public function col_courseid($values) {
+
+        if ($values->courseid != null && $values->courseid != 0) {
+            $url = new moodle_url('/course/view.php', ['id' => $values->courseid]);
+            $ret_html = html_writer::tag('i','',['class' => 'fa fa-graduation-cap']).' '.get_string('tocoursecontent','local_musi');
+            return html_writer::tag('a', $ret_html, ['href' => $url->out(false), 'class' => 'btn btn-info']);
+        }
+
+        return "";
     }
 
     /**

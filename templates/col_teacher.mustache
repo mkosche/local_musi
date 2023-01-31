@@ -23,7 +23,9 @@
     Data attributes required for JS:
     * data-region
 }}
-
+<i class="fa fa-graduation-cap mt-auto mb-auto mr-1 fa-fw" aria-hidden="true"></i>
+<span>
 {{#teachers}}
-    <i class="fa fa-graduation-cap" aria-hidden="true"></i> <a href="{{teacherurl}}">{{firstname}} {{lastname}}</a>&nbsp;
+     <a class="text-secondary font-size-m" href="{{teacherurl}}">{{firstname}} {{lastname}}</a>{{^last}}, {{/last}}
 {{/teachers}}
+</span>

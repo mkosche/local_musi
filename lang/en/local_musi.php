@@ -33,6 +33,7 @@ $string['pluginname'] = 'M:USI Dashboard';
 $string['shortcodeslistofbookingoptions'] = 'All courses as list';
 $string['shortcodeslistofbookingoptionsascards'] = 'All courses as cards';
 $string['shortcodeslistofmybookingoptionsascards'] = 'My courses as cards';
+$string['shortcodeslistofmybookingoptionsaslist'] = 'My courses as list';
 $string['shortcodeslistofteachersascards'] = 'List of teachers as cards';
 $string['shortcodeslistofmyteachedbookingoptionsascards'] = 'Courses I teach as cards';
 
@@ -165,3 +166,6 @@ $string['editcontractformula'] = 'Edit contract formula';
 
 // Userinformation.mustache.
 $string['userinformation'] = 'Benutzer-Information';
+
+// My Courses List
+$string['tocoursecontent'] = 'Course content';

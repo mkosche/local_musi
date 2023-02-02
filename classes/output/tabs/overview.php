@@ -72,6 +72,10 @@ class overview extends base {
             $returnarray['item'][] = $item;
         }
 
+        $returnarray['coursesavailable'] = $data->coursesavailable;
+        $returnarray['coursesbooked'] = $data->coursesbooked;
+        $returnarray['locations'] = $data->locations;
+
         return $returnarray;
     }
 
@@ -96,6 +100,27 @@ class overview extends base {
 
         $url = new moodle_url('/local/musi/teachers.php');
         $data->viewteachers = ['link' => $url->out(false), 'icon' => 'fa-user'];
+
+        global $DB;
+
+        if ($activeinstance = get_config('local_musi', 'shortcodessetinstance')) {
+            $sql = "SELECT COUNT(*)
+                FROM {booking_options} bo
+                JOIN {course_modules} cm ON bo.bookingid=cm.instance
+                JOIN {modules} m ON cm.module=m.id
+                WHERE m.name='booking'
+                AND cm.id=:cmid";
+            $coursesavailable = $DB->count_records_sql($sql, ['cmid' => $activeinstance]);
+        } else {
+            $coursesavailable = 0;
+        }
+
+        $coursesbooked = $DB->count_records('booking_answers', ['waitinglist' => MUSI_STATUSPARAM_BOOKED]);
+        $locations = $DB->count_records('local_entities');
+
+        $data->coursesavailable = $coursesavailable;
+        $data->coursesbooked = $coursesbooked;
+        $data->locations = $locations;
 
         return $data;
     }

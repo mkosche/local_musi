@@ -5,7 +5,17 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="07400882-b435-4020-80c0-383e2c808d84" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/classes/output/tabs/prices.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/classes/output/tabs/overview.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/output/tabs/overview.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dashboard.php" beforeDir="false" afterPath="$PROJECT_DIR$/dashboard.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lang/de/local_musi.php" beforeDir="false" afterPath="$PROJECT_DIR$/lang/de/local_musi.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lang/en/local_musi.php" beforeDir="false" afterPath="$PROJECT_DIR$/lang/en/local_musi.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/styles.css" beforeDir="false" afterPath="$PROJECT_DIR$/styles.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/dashboard.mustache" beforeDir="false" afterPath="$PROJECT_DIR$/templates/dashboard.mustache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/dashboard_card_quicklinks.mustache" beforeDir="false" afterPath="$PROJECT_DIR$/templates/dashboard_card_quicklinks.mustache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/dynamic_sidebar_menu.mustache" beforeDir="false" afterPath="$PROJECT_DIR$/templates/dynamic_sidebar_menu.mustache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/version.php" beforeDir="false" afterPath="$PROJECT_DIR$/version.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

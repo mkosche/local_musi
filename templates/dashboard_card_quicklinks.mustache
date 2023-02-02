@@ -23,9 +23,46 @@
     Data attributes required for JS:
     * data-region
 }}
-
-{{#item}}
-    {{#link}}
-        <a href="{{.}}" class=" btn btn-outline-info btn-lg btn-block"><i class="fa {{{icon}}}"></i> {{{key}}} </a>
-    {{/link}}
-{{/item}}
+<div class="row">
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body">
+                <span class="dashboard-number available-courses">{{coursesavailable}}</span>
+                <h5 class="dashboard-number-title">{{#str}} coursesavailable, local_musi {{/str}}</h5>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card ">
+            <div class="card-body">
+                <span class="dashboard-number booked-courses">{{coursesbooked}}</span>
+                <h5 class="dashboard-number-title">{{#str}} coursesbooked, local_musi {{/str}}</h5>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card ">
+            <div class="card-body">
+                <span class="dashboard-number available-locations">{{locations}}</span>
+                <h5 class="dashboard-number-title">{{#str}} entitiesavailable, local_musi {{/str}}</h5>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row mt-2 mb-3">
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header text-center bg-white">
+                <h4>Qucklinks</h4>
+            </div>
+    <div class="card-body">
+        {{#item}}
+            {{#link}}
+                <a href="{{.}}" class=" btn btn-outline-info btn-lg btn-block"><i class="fa {{{icon}}}"></i> {{{key}}} </a>
+            {{/link}}
+        {{/item}}
+    </div>
+        </div>
+    </div>
+</div>
+</div>

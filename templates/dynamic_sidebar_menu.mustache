@@ -38,12 +38,14 @@
 <script>
     M.util.js_pending('core_dynamic_tabs_init');
 </script>
-<nav class="navbar sticky-top flex-md-nowrap p-0">
-    <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="#">{{#str}} musi, local_musi {{/str}}</a>
-</nav>
-<div class="container-fluid">
+
+
+<div class="container-fluid" >
     <div class="dynamictabs row">
-        <nav class="col-md-2 d-none d-md-block bg-light sidebar">
+        <nav class="col-md-2 d-none d-md-block bg-white sidebar shadow" style="border-right: gray 1px solid">
+            <nav class="navbar sticky-top flex-md-nowrap p-0 bg-white">
+                <a class="navbar-brand col-sm-3 col-md-2 mr-0 bg-white" href="#">{{#str}} musi, local_musi {{/str}}</a>
+            </nav>
             <div class="sidebar-sticky">
             {{#showtabsnavigation}}
                 <ul class="nav flex-column  mb-4 moodle-has-zindex" id="dynamictabs-tabs" role="tablist">
@@ -58,7 +60,7 @@
             {{/showtabsnavigation}}
             </div>
         </nav>
-            <div class="tab-content col-sm-9" id="dynamictabs-content">
+            <div class="tab-content col-md-9 bg-light" id="dynamictabs-content">
                 {{#tabs}}
                     <div class="tab-pane fade container-fluid {{#active}}show active{{/active}}"
                          id="{{shortname}}"
@@ -73,6 +75,7 @@
             </div>
     </div>
 </div>
+
 
 {{#js}}
     require(['core/dynamic_tabs'], function(Tabs) {

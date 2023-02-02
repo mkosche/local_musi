@@ -260,6 +260,25 @@
     right: 0;
 }
 
+.dashboard-number{
+    font-size: 40px;
+    float: left;
+}
+
+.dashboard-number-title{
+    text-align: right;
+}
+
+.dashboard-number.available-courses{
+    color: #196ECD;
+}
+.dashboard-number.booked-courses {
+    color: #FFC78B;
+}
+.dashboard-number.available-locations {
+    color: #7FECCB;
+}
+
 div.columnclass.titleprefix {
     display: none;
 }

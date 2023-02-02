@@ -32,6 +32,7 @@ use local_musi\output\page_allteachers;
 use local_musi\output\userinformation;
 use local_musi\table\musi_table;
 use local_shopping_cart\shopping_cart;
+use local_shopping_cart\shopping_cart_credits;
 use mod_booking\booking;
 use mod_booking\singleton_service;
 use moodle_url;
@@ -1032,6 +1033,50 @@ class shortcodes {
         $output = $PAGE->get_renderer('local_musi');
         // And return the rendered page showing all teachers.
         return $output->render_allteacherspage($data);
+    }
+
+    /**
+     * Prints out all teachers as cards.
+     *
+     * @param string $shortcode
+     * @param array $args
+     * @param string|null $content
+     * @param object $env
+     * @param Closure $next
+     * @return void
+     */
+    public static function userdashboardcards($shortcode, $args, $content, $env, $next) {
+        global $DB, $PAGE, $USER;
+
+        // If the id argument was not passed on, we have a fallback in the connfig.
+        if (!isset($args['id'])) {
+            $args['id'] = get_config('local_musi', 'shortcodessetinstance');
+        }
+
+        // To prevent misconfiguration, id has to be there and int.
+        if (!(isset($args['id']) && $args['id'] && is_int((int)$args['id']))) {
+            return 'Set id of booking instance';
+        }
+
+        if (!$booking = singleton_service::get_instance_of_booking_by_cmid($args['id'])) {
+            return 'Couldn\'t find right booking instance ' . $args['id'];
+        }
+
+        $user = $USER;
+
+        $booked = $booking->get_user_booking_count($USER);
+        $as_teacher = $DB->get_fieldset_select('booking_teachers', 'optionid', "userid = {$USER->id} AND bookingid = $booking->id ");
+        $credits = shopping_cart_credits::get_balance($USER->id);
+
+
+
+        $data['booked'] = $booked;
+        $data['teacher'] = count($as_teacher);
+        $data['credits'] = $credits[0];
+
+        $output = $PAGE->get_renderer('local_musi');
+        return $output->render_user_dashboard_cards($data);
+
     }
 
     /**

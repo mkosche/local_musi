@@ -5,6 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="07400882-b435-4020-80c0-383e2c808d84" name="Changes" comment="">
+<<<<<<< HEAD
       <change afterPath="$PROJECT_DIR$/classes/output/tabs/prices.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/classes/output/tabs/overview.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/output/tabs/overview.php" afterDir="false" />
@@ -15,6 +16,13 @@
       <change beforePath="$PROJECT_DIR$/templates/dashboard.mustache" beforeDir="false" afterPath="$PROJECT_DIR$/templates/dashboard.mustache" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/templates/dashboard_card_quicklinks.mustache" beforeDir="false" afterPath="$PROJECT_DIR$/templates/dashboard_card_quicklinks.mustache" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/templates/dynamic_sidebar_menu.mustache" beforeDir="false" afterPath="$PROJECT_DIR$/templates/dynamic_sidebar_menu.mustache" afterDir="false" />
+=======
+      <change afterPath="$PROJECT_DIR$/templates/userdashboardcards.mustache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/classes/output/renderer.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/output/renderer.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/classes/shortcodes.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/shortcodes.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/db/shortcodes.php" beforeDir="false" afterPath="$PROJECT_DIR$/db/shortcodes.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/styles.css" beforeDir="false" afterPath="$PROJECT_DIR$/styles.css" afterDir="false" />
+>>>>>>> UserDashboardCards
       <change beforePath="$PROJECT_DIR$/version.php" beforeDir="false" afterPath="$PROJECT_DIR$/version.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />

@@ -60,7 +60,7 @@
     }
 }}
 
-<div class="wunderbyte_table_container_{{idstring}} {{#showcomponentstoggle}}wunderbyte_table_filter_on{{/showcomponentstoggle}} mt-2 px-2">
+<div class="wunderbyte_table_container_{{idstring}} {{#showcomponentstoggle}}wunderbyte_table_filter_on{{/showcomponentstoggle}} mt-2 px-2 musi-courses-container">
      <div class="container-fluid">
           <div class="row mb-2">
                <div>
@@ -82,6 +82,7 @@
                {{> local_wunderbyte_table/component_infinitescroll }}
           </aside>
           <div class= "wunderbyteTableClass" id='a{{idstring}}'>
+               {{> local_wunderbyte_table/component_countlabel }}
                {{> local_musi/table_list }}
           </div>
      </div>

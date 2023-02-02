@@ -35,19 +35,3 @@
         "pricecategoryname" : "student"
     }
 }}
-{{#price}}
-<table class="pricecurrency font-weight-bold w-100">
-    <tr>
-        <td>{{price}} {{currency}}</td>
-    </tr>
-</table>
-<div>{{> local_shopping_cart/addtocartdb }}</div>
-{{#priceitems}}
-    <p><i>{{pricecategoryname}}</i></p>
-{{/priceitems}}
-{{/price}}
-{{^price}}
-    {{#priceitems}}
-        <div class="pricecurrency"> {{price}} {{currency}} <i>{{pricecategoryname}}</i></div>
-    {{/priceitems}}
-{{/price}}

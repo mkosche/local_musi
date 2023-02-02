@@ -105,4 +105,15 @@ class renderer extends plugin_renderer_base {
         $o .= $this->render_from_template($templatename, $data);
         return $o;
     }
+
+    /** Function to render the cards table
+     * @param any $data
+     * @param string $data
+     * @return string
+     */
+    public function render_user_dashboard_cards($data) {
+        $o = '';
+        $o .= $this->render_from_template('local_musi/userdashboardcards', $data);
+        return $o;
+    }
 }

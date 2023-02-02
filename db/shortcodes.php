@@ -62,4 +62,9 @@ $shortcodes = [
         'wraps' => false,
         'description' => 'shortcodesuserinformation'
     ],
+    'userdashboardcards' => [
+        'callback' => 'local_musi\shortcodes::userdashboardcards',
+        'wraps' => false,
+        'description' => 'shortcodesuserinformation'
+    ],
 ];

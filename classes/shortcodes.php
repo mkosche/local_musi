@@ -88,34 +88,10 @@ class shortcodes {
      */
     public static function allcourseslist($shortcode, $args, $content, $env, $next) {
 
-        // If the id argument was not passed on, we have a fallback in the connfig.
-        if (!isset($args['id'])) {
-            $args['id'] = get_config('local_musi', 'shortcodessetinstance');
-        }
-
-        // To prevent misconfiguration, id has to be there and int.
-        if (!(isset($args['id']) && $args['id'] && is_int((int)$args['id']))) {
-            return 'Set id of booking instance';
-        }
-
-        if (!$booking = singleton_service::get_instance_of_booking_by_cmid($args['id'])) {
-            return 'Couldn\'t find right booking instance ' . $args['id'];
-        }
+        $booking = self::getBooking($args);
 
         if (!isset($args['category']) || !$category = ($args['category'])) {
             $category = '';
-        }
-
-        if (!isset($args['filter']) || !$showfilter = ($args['filter'])) {
-            $showfilter = false;
-        }
-
-        if (!isset($args['search']) || !$showsearch = ($args['search'])) {
-            $showsearch = false;
-        }
-
-        if (!isset($args['sort']) || !$showsort = ($args['sort'])) {
-            $showsort = false;
         }
 
         if (!isset($args['image']) || !$showimage = ($args['image'])) {
@@ -139,12 +115,7 @@ class shortcodes {
             $perpage = 1000;
         }
 
-        $tablename = bin2hex(random_bytes(12));
-
-        $table = new musi_table($tablename, $booking);
-
-        // Without defining sorting won't work!
-        $table->define_columns(['titleprefix']);
+        $table = self::initTableForCourses($booking);
 
         $table->showcountlabel = $countlabel;
         $wherearray = ['bookingid' => (int)$booking->id];
@@ -176,34 +147,7 @@ class shortcodes {
 
         self::generate_table_for_list($table);
 
-        // Id is not really something one wants to filter, but we need the dataset on the html element.
-        // The key "id" won't be rendered in filter json, though.
-        if ($showfilter !== false) {
-            self::define_filtercolumns($table);
-        }
-
-        if ($showsearch !== false) {
-            $table->define_fulltextsearchcolumns(['titleprefix', 'text', 'sport', 'description', 'location', 'teacherobjects']);
-        }
-
-        if ($showsort !== false) {
-            $table->define_sortablecolumns([
-                'titleprefix' => get_string('titleprefix', 'local_musi'),
-                'text' => get_string('coursename', 'local_musi'),
-                'sport' => get_string('sport', 'local_musi'),
-                'location' => get_string('location', 'local_musi'),
-            ]);
-        } else {
-            $table->sortable(true, 'text');
-        }
-
-        // It's important to have the baseurl defined, we use it as a return url at one point.
-        $baseurl = new moodle_url(
-            $_SERVER['REQUEST_URI'],
-            $_GET
-        );
-
-        $table->define_baseurl($baseurl->out());
+        self::setTableOptionsFromArguments($table, $args);
 
         $table->cardsort = true;
 
@@ -239,34 +183,10 @@ class shortcodes {
      */
     public static function allcoursesgrid($shortcode, $args, $content, $env, $next) {
 
-        // If the id argument was not passed on, we have a fallback in the connfig.
-        if (!isset($args['id'])) {
-            $args['id'] = get_config('local_musi', 'shortcodessetinstance');
-        }
-
-        // To prevent misconfiguration, id has to be there and int.
-        if (!(isset($args['id']) && $args['id'] && is_int((int)$args['id']))) {
-            return 'Set id of booking instance';
-        }
-
-        if (!$booking = singleton_service::get_instance_of_booking_by_cmid($args['id'])) {
-            return 'Couldn\'t find right booking instance ' . $args['id'];
-        }
+        $booking = self::getBooking($args);
 
         if (!isset($args['category']) || !$category = ($args['category'])) {
             $category = '';
-        }
-
-        if (!isset($args['filter']) || !$showfilter = ($args['filter'])) {
-            $showfilter = false;
-        }
-
-        if (!isset($args['search']) || !$showsearch = ($args['search'])) {
-            $showsearch = false;
-        }
-
-        if (!isset($args['sort']) || !$showsort = ($args['sort'])) {
-            $showsort = false;
         }
 
         // phpcs:ignore Squiz.PHP.CommentedOutCode.Found
@@ -282,9 +202,7 @@ class shortcodes {
             $perpage = 1000;
         }
 
-        $tablename = bin2hex(random_bytes(12));
-
-        $table = new musi_table($tablename, $booking);
+        $table = self::initTableForCourses($booking);
 
         // Without defining sorting won't work!
         $table->define_columns(['titleprefix']);
@@ -371,28 +289,7 @@ class shortcodes {
 
         $table->is_downloading('', 'List of booking options');
 
-        // Id is not really something one wants to filter, but we need the dataset on the html element.
-        // The key "id" won't be rendered in filter json, though.
-        if ($showfilter !== false) {
-            self::define_filtercolumns($table);
-        }
-
-        if ($showsearch !== false) {
-            $table->define_fulltextsearchcolumns(['titleprefix', 'text', 'sport', 'description', 'location', 'teacherobjects']);
-        }
-
-        if ($showsort !== false) {
-            $table->define_sortablecolumns([
-                'titleprefix' => get_string('titleprefix', 'local_musi'),
-                'text' => get_string('coursename', 'local_musi'),
-                'sport' => get_string('sport', 'local_musi'),
-                'location' => get_string('location', 'local_musi'),
-            ]);
-        } else {
-            $table->sortable(true, 'text');
-        }
-
-        $table->cardsort = true;
+        self::setTableOptionsFromArguments($table, $args);
 
         // This allows us to use infinite scrolling, No pages will be used.
         $table->infinitescroll = 100;
@@ -431,34 +328,10 @@ class shortcodes {
             return '';
         } */
 
-        // If the id argument was not passed on, we have a fallback in the connfig.
-        if (!isset($args['id'])) {
-            $args['id'] = get_config('local_musi', 'shortcodessetinstance');
-        }
-
-        // To prevent misconfiguration, id has to be there and int.
-        if (!(isset($args['id']) && $args['id'] && is_int((int)$args['id']))) {
-            return 'Set id of booking instance';
-        }
-
-        if (!$booking = singleton_service::get_instance_of_booking_by_cmid($args['id'])) {
-            return 'Couldn\'t find right booking instance ' . $args['id'];
-        }
+        $booking = self::getBooking($args);
 
         if (!isset($args['category']) || !$category = ($args['category'])) {
             $category = '';
-        }
-
-        if (!isset($args['filter']) || !$showfilter = ($args['filter'])) {
-            $showfilter = false;
-        }
-
-        if (!isset($args['search']) || !$showsearch = ($args['search'])) {
-            $showsearch = false;
-        }
-
-        if (!isset($args['sort']) || !$showsort = ($args['sort'])) {
-            $showsort = false;
         }
 
         // phpcs:ignore Squiz.PHP.CommentedOutCode.Found
@@ -474,9 +347,7 @@ class shortcodes {
             $perpage = 1000;
         }
 
-        $tablename = bin2hex(random_bytes(12));
-
-        $table = new musi_table($tablename, $booking);
+        $table = self::initTableForCourses($booking);
 
         // Without defining sorting won't work!
         $table->define_columns(['titleprefix']);
@@ -504,28 +375,7 @@ class shortcodes {
 
         self::generate_table_for_cards($table);
 
-        // Id is not really something one wants to filter, but we need the dataset on the html element.
-        // The key "id" won't be rendered in filter json, though.
-        if ($showfilter !== false) {
-            self::define_filtercolumns($table);
-        }
-
-        if ($showsearch !== false) {
-            $table->define_fulltextsearchcolumns(['titleprefix', 'text', 'sport', 'description', 'location', 'teacherobjects']);
-        }
-
-        if ($showsort !== false) {
-            $table->define_sortablecolumns([
-                'titleprefix' => get_string('titleprefix', 'local_musi'),
-                'text' => get_string('coursename', 'local_musi'),
-                'sport' => get_string('sport', 'local_musi'),
-                'location' => get_string('location', 'local_musi'),
-            ]);
-        } else {
-            $table->sortable(true, 'text');
-        }
-
-        $table->cardsort = true;
+        self::setTableOptionsFromArguments($table, $args);
 
         // This allows us to use infinite scrolling, No pages will be used.
         $table->infinitescroll = 30;
@@ -561,34 +411,10 @@ class shortcodes {
 
         global $USER;
 
-        // If the id argument was not passed on, we have a fallback in the connfig.
-        if (!isset($args['id'])) {
-            $args['id'] = get_config('local_musi', 'shortcodessetinstance');
-        }
-
-        // To prevent misconfiguration, id has to be there and int.
-        if (!(isset($args['id']) && $args['id'] && is_int((int)$args['id']))) {
-            return 'Set id of booking instance';
-        }
-
-        if (!$booking = singleton_service::get_instance_of_booking_by_cmid($args['id'])) {
-            return 'Couldn\'t find right booking instance ' . $args['id'];
-        }
+        $booking = self::getBooking($args);
 
         if (!isset($args['category']) || !$category = ($args['category'])) {
             $category = '';
-        }
-
-        if (!isset($args['filter']) || !$showfilter = ($args['filter'])) {
-            $showfilter = false;
-        }
-
-        if (!isset($args['search']) || !$showsearch = ($args['search'])) {
-            $showsearch = false;
-        }
-
-        if (!isset($args['sort']) || !$showsort = ($args['sort'])) {
-            $showsort = false;
         }
 
         if (
@@ -599,9 +425,7 @@ class shortcodes {
             $perpage = 1000;
         }
 
-        $tablename = bin2hex(random_bytes(12));
-
-        $table = new musi_table($tablename, $booking);
+        $table = self::initTableForCourses($booking);
 
         // Without defining sorting won't work!
         $table->define_columns(['titleprefix']);
@@ -629,34 +453,7 @@ class shortcodes {
 
         self::generate_table_for_cards($table);
 
-        // Id is not really something one wants to filter, but we need the dataset on the html element.
-        // The key "id" won't be rendered in filter json, though.
-        if ($showfilter !== false) {
-            self::define_filtercolumns($table);
-        }
-
-        if ($showsearch !== false) {
-            $table->define_fulltextsearchcolumns(['titleprefix', 'text', 'sport', 'description', 'location', 'teacherobjects']);
-        }
-
-        if ($showsort !== false) {
-            $table->define_sortablecolumns([
-                'titleprefix' => get_string('titleprefix', 'local_musi'),
-                'text' => get_string('coursename', 'local_musi'),
-                'sport' => get_string('sport', 'local_musi'),
-                'location' => get_string('location', 'local_musi'),
-            ]);
-        } else {
-            $table->sortable(true, 'text');
-        }
-
-        // It's important to have the baseurl defined, we use it as a return url at one point.
-        $baseurl = new moodle_url(
-            $_SERVER['REQUEST_URI'],
-            $_GET
-        );
-
-        $table->define_baseurl($baseurl->out());
+        self::setTableOptionsFromArguments($table, $args);
 
         $table->cardsort = true;
 
@@ -692,35 +489,7 @@ class shortcodes {
 
         global $USER;
 
-        // If the id argument was not passed on, we have a fallback in the connfig.
-        if (!isset($args['id'])) {
-            $args['id'] = get_config('local_musi', 'shortcodessetinstance');
-        }
-
-        // To prevent misconfiguration, id has to be there and int.
-        if (!(isset($args['id']) && $args['id'] && is_int((int)$args['id']))) {
-            return 'Set id of booking instance';
-        }
-
-        if (!$booking = singleton_service::get_instance_of_booking_by_cmid($args['id'])) {
-            return 'Couldn\'t find right booking instance ' . $args['id'];
-        }
-
-        if (!isset($args['category']) || !$category = ($args['category'])) {
-            $category = '';
-        }
-
-        if (!isset($args['filter']) || !$showfilter = ($args['filter'])) {
-            $showfilter = false;
-        }
-
-        if (!isset($args['search']) || !$showsearch = ($args['search'])) {
-            $showsearch = false;
-        }
-
-        if (!isset($args['sort']) || !$showsort = ($args['sort'])) {
-            $showsort = false;
-        }
+        $booking = self::getBooking($args);
 
         if (
             !isset($args['perpage'])
@@ -730,9 +499,7 @@ class shortcodes {
             $perpage = 1000;
         }
 
-        $tablename = bin2hex(random_bytes(12));
-
-        $table = new musi_table($tablename, $booking);
+        $table =self::initTableForCourses($booking);
 
         // Without defining sorting won't work!
         $table->define_columns(['titleprefix']);
@@ -752,34 +519,7 @@ class shortcodes {
 
         self::generate_table_for_cards($table);
 
-        // Id is not really something one wants to filter, but we need the dataset on the html element.
-        // The key "id" won't be rendered in filter json, though.
-        if ($showfilter !== false) {
-            self::define_filtercolumns($table);
-        }
-
-        if ($showsearch !== false) {
-            $table->define_fulltextsearchcolumns(['titleprefix', 'text', 'sport', 'description', 'location', 'teacherobjects']);
-        }
-
-        if ($showsort !== false) {
-            $table->define_sortablecolumns([
-                'titleprefix' => get_string('titleprefix', 'local_musi'),
-                'text' => get_string('coursename', 'local_musi'),
-                'sport' => get_string('sport', 'local_musi'),
-                'location' => get_string('location', 'local_musi'),
-            ]);
-        } else {
-            $table->sortable(true, 'text');
-        }
-
-        // It's important to have the baseurl defined, we use it as a return url at one point.
-        $baseurl = new moodle_url(
-            $_SERVER['REQUEST_URI'],
-            $_GET
-        );
-
-        $table->define_baseurl($baseurl->out());
+        self::setTableOptionsFromArguments($table, $args);
 
         $table->cardsort = true;
 
@@ -815,48 +555,11 @@ class shortcodes {
 
         global $USER;
 
-        // If the id argument was not passed on, we have a fallback in the connfig.
-        if (!isset($args['id'])) {
-            $args['id'] = get_config('local_musi', 'shortcodessetinstance');
-        }
-
-        // To prevent misconfiguration, id has to be there and int.
-        if (!(isset($args['id']) && $args['id'] && is_int((int)$args['id']))) {
-            return 'Set id of booking instance';
-        }
-
-        if (!$booking = singleton_service::get_instance_of_booking_by_cmid($args['id'])) {
-            return 'Couldn\'t find right booking instance ' . $args['id'];
-        }
+        $booking = self::getBooking($args);
 
         if (!isset($args['category']) || !$category = ($args['category'])) {
             $category = '';
         }
-
-        if (!isset($args['filter']) || !$showfilter = ($args['filter'])) {
-            $showfilter = false;
-        }
-
-        if (!isset($args['search']) || !$showsearch = ($args['search'])) {
-            $showsearch = false;
-        }
-
-        if (!isset($args['sort']) || !$showsort = ($args['sort'])) {
-            $showsort = false;
-        }
-
-        if (!isset($args['image']) || !$showimage = ($args['image'])) {
-            $showimage = false;
-        }
-
-        if (!isset($args['countlabel']) || !$countlabel = ($args['countlabel'])) {
-            $countlabel = false;
-        }
-
-        // phpcs:ignore Squiz.PHP.CommentedOutCode.Found
-        /* if (!isset($args['infinitescrollpage']) || !$infinitescrollpage = ($args['infinitescrollpage'])) {
-            $infinitescrollpage = 20;
-        } */
 
         if (
             !isset($args['perpage'])
@@ -866,9 +569,7 @@ class shortcodes {
             $perpage = 1000;
         }
 
-        $tablename = bin2hex(random_bytes(12));
-
-        $table = new musi_table($tablename, $booking);
+        $table = self::initTableForCourses($booking);
 
         // Without defining sorting won't work!
         $table->define_columns(['titleprefix']);
@@ -903,34 +604,7 @@ class shortcodes {
 
         self::generate_table_for_list($table);
 
-        // Id is not really something one wants to filter, but we need the dataset on the html element.
-        // The key "id" won't be rendered in filter json, though.
-        if ($showfilter !== false) {
-            self::define_filtercolumns($table);
-        }
-
-        if ($showsearch !== false) {
-            $table->define_fulltextsearchcolumns(['titleprefix', 'text', 'sport', 'description', 'location', 'teacherobjects']);
-        }
-
-        if ($showsort !== false) {
-            $table->define_sortablecolumns([
-                'titleprefix' => get_string('titleprefix', 'local_musi'),
-                'text' => get_string('coursename', 'local_musi'),
-                'sport' => get_string('sport', 'local_musi'),
-                'location' => get_string('location', 'local_musi'),
-            ]);
-        } else {
-            $table->sortable(true, 'text');
-        }
-
-        // It's important to have the baseurl defined, we use it as a return url at one point.
-        $baseurl = new moodle_url(
-            $_SERVER['REQUEST_URI'],
-            $_GET
-        );
-
-        $table->define_baseurl($baseurl->out());
+        self::setTableOptionsFromArguments($table, $args);
 
         $table->cardsort = true;
 
@@ -1006,34 +680,10 @@ class shortcodes {
             return '';
         } */
 
-        // If the id argument was not passed on, we have a fallback in the connfig.
-        if (!isset($args['id'])) {
-            $args['id'] = get_config('local_musi', 'shortcodessetinstance');
-        }
-
-        // To prevent misconfiguration, id has to be there and int.
-        if (!(isset($args['id']) && $args['id'] && is_int((int)$args['id']))) {
-            return 'Set id of booking instance';
-        }
-
-        if (!$booking = singleton_service::get_instance_of_booking_by_cmid($args['id'])) {
-            return 'Couldn\'t find right booking instance ' . $args['id'];
-        }
+        $booking = self::getBooking($args);
 
         if (!isset($args['category']) || !$category = ($args['category'])) {
             $category = '';
-        }
-
-        if (!isset($args['filter']) || !$showfilter = ($args['filter'])) {
-            $showfilter = false;
-        }
-
-        if (!isset($args['search']) || !$showsearch = ($args['search'])) {
-            $showsearch = false;
-        }
-
-        if (!isset($args['sort']) || !$showsort = ($args['sort'])) {
-            $showsort = false;
         }
 
         // phpcs:ignore Squiz.PHP.CommentedOutCode.Found
@@ -1049,9 +699,7 @@ class shortcodes {
             $perpage = 1000;
         }
 
-        $tablename = bin2hex(random_bytes(12));
-
-        $table = new musi_table($tablename, $booking);
+        $table = self::initTableForCourses($booking);
 
         // Without defining sorting won't work!
         $table->define_columns(['titleprefix']);
@@ -1096,56 +744,7 @@ class shortcodes {
 
         $table->is_downloading('', 'List of booking options');
 
-        // Id is not really something one wants to filter, but we need the dataset on the html element.
-        // The key "id" won't be rendered in filter json, though.
-        if ($showfilter !== false) {
-            $table->define_filtercolumns([
-                'id', 'sport' => [
-                    'localizedname' => get_string('sport', 'local_musi')
-                ], 'dayofweek' => [
-                    'localizedname' => get_string('dayofweek', 'mod_booking'),
-                    'monday' => get_string('monday', 'mod_booking'),
-                    'tuesday' => get_string('tuesday', 'mod_booking'),
-                    'wednesday' => get_string('wednesday', 'mod_booking'),
-                    'thursday' => get_string('thursday', 'mod_booking'),
-                    'friday' => get_string('friday', 'mod_booking'),
-                    'saturday' => get_string('saturday', 'mod_booking'),
-                    'sunday' => get_string('sunday', 'mod_booking')
-                ],  'location' => [
-                    'localizedname' => get_string('location', 'mod_booking')
-                ],  'botags' => [
-                    'localizedname' => get_string('tags', 'core')
-                ]
-            ]);
-        }
-
-        if ($showsearch !== false) {
-            $table->define_fulltextsearchcolumns(['titleprefix', 'text', 'sport', 'description', 'location', 'teacherobjects']);
-        }
-
-        if ($showsort !== false) {
-            $table->define_sortablecolumns([
-                'titleprefix' => get_string('titleprefix', 'local_musi'),
-                'text' => get_string('coursename', 'local_musi'),
-                'sport' => get_string('sport', 'local_musi'),
-                'location' => get_string('location', 'local_musi'),
-            ]);
-        } else {
-            $table->sortable(true, 'text');
-        }
-
-        // It's important to have the baseurl defined, we use it as a return url at one point.
-        $baseurl = new moodle_url(
-            $_SERVER['REQUEST_URI'],
-            $_GET
-        );
-
-        $table->define_baseurl($baseurl->out());
-
-        $table->cardsort = true;
-
-        // This allows us to use infinite scrolling, No pages will be used.
-        $table->infinitescroll = 100;
+        self::setTableOptionsFromArguments($table, $args);
 
         // This allows us to use infinite scrolling, No pages will be used.
         $table->infinitescroll = 100;
@@ -1155,7 +754,24 @@ class shortcodes {
         return [$table, $booking, $category];
     }
 
-    private static function define_filtercolumns(&$table) {
+    private static function initTableForCourses($booking){
+
+        $tablename = bin2hex(random_bytes(12));
+
+        $table = new musi_table($tablename, $booking);
+
+        // It's important to have the baseurl defined, we use it as a return url at one point.
+        $baseurl = new moodle_url(
+            $_SERVER['REQUEST_URI'],
+            $_GET
+        );
+
+        $table->define_baseurl($baseurl->out());
+        $table->cardsort = true;
+        return $table;
+    }
+
+    private static function define_filtercolumns(&$table){
         $table->define_filtercolumns([
             'id', 'sport' => [
                 'localizedname' => get_string('sport', 'local_musi')
@@ -1174,6 +790,46 @@ class shortcodes {
                 'localizedname' => get_string('tags', 'core')
             ]
         ]);
+    }
+
+    private static function getBooking($args){
+        // If the id argument was not passed on, we have a fallback in the connfig.
+        if (!isset($args['id'])) {
+            $args['id'] = get_config('local_musi', 'shortcodessetinstance');
+        }
+
+        // To prevent misconfiguration, id has to be there and int.
+        if (!(isset($args['id']) && $args['id'] && is_int((int)$args['id']))) {
+            return 'Set id of booking instance';
+        }
+
+        if (!$booking = singleton_service::get_instance_of_booking_by_cmid($args['id'])) {
+            return 'Couldn\'t find right booking instance ' . $args['id'];
+        }
+
+        return $booking;
+    }
+
+    private static function setTableOptionsFromArguments(&$table, $args){
+
+        if (!empty($args['filter'])) {
+            self::define_filtercolumns($table);
+        }
+
+        if (!empty($args['search'])) {
+            $table->define_fulltextsearchcolumns(['titleprefix', 'text', 'sport', 'description', 'location', 'teacherobjects']);
+        }
+
+        if (!empty($args['sort'])) {
+            $table->define_sortablecolumns([
+                'titleprefix' => get_string('titleprefix', 'local_musi'),
+                'text' => get_string('coursename', 'local_musi'),
+                'sport' => get_string('sport', 'local_musi'),
+                'location' => get_string('location', 'local_musi'),
+            ]);
+        }else{
+            $table->sortable(true, 'text');
+        }
     }
 
     private static function generate_table_for_cards(&$table) {

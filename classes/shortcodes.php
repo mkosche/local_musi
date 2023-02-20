@@ -855,6 +855,7 @@ class shortcodes {
         $table->add_classes_to_subcolumns('cardlist', ['columnalt' => get_string('bookingsalt', 'local_musi')], ['bookings']);
         $table->add_classes_to_subcolumns('cardimage', ['cardimagealt' => get_string('imagealt', 'local_musi')], ['image']);
 
+
         $table->add_subcolumns('cardfooter', ['price']);
         $table->add_classes_to_subcolumns('cardfooter', ['columnkeyclass' => 'd-none']);
         $table->add_classes_to_subcolumns('cardfooter', ['columnclass' => 'theme-text-color bold '], ['price']);

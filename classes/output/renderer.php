@@ -76,6 +76,7 @@ class renderer extends plugin_renderer_base {
     public function render_col_availableplaces($data) {
         $o = '';
         $template_data = $data->export_for_template($this);
+        $template_data['showminanswers'] = $data->showminanswers;
         $template_data['showmaxanswers'] = $data->showmaxanswers;
         $o .= $this->render_from_template('local_musi/col_availableplaces', $template_data);
         return $o;

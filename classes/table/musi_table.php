@@ -222,9 +222,9 @@ class musi_table extends wunderbyte_table {
         $settings = singleton_service::get_instance_of_booking_option_settings($values->id, $values);
         // Render col_bookings using a template.
         $data = new col_availableplaces($values, $settings, $this->buyforuser);
+        $data->showminanswers = $this->displayoptions['showminanwers'];
         $data->showmaxanswers = $this->displayoptions['showmaxanwers'];
-        $output = singleton_service::get_renderer('local_musi');
-        return $output->render_col_availableplaces($data);
+        return $this->outputmusi->render_col_availableplaces($data);
     }
 
     /**

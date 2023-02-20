@@ -205,9 +205,6 @@ class shortcodes {
 
         $table = self::initTableForCourses($booking);
 
-        // Without defining sorting won't work!
-        $table->define_columns(['titleprefix']);
-
         $wherearray = ['bookingid' => (int)$booking->id];
 
         if (!empty($category)) {
@@ -350,9 +347,6 @@ class shortcodes {
 
         $table = self::initTableForCourses($booking);
 
-        // Without defining sorting won't work!
-        $table->define_columns(['titleprefix']);
-
         $wherearray = ['bookingid' => (int)$booking->id];
 
         if (!empty($category)) {
@@ -428,9 +422,6 @@ class shortcodes {
 
         $table = self::initTableForCourses($booking);
 
-        // Without defining sorting won't work!
-        $table->define_columns(['titleprefix']);
-
         $wherearray = ['bookingid' => (int)$booking->id];
 
         if (!empty($category)) {
@@ -502,9 +493,6 @@ class shortcodes {
 
         $table =self::initTableForCourses($booking);
 
-        // Without defining sorting won't work!
-        $table->define_columns(['titleprefix']);
-
         // We want to check for the currently logged in user...
         // ... if (s)he is teaching courses.
         $teacherid = $USER->id;
@@ -571,9 +559,6 @@ class shortcodes {
         }
 
         $table = self::initTableForCourses($booking);
-
-        // Without defining sorting won't work!
-        $table->define_columns(['titleprefix']);
 
         $table->showcountlabel = $countlabel;
         $wherearray = ['bookingid' => (int)$booking->id];
@@ -695,9 +680,6 @@ class shortcodes {
 
         $table = self::initTableForCourses($booking);
 
-        // Without defining sorting won't work!
-        $table->define_columns(['titleprefix']);
-
         $wherearray = ['bookingid' => (int)$booking->id];
 
         if (!empty($category)) {
@@ -762,6 +744,8 @@ class shortcodes {
 
         $table->define_baseurl($baseurl->out());
         $table->cardsort = true;
+        // Without defining sorting won't work!
+        $table->define_columns(['titleprefix']);
         return $table;
     }
 
@@ -847,7 +831,10 @@ class shortcodes {
         $table->add_classes_to_subcolumns('cardbody', ['columnvalueclass' => 'text-secondary'], ['sport']);
         $table->add_classes_to_subcolumns('cardbody', ['columnvalueclass' => 'm-0 mt-1 mb-1 h5'], ['text']);
 
-        $subcolumns = ['teacher', 'dayofweektime', 'location','bookings','minanswers'];
+        $subcolumns = ['teacher', 'dayofweektime', 'location','bookings'];
+        if(!empty($args['showminanswers'])){
+            $subcolumns[]='minanswers';
+        }
 
 
         $table->add_subcolumns('cardlist', $subcolumns);
@@ -857,7 +844,9 @@ class shortcodes {
         $table->add_classes_to_subcolumns('cardlist', ['columniclassbefore' => 'fa fa-map-marker'], ['location']);
         $table->add_classes_to_subcolumns('cardlist', ['columniclassbefore' => 'fa fa-clock-o'], ['dayofweektime']);
         $table->add_classes_to_subcolumns('cardlist', ['columniclassbefore' => 'fa fa-users'], ['bookings']);
-        $table->add_classes_to_subcolumns('cardlist', ['columniclassbefore' => 'fa fa-arrow-up'], ['minanswers']);
+        if(!empty($args['showminanswers'])) {
+            $table->add_classes_to_subcolumns('cardlist', ['columniclassbefore' => 'fa fa-arrow-up'], ['minanswers']);
+        }
 
 
         $table->add_subcolumns('cardfooter', ['price']);
@@ -869,21 +858,22 @@ class shortcodes {
     }
 
     private static function generate_table_for_list(&$table, $args){
-        $subcolumns_info = ['teacher', 'dayofweektime', 'location','bookings','minanswers'];
+        $subcolumns_info = ['teacher', 'dayofweektime', 'location','bookings'];
+        if(!empty($args['showminanswers'])){
+            $subcolumns_info[]='minanswers';
+        }
         $subcolumns_leftside = ['text', 'invisibleoption'];
 
         $table->define_cache('mod_booking', 'bookingoptionstable');
 
         $table->add_subcolumns('top', ['sport', 'action']);
         $table->add_subcolumns('leftside', ['text', 'invisibleoption']);
-        $table->add_subcolumns('info', ['teacher', 'dayofweektime', 'location', 'bookings', 'minanswers']);
+        $table->add_subcolumns('info', $subcolumns_info);
         // phpcs:ignore Squiz.PHP.CommentedOutCode.Found
         /* $table->add_subcolumns('footer', ['botags']); */
         $table->add_subcolumns('rightside', ['botags', 'price']);
         $table->add_subcolumns('leftside', $subcolumns_leftside);
 
-
-        $table->add_subcolumns('cardlist', $subcolumns_info);
         $table->add_subcolumns('info', $subcolumns_info);
         //$table->add_subcolumns('footer', ['botags']);
         $table->add_subcolumns('rightside', ['botags','price']);
@@ -908,7 +898,9 @@ class shortcodes {
         $table->add_classes_to_subcolumns('info', ['columniclassbefore' => 'fa fa-clock-o'], ['dayofweektime']);
         $table->add_classes_to_subcolumns('info', ['columniclassbefore' => 'fa fa-map-marker'], ['location']);
         $table->add_classes_to_subcolumns('info', ['columniclassbefore' => 'fa fa-ticket'], ['bookings']);
-        $table->add_classes_to_subcolumns('info', ['columniclassbefore' => 'fa fa-arrow-up'], ['minanswers']);
+        if(!empty($args['showminanswers'])) {
+            $table->add_classes_to_subcolumns('info', ['columniclassbefore' => 'fa fa-arrow-up'], ['minanswers']);
+        }
 
         $table->add_classes_to_subcolumns('rightside', ['columnclass' => 'text-right mb-auto align-self-end '], ['botags']);
         $table->add_classes_to_subcolumns('rightside', ['columnclass' =>

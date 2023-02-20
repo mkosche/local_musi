@@ -97,7 +97,6 @@ class musi_table extends wunderbyte_table {
 
     public function set_display_options($displayoptions){
         $this->displayoptions['showunits'] = !empty($displayoptions['show_units']) ? $displayoptions['show_units'] : false;
-        $this->displayoptions['showminanwers'] = !empty($displayoptions['show_min_registrations']) ? $displayoptions['show_min_registrations'] : false;
         $this->displayoptions['showmaxanwers'] = !empty($displayoptions['show_max_registrations']) ? $displayoptions['show_max_registrations'] : false;
     }
 
@@ -157,7 +156,7 @@ class musi_table extends wunderbyte_table {
                 $value['last'] = false;
             }
         }
-        return $output->render_col_teacher($data);
+        return $this->outputmusi->render_col_teacher($data);;
     }
 
     /**
@@ -222,7 +221,6 @@ class musi_table extends wunderbyte_table {
         $settings = singleton_service::get_instance_of_booking_option_settings($values->id, $values);
         // Render col_bookings using a template.
         $data = new col_availableplaces($values, $settings, $this->buyforuser);
-        $data->showminanswers = $this->displayoptions['showminanwers'];
         $data->showmaxanswers = $this->displayoptions['showmaxanwers'];
         return $this->outputmusi->render_col_availableplaces($data);
     }

@@ -103,7 +103,7 @@
                 {{#columnclass}}</div>{{/columnclass}}
             {{/top}}
         </div>
-        <div class="col-md-12">
+        <div class="col-md-12 d-flex flex-column p-0">
           {{#leftside}}
             {{#columnclass}}<div class="{{.}} {{key}}">{{/columnclass}}
               <span {{^value}} style="display:none" {{/value}}>
@@ -130,7 +130,7 @@
               </span>
             {{#columnclass}}</div>{{/columnclass}}
           {{/leftside}}
-          <div class="d-block">
+          <div class="d-block col-md-auto">
               <ul class="nav mb-2">
               {{#info}}
                 <span {{^value}} style="display:none" {{/value}}>

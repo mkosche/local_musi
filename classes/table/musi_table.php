@@ -62,6 +62,10 @@ class musi_table extends wunderbyte_table {
     private $context = null;
 
     /** @var bool $showunits */
+    private $displayoptions= [];
+
+
+    /** @var bool $showunits */
     private $showunits = false;
 
     /**
@@ -84,8 +88,17 @@ class musi_table extends wunderbyte_table {
 
         // We set buyforuser here for better performance.
         $this->buyforuser = price::return_user_to_buy_for();
+        $this->set_display_options([]);
+
+
 
         // Columns and headers are not defined in constructor, in order to keep things as generic as possible.
+    }
+
+    public function set_display_options($displayoptions){
+        $this->displayoptions['showunits'] = !empty($displayoptions['show_units']) ? $displayoptions['show_units'] : false;
+        $this->displayoptions['showminanwers'] = !empty($displayoptions['show_min_registrations']) ? $displayoptions['show_min_registrations'] : false;
+        $this->displayoptions['showmaxanwers'] = !empty($displayoptions['show_max_registrations']) ? $displayoptions['show_max_registrations'] : false;
     }
 
     /**
@@ -199,18 +212,19 @@ class musi_table extends wunderbyte_table {
 
     /**
      * This function is called for each data row to allow processing of the
-     * coursestarttime value.
+     * booking value.
      *
      * @param object $values Contains object with all the values of record.
      * @return string $coursestarttime Returns course start time as a readable string.
      * @throws coding_exception
      */
     public function col_bookings($values) {
-
         $settings = singleton_service::get_instance_of_booking_option_settings($values->id, $values);
         // Render col_bookings using a template.
         $data = new col_availableplaces($values, $settings, $this->buyforuser);
-        return $this->outputbooking->render_col_availableplaces($data);
+        $data->showminanswers = $this->displayoptions['showminanwers'];
+        $data->showmaxanswers = $this->displayoptions['showmaxanwers'];
+        return $this->outputmusi->render_col_availableplaces($data);
     }
 
     /**
@@ -383,8 +397,7 @@ class musi_table extends wunderbyte_table {
             } else {
                 $ret = get_string('datenotset', 'mod_booking');
             }
-
-            if (!$this->is_downloading() && !empty($units) && $this->showunits) {
+            if (!$this->is_downloading() &&  $this->displayoptions['showunits']) {
                 $units = dates_handler::calculate_and_render_educational_units($settings->dayofweektime);
                 $ret .= " ($units)";
             }

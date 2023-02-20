@@ -39,6 +39,7 @@ $string['shortcodeslistofmyteachedbookingoptionsascards'] = 'Courses I teach as 
 
 // General strings.
 $string['titleprefix'] = 'Course number';
+$string['dayofweek'] = 'Weekday';
 
 // List of all courses.
 $string['allcourses'] = 'All courses';

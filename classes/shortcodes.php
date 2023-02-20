@@ -145,9 +145,10 @@ class shortcodes {
             $table->add_subcolumns('cardimage', ['image']);
         }
 
-        self::generate_table_for_list($table);
-
         self::setTableOptionsFromArguments($table, $args);
+        self::generate_table_for_list($table, $args);
+
+
 
         $table->cardsort = true;
 
@@ -373,7 +374,7 @@ class shortcodes {
 
         $table->use_pages = false;
 
-        self::generate_table_for_cards($table);
+        self::generate_table_for_cards($table, $args);
 
         self::setTableOptionsFromArguments($table, $args);
 
@@ -451,7 +452,7 @@ class shortcodes {
 
         $table->use_pages = false;
 
-        self::generate_table_for_cards($table);
+        self::generate_table_for_cards($table, $args);
 
         self::setTableOptionsFromArguments($table, $args);
 
@@ -517,7 +518,7 @@ class shortcodes {
 
         $table->use_pages = false;
 
-        self::generate_table_for_cards($table);
+        self::generate_table_for_cards($table, $args);
 
         self::setTableOptionsFromArguments($table, $args);
 
@@ -596,13 +597,7 @@ class shortcodes {
 
         $table->use_pages = false;
 
-        if ($showimage !== false) {
-            $table->set_tableclass('cardimageclass', 'pr-0 pl-1');
-
-            $table->add_subcolumns('cardimage', ['image']);
-        }
-
-        self::generate_table_for_list($table);
+        self::generate_table_for_list($table, $args);;
 
         self::setTableOptionsFromArguments($table, $args);
 
@@ -622,7 +617,6 @@ class shortcodes {
         }
 
         $out = $table->outhtml($perpage, true);
-
         return $out;
     }
 
@@ -776,7 +770,7 @@ class shortcodes {
             'id', 'sport' => [
                 'localizedname' => get_string('sport', 'local_musi')
             ], 'dayofweek' => [
-                'localizedname' => get_string('dayofweek', 'mod_booking'),
+                'localizedname' => get_string('dayofweek', 'local_musi'),
                 'monday' => get_string('monday', 'mod_booking'),
                 'tuesday' => get_string('tuesday', 'mod_booking'),
                 'wednesday' => get_string('wednesday', 'mod_booking'),
@@ -812,6 +806,8 @@ class shortcodes {
 
     private static function setTableOptionsFromArguments(&$table, $args){
 
+        $table->set_display_options($args);
+
         if (!empty($args['filter'])) {
             self::define_filtercolumns($table);
         }
@@ -832,7 +828,7 @@ class shortcodes {
         }
     }
 
-    private static function generate_table_for_cards(&$table) {
+    private static function generate_table_for_cards(&$table, $args){
         $table->define_cache('mod_booking', 'bookingoptionstable');
 
         $table->add_subcolumns('itemcategory', ['sport']);
@@ -851,7 +847,10 @@ class shortcodes {
         $table->add_classes_to_subcolumns('cardbody', ['columnvalueclass' => 'text-secondary'], ['sport']);
         $table->add_classes_to_subcolumns('cardbody', ['columnvalueclass' => 'm-0 mt-1 mb-1 h5'], ['text']);
 
-        $table->add_subcolumns('cardlist', ['teacher', 'dayofweektime', 'location', 'bookings', 'minanswers']);
+        $subcolumns = ['teacher', 'dayofweektime', 'location','bookings','minanswers'];
+
+
+        $table->add_subcolumns('cardlist', $subcolumns);
         $table->add_classes_to_subcolumns('cardlist', ['columnkeyclass' => 'd-none']);
         $table->add_classes_to_subcolumns('cardlist', ['columnvalueclass' => 'text-secondary']);
         $table->add_classes_to_subcolumns('cardlist', ['columniclassbefore' => 'text-secondary fa-fw']);
@@ -859,6 +858,7 @@ class shortcodes {
         $table->add_classes_to_subcolumns('cardlist', ['columniclassbefore' => 'fa fa-clock-o'], ['dayofweektime']);
         $table->add_classes_to_subcolumns('cardlist', ['columniclassbefore' => 'fa fa-users'], ['bookings']);
         $table->add_classes_to_subcolumns('cardlist', ['columniclassbefore' => 'fa fa-arrow-up'], ['minanswers']);
+
 
         $table->add_subcolumns('cardfooter', ['price']);
         $table->add_classes_to_subcolumns('cardfooter', ['columnkeyclass' => 'd-none']);
@@ -868,7 +868,10 @@ class shortcodes {
         $table->is_downloading('', 'List of booking options');
     }
 
-    private static function generate_table_for_list(&$table) {
+    private static function generate_table_for_list(&$table, $args){
+        $subcolumns_info = ['teacher', 'dayofweektime', 'location','bookings','minanswers'];
+        $subcolumns_leftside = ['text', 'invisibleoption'];
+
         $table->define_cache('mod_booking', 'bookingoptionstable');
 
         $table->add_subcolumns('top', ['sport', 'action']);
@@ -877,6 +880,13 @@ class shortcodes {
         // phpcs:ignore Squiz.PHP.CommentedOutCode.Found
         /* $table->add_subcolumns('footer', ['botags']); */
         $table->add_subcolumns('rightside', ['botags', 'price']);
+        $table->add_subcolumns('leftside', $subcolumns_leftside);
+
+
+        $table->add_subcolumns('cardlist', $subcolumns_info);
+        $table->add_subcolumns('info', $subcolumns_info);
+        //$table->add_subcolumns('footer', ['botags']);
+        $table->add_subcolumns('rightside', ['botags','price']);
 
         $table->add_classes_to_subcolumns('top', ['columnkeyclass' => 'd-none']);
         $table->add_classes_to_subcolumns('top', ['columnclass' => 'text-left col-md-8'], ['sport']);
@@ -890,7 +900,7 @@ class shortcodes {
             ['columnvalueclass' => 'shortcodes_option_info_invisible'],
             ['invisibleoption']
         );
-        $table->add_classes_to_subcolumns('leftside', ['columnclass' => 'text-left mt-3 mb-3 h3'], ['text']);
+        $table->add_classes_to_subcolumns('leftside', ['columnclass' => 'text-left mt-2 mb-2 h3 col-md-auto'], ['text']);
 
         $table->add_classes_to_subcolumns('info', ['columnkeyclass' => 'd-none']);
         $table->add_classes_to_subcolumns('info', ['columnclass' => 'text-left text-secondary font-size-sm pr-2']);

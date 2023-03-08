@@ -92,4 +92,15 @@ class renderer extends plugin_renderer_base {
         return $o;
     }
 
+    /** Function to render the overview cards in user dashboard
+     * @param any $data
+     * @param string $data
+     * @return string
+     */
+    public function render_user_dashboard_overview($data) {
+        $o = '';
+        $o .= $this->render_from_template('local_musi/userdashboardoverview', $data);
+        return $o;
+    }
+
 }

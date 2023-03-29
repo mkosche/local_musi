@@ -51,7 +51,7 @@ class userinformation implements renderable, templatable {
      */
     public function __construct(int $userid, string $fields) {
 
-        global $CFG, $DB;
+        global $CFG, $DB, $OUTPUT;
 
         if (empty($fields)) {
             return 'You can add fields like this in the shortcode \'fields="firstname,lastname"\'';
@@ -62,13 +62,27 @@ class userinformation implements renderable, templatable {
         $user = singleton_service::get_instance_of_user($userid);
 
         $fields = explode(',', $fields);
+        $this->data['firstname'] = $user->firstname;
+        $this->data['lastname'] = $user->lastname;
+        $this->data['email'] = $user->email;
+        $this->data['id'] = $user->id;
+
+        $options = array(
+            'visibletoscreenreaders' => false,
+            'size' => 150,
+            'link' => true, // make image clickable - the link leads to user profile
+            'popup' => true, // open in popup
+        );
+
+        $this->data['picture'] = $OUTPUT->user_picture($user, $options);
 
         foreach ($user as $key => $value) {
 
             if (!in_array($key, $fields)) {
                 continue;
             }
-            $this->data[] = [
+
+            $additional_data[] = [
                 'key' => get_string($key, 'core'),
                 'value' => $value,
             ];
@@ -82,11 +96,14 @@ class userinformation implements renderable, templatable {
                 continue;
             }
             $localized = $DB->get_field('user_info_field', 'name', ['shortname' => $key]);
-            $this->data[] = [
+            $additional_data[] = [
                 'key' => $localized,
                 'value' => $value,
             ];
         }
+
+        $this->data['additionaldata'] = $additional_data;
+
     }
 
     /**

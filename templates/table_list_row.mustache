@@ -60,7 +60,7 @@
     }
 }}
 
-<div class="card border py-1 px-3 sk-fade mb-2 flex-md-row align-items-center row gx-0 shadow-sm" {{#datafields}} data-{{key}}="{{value}}" {{/datafields}}>
+<div class="card border py-1 px-3 sk-fade mb-2 flex-md-row align-items-center row gx-0 " {{#datafields}} data-{{key}}="{{value}}" {{/datafields}}>
   <div class="content w-100">
 
     <div class="row foroptionid-{{#optionid}}{{#value}}{{.}}{{/value}}{{/optionid}}" {{#cardimage}}style="margin-right: -55px;"{{/cardimage}}>
@@ -74,7 +74,7 @@
         </div>
         <div class="col-md-10 row pr-0">
     {{/cardimage}}
-    <div class="col-md-9 row pr-0">
+    <div class="col-md-10 row pr-0">
         <div class="col-md-12 row pr-0">
             {{#top}}
                 {{#columnclass}}<div class="{{.}} {{key}}">{{/columnclass}}
@@ -159,7 +159,7 @@
         </div>
       </div>
     </div>
-      <div class="col-md-3 p-0">
+      <div class="col-md-2 p-0">
         <div class="h-100 d-flex" style="
         flex-direction: column;">
         {{#rightside}}

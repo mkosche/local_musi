@@ -171,12 +171,15 @@ class musi_table extends wunderbyte_table {
         }
 
         $title = $values->text;
-        if (!empty($values->titleprefix)) {
-            $title = $values->titleprefix . ' - ' . $values->text;
-        }
 
         if (!$this->is_downloading()) {
-            $title = "<div class='musi-table-option-title'><a href='$url' target='_blank'>$title</a></div>";
+            $title = "<div class='musi-table-option-title mb-3'><a href='$url' target='_blank'>$title</a>";
+            if (!empty($values->titleprefix)) {
+                $title .= "<small class='text-muted'> (".$values->titleprefix.")</small>" ;
+            }
+            $title .= "</div>";
+        } elseif (!empty($values->titleprefix)){
+            $title = $values->titleprefix . ' - ' . $values->text;
         }
 
         return $title;

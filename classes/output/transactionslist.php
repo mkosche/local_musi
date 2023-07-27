@@ -29,6 +29,7 @@ use renderable;
 use renderer_base;
 use templatable;
 use stdClass;
+use context_system;
 
 /**
  * This class prepares to data to render transactionstable in mustache template
@@ -45,15 +46,16 @@ class transactionslist implements renderable, templatable {
         // Headers.
         $table->define_headers([get_string('id', 'local_musi'), get_string('transactionid', 'local_musi'),
         get_string('itemid', 'local_musi'), get_string('username', 'local_musi'),
-        get_string('price', 'local_musi'), get_string('status', 'local_musi'), get_string('names', 'local_musi'),
+        get_string('price', 'local_musi'), 'gateway', get_string('status', 'local_musi'), get_string('names', 'local_musi'),
         get_string('action', 'local_musi')]);
 
         // Columns.
-        $table->define_columns(['id', 'tid', 'itemid', 'username', 'price', 'status', 'names', 'action']);
+        $table->define_columns(['id', 'tid', 'itemid', 'username', 'price', 'gateway', 'status', 'names', 'action']);
 
         // Pass SQL to table.
         // TODO: Add functionality for other providers.
-        list($fields, $from, $where) = self::return_payunity_sql_transaction();
+        list($fields, $from, $where) = self::return_all_sql_transaction();
+        // list($fields, $from, $where) = self::return_payunity_sql_transaction();
         $table->set_filter_sql($fields, $from, $where, '');
 
         $table->sortable(true, 'id', SORT_ASC);
@@ -68,10 +70,10 @@ class transactionslist implements renderable, templatable {
         ]);
 
         // Full text search columns.
-        $table->define_fulltextsearchcolumns(['id', 'tid', 'itemid', 'username', 'price', 'status', 'names']);
+        $table->define_fulltextsearchcolumns(['id', 'tid', 'itemid', 'username', 'price', 'gateway', 'status', 'names']);
 
         // Sortable columns.
-        $table->define_sortablecolumns(['id', 'tid', 'itemid', 'username', 'price', 'status', 'names']);
+        $table->define_sortablecolumns(['id', 'tid', 'itemid', 'username', 'price', 'gateway', 'status', 'names']);
 
         $table->define_cache('local_musi', 'cachedpaymenttable');
 
@@ -94,35 +96,46 @@ class transactionslist implements renderable, templatable {
         return $data;
     }
 
-
-    /**
-     * Return SQL Query in correct format for wb_table
-     *
-     * @return array
-     */
-    private static function return_payunity_sql_transaction():array {
+     /**
+      * Return SQL Query in correct format for wb_table
+      *
+      * @return array
+      */
+    private static function return_all_sql_transaction():array {
         global $DB;
 
-        // TODO: Check database exists and / or loop over payment providers!
-        // DB table_exists.
-        $gatewaynames = ['payunity'];
-        // TODO: check for open orders tables in all gateways.
-        // TODO: use all gateway tables.
         $concatsql = $DB->sql_group_concat("so.itemname", "<br>", "so.itemname");
         $concatusername = $DB->sql_fullname("u.lastname", "u.firstname");
-        $fields = '*';
-        $from = "(SELECT oo.*, $concatusername AS username, $concatsql AS names FROM
-            {paygw_payunity_openorders} oo
-            LEFT JOIN {local_shopping_cart_history} so
-            ON oo.itemid = so.identifier AND oo.userid=so.userid
-            LEFT JOIN {user} u
-            ON u.id = oo.userid
-            GROUP BY oo.id, u.firstname, u.lastname
-            ) as s1 ";
+        // TODO: Check database exists and / or loop over payment providers!
+        // DB table_exists.
+        // $gatewaynames = ['payunity', 'mpay24'];
 
+        $gatewayselectstring = "";
+        $accounts = \core_payment\helper::get_payment_accounts_to_manage(context_system::instance());
+        foreach ($accounts as $account) {
+            foreach ($account->get_gateways() as $gateway) {
+                if ($gateway->get('enabled')) {
+                    $gwname = '';
+                    $gwname = $gateway->get('gateway');
+                    $gwselect = "SELECT $gwname.*,  $concatusername AS username, '{$gwname}' as gateway,$concatsql AS names FROM
+                {paygw_{$gwname}_openorders} $gwname
+                LEFT JOIN {local_shopping_cart_history} so
+                ON $gwname.itemid = so.identifier AND $gwname.userid=so.userid
+                LEFT JOIN {user} u
+                ON u.id = $gwname.userid
+                GROUP BY $gwname.id, u.firstname, u.lastname";
+                    if ($gatewayselectstring === '') {
+                        $gatewayselectstring = '(' . $gwselect;
+                    } else {
+                        $gatewayselectstring = $gatewayselectstring . ' UNION ' . $gwselect;
+                    }
+                }
+            }
+        }
+        $fields = '*';
+        $from = $gatewayselectstring . ')as s1';
         $where = "1 = 1";
 
         return [$fields, $from, $where];
     }
-
 }

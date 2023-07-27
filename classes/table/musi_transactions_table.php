@@ -26,7 +26,8 @@ use cache_helper;
 use local_wunderbyte_table\output\table;
 use local_wunderbyte_table\wunderbyte_table;
 use mod_booking\singleton_service;
-use paygw_payunity\external\transaction_complete;
+use paygw_payunity\external\transaction_complete as payunity_complete;
+use paygw_mpay24\external\transaction_complete as mpay24_complete;
 
 
 defined('MOODLE_INTERNAL') || die();
@@ -113,6 +114,7 @@ class musi_transactions_table extends wunderbyte_table {
                 'itemid' => $values->itemid,
                 'orderid' => $values->tid,
                 'userid' => $values->userid,
+                'gateway' => $values->gateway
             )
         ];
         table::transform_actionbuttons_array($data);
@@ -135,8 +137,17 @@ class musi_transactions_table extends wunderbyte_table {
         $data = json_decode($data);
 
         try {
-            // Call transaction complate logic in payunity gateway -> Items will be unlocked and status changed if successful.
-            $result = transaction_complete::execute('local_shopping_cart', '', $data->itemid, $data->orderid, '', $data->userid );
+            $transactioncomplete = 'paygw_' . $data->gateway . '\external\transaction_complete';
+            if (class_exists($transactioncomplete)) {
+                try {
+                    $result = $transactioncomplete::execute('local_shopping_cart', '',
+                    $data->itemid, $data->orderid, '', '',
+                    true, '', $data->userid);
+                } catch (\Throwable $e) {
+                    echo($e);
+                }
+            }
+
         } catch (\Exception $e) {
             // Transaction could not be verified.
             return [

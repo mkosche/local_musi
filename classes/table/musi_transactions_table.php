@@ -126,6 +126,54 @@ class musi_transactions_table extends wunderbyte_table {
     }
 
     /**
+     * This function is called for each data row to allow processing of the
+     * 'timecreated' value.
+     *
+     * @param object $values Contains object with all the values of record.
+     * @return string Rendered date.
+     * @throws dml_exception
+     */
+    public function col_timecreated(object $values): string {
+        $rendereddate = '';
+
+        if ($this->is_downloading()) {
+            $rendereddate = date('Y-m-d H:i:s', $values->timecreated);
+        } else if (current_language() === 'de') {
+            $rendereddate = date('d.m.Y H:i:s', $values->timecreated);
+        } else {
+            $rendereddate = date('Y-m-d H:i:s', $values->timecreated);
+        }
+
+        return $rendereddate;
+    }
+
+    /**
+     * This function is called for each data row to allow processing of the
+     * 'timemodified' value.
+     *
+     * @param object $values Contains object with all the values of record.
+     * @return string Rendered date.
+     * @throws dml_exception
+     */
+    public function col_timemodified(object $values): string {
+        $rendereddate = '';
+
+        if (empty($values->timemodified)) {
+            $values->timemodified = $values->timecreated;
+        }
+
+        if ($this->is_downloading()) {
+            $rendereddate = date('Y-m-d H:i:s', $values->timemodified);
+        } else if (current_language() === 'de') {
+            $rendereddate = date('d.m.Y H:i:s', $values->timemodified);
+        } else {
+            $rendereddate = date('Y-m-d H:i:s', $values->timemodified);
+        }
+
+        return $rendereddate;
+    }
+
+    /**
      * Tries to verify a transaction and delivers order if successful
      *
      * @param integer $id

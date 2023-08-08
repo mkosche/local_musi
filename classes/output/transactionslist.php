@@ -44,13 +44,22 @@ class transactionslist implements renderable, templatable {
         $table = new musi_transactions_table('musi_transactions_table');
 
         // Headers.
-        $table->define_headers([get_string('id', 'local_musi'), get_string('transactionid', 'local_musi'),
-        get_string('itemid', 'local_musi'), get_string('username', 'local_musi'),
-        get_string('price', 'local_musi'), 'gateway', get_string('status', 'local_musi'), get_string('names', 'local_musi'),
-        get_string('action', 'local_musi')]);
+        $table->define_headers([
+            get_string('id', 'local_musi'),
+            get_string('transactionid', 'local_musi'),
+            get_string('itemid', 'local_musi'),
+            get_string('username', 'local_musi'),
+            get_string('price', 'local_musi'), 'gateway',
+            get_string('status', 'local_musi'),
+            get_string('names', 'local_musi'),
+            get_string('action', 'local_musi'),
+            get_string('timecreated', 'local_shopping_cart'),
+            get_string('timemodified', 'local_shopping_cart'),
+        ]);
 
         // Columns.
-        $table->define_columns(['id', 'tid', 'itemid', 'username', 'price', 'gateway', 'status', 'names', 'action']);
+        $table->define_columns(['id', 'tid', 'itemid', 'username', 'price', 'gateway', 'status', 'names', 'action',
+            'timecreated', 'timemodified']);
 
         // Pass SQL to table.
         // TODO: Add functionality for other providers.
@@ -70,10 +79,10 @@ class transactionslist implements renderable, templatable {
         ]);
 
         // Full text search columns.
-        $table->define_fulltextsearchcolumns(['id', 'tid', 'itemid', 'username', 'price', 'gateway', 'status', 'names']);
+        $table->define_fulltextsearchcolumns(['id', 'tid', 'itemid', 'username', 'price', 'gateway', 'status', 'names', 'timecreated', 'timemodified']);
 
         // Sortable columns.
-        $table->define_sortablecolumns(['id', 'tid', 'itemid', 'username', 'price', 'gateway', 'status', 'names']);
+        $table->define_sortablecolumns(['id', 'tid', 'itemid', 'username', 'price', 'gateway', 'status', 'names', 'timecreated', 'timemodified']);
 
         $table->define_cache('local_musi', 'cachedpaymenttable');
 
@@ -104,7 +113,7 @@ class transactionslist implements renderable, templatable {
     private static function return_all_sql_transaction():array {
         global $DB;
 
-        $concatsql = $DB->sql_group_concat("so.itemname", "<br>", "so.itemname");
+        $concatsql = $DB->sql_group_concat("sch.itemname", "<br>", "sch.itemname");
         $concatusername = $DB->sql_fullname("u.lastname", "u.firstname");
         // TODO: Check database exists and / or loop over payment providers!
         // DB table_exists.
@@ -115,15 +124,18 @@ class transactionslist implements renderable, templatable {
         foreach ($accounts as $account) {
             foreach ($account->get_gateways() as $gateway) {
                 if ($gateway->get('enabled')) {
-                    $gwname = '';
                     $gwname = $gateway->get('gateway');
-                    $gwselect = "SELECT $gwname.*,  $concatusername AS username, '{$gwname}' as gateway,$concatsql AS names FROM
-                {paygw_{$gwname}_openorders} $gwname
-                LEFT JOIN {local_shopping_cart_history} so
-                ON $gwname.itemid = so.identifier AND $gwname.userid=so.userid
-                LEFT JOIN {user} u
-                ON u.id = $gwname.userid
-                GROUP BY $gwname.id, u.firstname, u.lastname";
+                    $gwselect = "SELECT " . $DB->sql_concat("'" . "{$gwname} " . "'", "$gwname.id") .
+                        " AS id, $gwname.tid, $gwname.itemid, $gwname.userid, $gwname.price, $gwname.status,
+                        $gwname.timecreated, $gwname.timemodified,
+                        $concatusername AS username, '{$gwname}' as gateway,$concatsql AS names FROM
+                    {paygw_{$gwname}_openorders} $gwname
+                    LEFT JOIN {local_shopping_cart_history} sch
+                    ON $gwname.itemid = sch.identifier AND $gwname.userid=sch.userid
+                    LEFT JOIN {user} u
+                    ON u.id = $gwname.userid
+                    GROUP BY $gwname.id, u.firstname, u.lastname";
+
                     if ($gatewayselectstring === '') {
                         $gatewayselectstring = '(' . $gwselect;
                     } else {
@@ -133,9 +145,27 @@ class transactionslist implements renderable, templatable {
             }
         }
         $fields = '*';
-        $from = $gatewayselectstring . ')as s1';
+        $from = $gatewayselectstring . ') as s1';
         $where = "1 = 1";
 
         return [$fields, $from, $where];
+    }
+
+    /**
+     * Helper function to get name of the orderid column for each gateway table.
+     * We currently do not need it here, but we'll need it later, so keep it!
+     *
+     * @param string $gwname the name of the gateway
+     * @return string the name of the orderid column
+     */
+    private static function get_name_of_orderid_column(string $gwname): string {
+        switch ($gwname) {
+            case 'paypal':
+                return 'pp_orderid';
+            case 'mpay24':
+                return 'mpay24_orderid';
+            case 'payunity':
+                return 'pu_orderid';
+        }
     }
 }

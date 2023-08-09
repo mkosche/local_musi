@@ -102,12 +102,15 @@ class musi_transactions_table extends wunderbyte_table {
 
         global $OUTPUT;
 
+        // We have to use the id as integer - the update_status function will use the right gateway anyway.
+        $rowid = (int) explode(' ', $values->id)[1];
+
         $data[] = [
             'label' => 'überprüfe Status', // Name of your action button.
             'class' => 'btn btn-warning',
             'href' => '#', // You can either use the link, or JS, or both.
             'iclass' => 'fa fa-edit', // Add an icon before the label.
-            'id' => $values->id,
+            'id' => $rowid,
             'methodname' => 'update_status', // The method needs to be added to your child of wunderbyte_table class.
             'nomodal' => true,
             'data' => array(

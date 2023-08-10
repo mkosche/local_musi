@@ -29,7 +29,7 @@ use renderable;
 use renderer_base;
 use templatable;
 use stdClass;
-use context_system;
+use local_musi\musi_payment_helper;
 
 /**
  * This class prepares to data to render transactionstable in mustache template
@@ -118,33 +118,28 @@ class transactionslist implements renderable, templatable {
         $concatsql = $DB->sql_group_concat("sch.itemname", "<br>", "sch.itemname");
         $concatusername = $DB->sql_fullname("u.lastname", "u.firstname");
 
-        // TODO: Check database exists and / or loop over payment providers!
-        // DB table_exists.
+        $gatewaynames = musi_payment_helper::get_supported_payment_gateways();
         $gatewayselectstring = "";
-        $accounts = \core_payment\helper::get_payment_accounts_to_manage(context_system::instance());
-        foreach ($accounts as $account) {
-            foreach ($account->get_gateways() as $gateway) {
-                if ($gateway->get('enabled')) {
-                    $gwname = $gateway->get('gateway');
-                    $gwselect = "SELECT " . $DB->sql_concat("'" . "{$gwname} " . "'", "$gwname.id") .
-                        " AS id, $gwname.tid, $gwname.itemid, $gwname.userid, $gwname.price, $gwname.status,
-                        $gwname.timecreated, $gwname.timemodified,
-                        $concatusername AS username, '{$gwname}' as gateway, $concatsql AS names FROM
-                    {paygw_{$gwname}_openorders} $gwname
-                    LEFT JOIN {local_shopping_cart_history} sch
-                    ON $gwname.itemid = sch.identifier AND $gwname.userid=sch.userid
-                    LEFT JOIN {user} u
-                    ON u.id = $gwname.userid
-                    GROUP BY $gwname.id, u.firstname, u.lastname";
 
-                    if ($gatewayselectstring === '') {
-                        $gatewayselectstring = '(' . $gwselect;
-                    } else {
-                        $gatewayselectstring = $gatewayselectstring . ' UNION ' . $gwselect;
-                    }
-                }
+        foreach ($gatewaynames as $gwname) {
+            $gwselect = "SELECT " . $DB->sql_concat("'" . "{$gwname} " . "'", "$gwname.id") .
+                " AS id, $gwname.tid, $gwname.itemid, $gwname.userid, $gwname.price, $gwname.status,
+                $gwname.timecreated, $gwname.timemodified,
+                $concatusername AS username, '{$gwname}' as gateway, $concatsql AS names FROM
+            {paygw_{$gwname}_openorders} $gwname
+            LEFT JOIN {local_shopping_cart_history} sch
+            ON $gwname.itemid = sch.identifier AND $gwname.userid=sch.userid
+            LEFT JOIN {user} u
+            ON u.id = $gwname.userid
+            GROUP BY $gwname.id, u.firstname, u.lastname";
+
+            if ($gatewayselectstring === '') {
+                $gatewayselectstring = '(' . $gwselect;
+            } else {
+                $gatewayselectstring = $gatewayselectstring . ' UNION ' . $gwselect;
             }
         }
+
         $fields = '*';
         $from = $gatewayselectstring . ') as s1';
         $where = "1 = 1";

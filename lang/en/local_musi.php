@@ -47,6 +47,7 @@ $string['shortcodeslistofmyteachedbookingoptionsascards'] = 'Courses I teach as 
 $string['campaigns'] = 'Campaigns';
 $string['dayofweek'] = 'Weekday';
 $string['editavailability'] = 'Edit availability';
+$string['gateway'] = 'Gateway';
 $string['invisibleoption'] = '<i class="fa fa-eye-slash" aria-hidden="true"></i>';
 $string['titleprefix'] = 'Course number';
 

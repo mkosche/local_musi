@@ -1,3 +1,16 @@
+## Version 0.6.0 (2023081100)
+**New features:**
+* New feature: Transaction list now supports Mpay24 too (besides PayUnity).
+
+**Improvements:**
+* Improvement: Show timecreated and timemodified in transactions list and fix support for more than one gateway.
+* Improvement: Better transaction list with support for multiple gateways and sorting by timecreated DESC.
+* Improvement: Add header string for gateway.
+
+**Bugfixes:**
+* Bugfix: Transactionslist does not crash anymore when unsupported gateways are used.
+* Bugfix: Missing cache definitions.
+
 ## Version 0.5.9 (2023080700)
 **Bugfixes:**
 * Bugfix: Refactor: new location of dates_handler.

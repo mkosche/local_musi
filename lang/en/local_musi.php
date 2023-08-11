@@ -32,6 +32,10 @@ $string['messageprovider:sendmessages'] = 'Send messages';
 $string['musi:cansendmessages'] = 'Can send messages';
 $string['musi:editavailability'] = 'Can change availability and reservations';
 
+// Caches.
+$string['cachedef_cachedpaymenttable'] = 'Cached payment table (transaction list).';
+
+// Shortcodes.
 $string['shortcodeslistofbookingoptions'] = 'All courses as list';
 $string['shortcodeslistofbookingoptionsascards'] = 'All courses as cards';
 $string['shortcodeslistofmybookingoptionsascards'] = 'My courses as cards';

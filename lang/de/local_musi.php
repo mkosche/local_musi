@@ -32,6 +32,10 @@ $string['messageprovider:sendmessages'] = 'Verschicke Nachrichten';
 $string['musi:cansendmessages'] = 'Kann Nachrichten schicken.';
 $string['musi:editavailability'] = 'Kann die Verfügbarkeit von Buchungsoptionen ändern und Vorreservierungen anlegen';
 
+// Caches.
+$string['cachedef_cachedpaymenttable'] = 'Zahlungstransaktionen (Cache)';
+
+// Shortcodes.
 $string['shortcodeslistofbookingoptions'] = 'Alle Kurse als Liste';
 $string['shortcodeslistofbookingoptionsascards'] = 'Alle Kurse als Karten';
 $string['shortcodeslistofmybookingoptionsascards'] = 'Meine Kurse als Karten';

@@ -47,14 +47,6 @@ defined('MOODLE_INTERNAL') || die();
  */
 class musi_table extends wunderbyte_table {
 
-    // phpcs:ignore Squiz.PHP.CommentedOutCode.Found
-    /* @var renderer_base $outputbooking
-    private $outputbooking = null; */
-
-    // phpcs:ignore Squiz.PHP.CommentedOutCode.Found
-    /* @var renderer_base $outputmusi
-    private $outputmusi = null; */
-
     /** @var booking $booking */
     private $booking = null;
 

@@ -49,6 +49,13 @@ class observer {
     }
 
     /**
+     * Observer for the payment_successful event
+     */
+    public static function payment_successful() {
+        cache_helper::purge_by_event('setbackcachedpaymenttable');
+    }
+
+    /**
      * Observer for the payment_rebooked event
      */
     public static function payment_rebooked(payment_rebooked $event) {

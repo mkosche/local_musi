@@ -36,6 +36,22 @@ $observers = [
         'callback' => '\local_musi\observer::payment_completed',
     ],
     [
+        'eventname' => '\paygw_payunity\event\payment_successful',
+        'callback' => '\local_musi\observer::payment_successful',
+    ],
+    [
+        'eventname' => '\paygw_mpay24\event\payment_added',
+        'callback' => '\local_musi\observer::payment_added',
+    ],
+    [
+        'eventname' => '\paygw_mpay24\event\payment_completed',
+        'callback' => '\local_musi\observer::payment_completed',
+    ],
+    [
+        'eventname' => '\paygw_mpay24\event\payment_successful',
+        'callback' => '\local_musi\observer::payment_successful',
+    ],
+    [
         'eventname' => '\local_shopping_cart\event\payment_rebooked',
         'callback' => '\local_musi\observer::payment_rebooked',
     ],

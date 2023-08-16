@@ -1,3 +1,7 @@
+## Version 0.6.1 (2023081600)
+**Bugfixes:**
+* Bugfix: Added missing observers for mpay24 events.
+
 ## Version 0.6.0 (2023081100)
 **New features:**
 * New feature: Transaction list now supports Mpay24 too (besides PayUnity).

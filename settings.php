@@ -82,8 +82,19 @@ if ($hassiteconfig) {
                 get_string('shortcodesarchivecmids', 'local_musi'),
                 get_string('shortcodesarchivecmids_desc', 'local_musi'), ''));
 
-        // CONTRACT MANAGEMENT.
+        // Shortcode lists.
         $settings->add(
+            new admin_setting_heading('shortcodelists',
+                get_string('shortcodelists', 'local_musi'),
+                get_string('shortcodelists_desc', 'local_musi')));
+
+        $settings->add(
+            new admin_setting_configcheckbox('local_musi/shortcodelists_showdescriptions',
+                get_string('shortcodelists_showdescriptions', 'local_musi'), '', 0));
+
+        // CONTRACT MANAGEMENT.
+        // phpcs:ignore Squiz.PHP.CommentedOutCode.Found
+        /* $settings->add(
             new admin_setting_heading('contractmanagement_heading',
                 get_string('contractmanagementsettings', 'local_musi'),
                 get_string('contractmanagementsettings_desc', 'local_musi')));
@@ -91,6 +102,6 @@ if ($hassiteconfig) {
         $settings->add(
             new admin_setting_configtextarea('local_musi/contractformula',
                 get_string('contractformula', 'local_musi'),
-                get_string('contractformula_desc', 'local_musi'), '', PARAM_TEXT, 60, 10));
+                get_string('contractformula_desc', 'local_musi'), '', PARAM_TEXT, 60, 10)); */
     }
 }

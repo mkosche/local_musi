@@ -36,6 +36,9 @@ $string['musi:editavailability'] = 'Kann die Verfügbarkeit von Buchungsoptionen
 $string['cachedef_cachedpaymenttable'] = 'Zahlungstransaktionen (Cache)';
 
 // Shortcodes.
+$string['shortcodelists'] = 'Shortcode-Listen';
+$string['shortcodelists_desc'] = 'Hier können Sie Listen konfigurieren, die durch Shortcodes (z.B. [allekurseliste]) generiert werden.';
+$string['shortcodelists_showdescriptions'] = 'Beschreibungen von Buchungsoptionen anzeigen';
 $string['shortcodeslistofbookingoptions'] = 'Alle Kurse als Liste';
 $string['shortcodeslistofbookingoptionsascards'] = 'Alle Kurse als Karten';
 $string['shortcodeslistofmybookingoptionsascards'] = 'Meine Kurse als Karten';

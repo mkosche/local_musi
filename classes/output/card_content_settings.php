@@ -97,8 +97,9 @@ class card_content_settings implements renderable, templatable {
         $url = new moodle_url('/local/musi/createsapdailysums.php');
         $data->sapdailysums = ['link' => $url->out(false)];
 
-        $url = new moodle_url('/admin/category.php?category=local_musi');
-        $data->editcontractformula = ['link' => $url->out(false)];
+        // phpcs:ignore Squiz.PHP.CommentedOutCode.Found
+        /* $url = new moodle_url('/admin/category.php?category=local_musi');
+        $data->editcontractformula = ['link' => $url->out(false)]; */
 
         $url = new moodle_url('/local/musi/transactionlist.php');
         $data->transactionslist = ['link' => $url->out(false)];

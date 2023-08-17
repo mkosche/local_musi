@@ -919,7 +919,14 @@ class shortcodes {
     }
 
     private static function generate_table_for_list(&$table, $args) {
+        $subcolumnsleftside = ['text'];
         $subcolumnsinfo = ['teacher', 'dayofweektime', 'location', 'bookings'];
+
+        // Check if we should add the description.
+        if (get_config('local_musi', 'shortcodelists_showdescriptions')) {
+            $subcolumnsleftside[] = 'description';
+        }
+
         if (!empty($args['showminanswers'])) {
             $subcolumnsinfo[] = 'minanswers';
         }
@@ -930,7 +937,7 @@ class shortcodes {
         $table->add_subcolumns('optionid', ['id']);
 
         $table->add_subcolumns('top', ['sport', 'action']);
-        $table->add_subcolumns('leftside', ['text']);
+        $table->add_subcolumns('leftside', $subcolumnsleftside);
         $table->add_subcolumns('info', $subcolumnsinfo);
         // phpcs:ignore Squiz.PHP.CommentedOutCode.Found
         /* $table->add_subcolumns('footer', ['botags']); */
@@ -943,12 +950,14 @@ class shortcodes {
         $table->add_classes_to_subcolumns('top', ['columnkeyclass' => 'd-none']);
         $table->add_classes_to_subcolumns('top', ['columnclass' => 'text-left col-md-8'], ['sport']);
         $table->add_classes_to_subcolumns('top', ['columnvalueclass' =>
-            'sport-badge rounded-sm text-gray-800 pb-0 pt-0 mb-1'], ['sport']);
+            'sport-badge rounded-sm text-gray-800 mt-2'], ['sport']);
         $table->add_classes_to_subcolumns('top', ['columnclass' => 'text-right col-md-2 position-relative pr-0'], ['action']);
 
         $table->add_classes_to_subcolumns('leftside', ['columnkeyclass' => 'd-none']);
-        $table->add_classes_to_subcolumns('leftside', ['columnclass' => 'text-left mt-2 mb-2 h3 col-md-auto'], ['text']);
-
+        $table->add_classes_to_subcolumns('leftside', ['columnclass' => 'text-left mt-1 mb-1 h3 col-md-auto'], ['text']);
+        if (get_config('local_musi', 'shortcodelists_showdescriptions')) {
+            $table->add_classes_to_subcolumns('leftside', ['columnclass' => 'text-left mt-1 mb-3 h6 col-md-auto'], ['description']);
+        }
         $table->add_classes_to_subcolumns('info', ['columnkeyclass' => 'd-none']);
         $table->add_classes_to_subcolumns('info', ['columnclass' => 'text-left text-secondary font-size-sm pr-2']);
         $table->add_classes_to_subcolumns('info', ['columnvalueclass' => 'd-flex'], ['teacher']);

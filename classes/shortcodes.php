@@ -956,7 +956,7 @@ class shortcodes {
         $table->add_classes_to_subcolumns('leftside', ['columnkeyclass' => 'd-none']);
         $table->add_classes_to_subcolumns('leftside', ['columnclass' => 'text-left mt-1 mb-1 h3 col-md-auto'], ['text']);
         if (get_config('local_musi', 'shortcodelists_showdescriptions')) {
-            $table->add_classes_to_subcolumns('leftside', ['columnclass' => 'text-left mt-1 mb-3 h6 col-md-auto'], ['description']);
+            $table->add_classes_to_subcolumns('leftside', ['columnclass' => 'text-left mt-1 mb-3 col-md-auto'], ['description']);
         }
         $table->add_classes_to_subcolumns('info', ['columnkeyclass' => 'd-none']);
         $table->add_classes_to_subcolumns('info', ['columnclass' => 'text-left text-secondary font-size-sm pr-2']);

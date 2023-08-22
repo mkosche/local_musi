@@ -35,7 +35,8 @@ use stdClass;
 class easy_availability_modal_form extends \core_form\dynamic_form {
 
     protected function get_context_for_dynamic_submission(): \context {
-        return \context_system::instance();
+        $settings = singleton_service::get_instance_of_booking_option_settings($this->_ajaxformdata['optionid']);
+        return context_module::instance($settings->cmid);
     }
 
     /**
@@ -155,7 +156,8 @@ class easy_availability_modal_form extends \core_form\dynamic_form {
             // Or: Everyone with the M:USI editavailability capability.
             has_capability('local/musi:editavailability', $context) ||
             // Or: Teachers can edit the availability of their own option.
-            (has_capability('mod/booking:limitededitownoption', $context) && $this->check_if_teacher($optionid))
+            (has_capability('mod/booking:limitededitownoption', $context) && $this->check_if_teacher($optionid)) ||
+            (has_capability('mod/booking:addeditownoption', $context) && $this->check_if_teacher($optionid))
         );
         if (!$alloweditavailability) {
             throw new moodle_exception('norighttoaccess', 'local_musi');

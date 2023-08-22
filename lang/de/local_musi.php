@@ -49,7 +49,9 @@ $string['shortcodeslistofmyteachedbookingoptionsascards'] = 'Kurse, die ich unte
 // General strings.
 $string['campaigns'] = 'Kampagnen';
 $string['dayofweek'] = 'Wochentag';
+$string['editavailabilityanddescription'] = 'Verfügbarkeit & Beschreibung bearbeiten';
 $string['editavailability'] = 'Verfügbarkeit bearbeiten';
+$string['editdescription'] = 'Beschreibung bearbeiten';
 $string['gateway'] = 'Gateway';
 $string['invisibleoption'] = '<i class="fa fa-eye-slash" aria-hidden="true"></i>';
 $string['titleprefix'] = 'Kursnummer';

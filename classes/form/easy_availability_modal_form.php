@@ -61,6 +61,11 @@ class easy_availability_modal_form extends \core_form\dynamic_form {
             // The form is locked because there are incompatible conditions.
             $mform->addElement('html', get_string('easyavailability:formlocked', 'local_musi'));
         } else {
+
+            // EDIT AVAILABILITY.
+            $mform->addElement('header', 'availabilityheader', get_string('editavailability', 'local_musi'));
+            $mform->setExpanded('availabilityheader', false);
+
             // The form is not locked and can be used normally.
             $mform->addElement('date_time_selector', 'bookingopeningtime',
                 get_string('easyavailability:openingtime', 'local_musi'));
@@ -136,7 +141,12 @@ class easy_availability_modal_form extends \core_form\dynamic_form {
             $mform->hideIf('bo_cond_previouslybooked_optionid', 'previouslybookedcheckbox', 'notchecked');
         }
 
-        $mform->addElement('html', '<br><br>');
+        // EDIT DESCRIPTION.
+        $mform->addElement('header', 'descriptionheader', get_string('editdescription', 'local_musi'));
+        $mform->setExpanded('descriptionheader', false);
+
+        $mform->addElement('editor', 'description', get_string('description', 'core'));
+        $mform->setType('description', PARAM_CLEANHTML);
     }
 
     /**
@@ -184,6 +194,9 @@ class easy_availability_modal_form extends \core_form\dynamic_form {
 
         booking_option::purge_cache_for_option($data->optionid);
         $settings = singleton_service::get_instance_of_booking_option_settings($data->optionid);
+
+        // The booking option description.
+        $data->description = array('text' => $settings->description, 'format' => FORMAT_HTML);
 
         $data->bookingopeningtime = $settings->bookingopeningtime ?? $this->_ajaxformdata['bookingopeningtime'];
         $data->bookingclosingtime = $settings->bookingclosingtime ?? $this->_ajaxformdata['bookingclosingtime'];
@@ -240,7 +253,8 @@ class easy_availability_modal_form extends \core_form\dynamic_form {
         $optionvalues = $settings->return_settings_as_stdclass();
         $optionvalues->optionid = $optionid;
 
-        // Now we can modify with our data.
+        // Now we can modify our data.
+        $optionvalues->description = $data->description['text'];
         $optionvalues->restrictanswerperiodopening = true;
         $optionvalues->restrictanswerperiodclosing = true;
         $optionvalues->bookingopeningtime = $data->bookingopeningtime;

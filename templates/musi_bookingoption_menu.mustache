@@ -59,7 +59,7 @@
       {{/sendmailtoallbookedusers}}
       {{#editavailability}}
       <a class="dropdown-item editavailability" href="#" target="_self" data-optionid="{{optionid}}">
-        <i class="fa fa-unlock-alt fa-fw" aria-hidden="true"></i> {{#str}} editavailability, local_musi {{/str}}
+        <i class="fa fa-unlock-alt fa-fw" aria-hidden="true"></i> {{#str}} editavailabilityanddescription, local_musi {{/str}}
       </a>
       {{/editavailability}}
       {{#manageresponsesurl}}
@@ -83,7 +83,7 @@
         fn.init(
           '{{optionid}}',
           'a.editavailability[data-optionid="{{optionid}}"]',
-          '{{#str}} editavailability, local_musi {{/str}}'
+          '{{#str}} editavailabilityanddescription, local_musi {{/str}}'
         );
     });
 {{/js}}

@@ -1,3 +1,11 @@
+## Version 0.6.2 (2023082300)
+**New features:**
+* New feature: Plugin config setting to turn descriptions in shortcodes lists on or off.
+* New feature: Description can now be edited directly from new "Edit availability & description" modal.
+
+**Bugfixes:**
+* Bugfix: Fix teacher access for edit availability modal.
+
 ## Version 0.6.1 (2023081600)
 **Bugfixes:**
 * Bugfix: Added missing observers for mpay24 events.

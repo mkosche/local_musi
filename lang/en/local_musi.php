@@ -203,8 +203,8 @@ $string['action'] = 'Action';
 $string['easyavailability:overbook'] = 'Even if the course is fully booked';
 $string['easyavailability:previouslybooked'] = 'Users who already booked a specific USI course are always allowed to book';
 $string['easyavailability:selectusers'] = 'Selected users are allowed to book outside this timespan';
-$string['easyavailability:formlocked'] = '<div class="alert alert-warning">You cannot acces this form because this booking option has availability conditions which are incompatible with it.
- If you need access, please contact a M:USI admin.</div>';
+$string['easyavailability:formincompatible'] = '<div class="alert alert-warning">This form uses availability conditions
+ that are incompatible with this form. Please contact a M:USI admin.</div>';
  $string['easyavailability:openingtime'] = 'Can be booked from';
 $string['easyavailability:closingtime'] = 'Can be booked until';
 $string['easyavailability:heading'] = '<div class="alert alert-info">You are editing the availability of "<b>{$a}</b>"</div>';

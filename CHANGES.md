@@ -60,7 +60,7 @@
 
 ## Version 0.5.4 (2023061600)
 **New features:**
-* New feature: New possibility for cachier to rebook users manually. In MUSI we can listen to the payment_rebooked event and write into the appropriate payment tables if necessary.
+* New feature: New possibility for cashier to rebook users manually. In MUSI we can listen to the payment_rebooked event and write into the appropriate payment tables if necessary.
 
 **Bugfixes:**
 * Bugfix: Fix cashier typos.

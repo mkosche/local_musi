@@ -1,3 +1,7 @@
+## Version 0.6.3 (2023083100)
+**Improvements:**
+* Improvement: Easy availability modal no longer gets locked with incompatible conditions.
+
 ## Version 0.6.2 (2023082300)
 **New features:**
 * New feature: Plugin config setting to turn descriptions in shortcodes lists on or off.

@@ -806,7 +806,8 @@ class shortcodes {
         $table->define_filtercolumns([
             'id', 'sport' => [
                 'localizedname' => get_string('sport', 'local_musi')
-            ], 'dayofweek' => [
+            ],
+            'dayofweek' => [
                 'localizedname' => get_string('dayofweek', 'local_musi'),
                 'monday' => get_string('monday', 'mod_booking'),
                 'tuesday' => get_string('tuesday', 'mod_booking'),
@@ -815,9 +816,14 @@ class shortcodes {
                 'friday' => get_string('friday', 'mod_booking'),
                 'saturday' => get_string('saturday', 'mod_booking'),
                 'sunday' => get_string('sunday', 'mod_booking')
-            ],  'location' => [
+            ],
+            // We currently hide the location filter until problems with entity-IDs are fixed...
+            // ...and until we have a possibility to hide sub-entities.
+            // phpcs:ignore Squiz.PHP.CommentedOutCode.Found
+            /*'location' => [
                 'localizedname' => get_string('location', 'mod_booking')
-            ],  'botags' => [
+            ],*/
+            'botags' => [
                 'localizedname' => get_string('tags', 'core')
             ]
         ]);

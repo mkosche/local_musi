@@ -90,7 +90,7 @@ $string['editentitiescategories'] = 'Kategorien der Sportstätten bearbeiten';
 $string['importentities'] = 'Sportstätten importieren';
 $string['editbookinginstance'] = 'Semester-Instanz bearbeiten';
 $string['editbookings'] = 'Kurs-Übersicht';
-$string['viewteachers'] = 'Trainer*innen-Übersicht';
+$string['viewteachers'] = 'Trainer:innen-Übersicht';
 $string['teachersinstancereport'] = 'Trainer:innen-Gesamtbericht (Kurse, Fehlstunden, Vertretungen)';
 $string['sapdailysums'] = 'SAP-Buchungsdateien';
 

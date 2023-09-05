@@ -26,6 +26,7 @@
 
 namespace local_musi;
 
+use Closure;
 use context_module;
 use context_system;
 use mod_booking\output\page_allteachers;
@@ -36,11 +37,68 @@ use local_shopping_cart\shopping_cart_credits;
 use mod_booking\booking;
 use mod_booking\singleton_service;
 use moodle_url;
+use stdClass;
 
 /**
  * Deals with local_shortcodes regarding booking.
  */
 class shortcodes {
+
+    /**
+     * Prints out list of bookingoptions.
+     * Arguments can be 'category' or 'perpage'.
+     *
+     * @param string $shortcode
+     * @param array $args
+     * @param string|null $content
+     * @param object $env
+     * @param Closure $next
+     * @return void
+     */
+    public static function showallsports($shortcode, $args, $content, $env, $next) {
+
+        global $DB, $OUTPUT;
+
+        // TODO: Retrieve courseid, preferably via settings.
+        $courseid = sports::return_courseids();
+
+        $sections = $DB->get_records('course_sections', ['course' => $courseid]);
+
+        $pages = sports::return_list_of_pages();
+
+        $data['categories'] = [];
+
+        // Iterate through sport categories.
+        foreach ($sections as $section) {
+
+            if (empty($section->name)) {
+                continue;
+            }
+
+            $cmids = explode(',', $section->sequence);
+
+            $category = [
+                'name' => $section->name,
+                'id' => $section->id,
+                'sports' => []
+            ];
+
+            // Sports.
+            foreach ($cmids as $cmid) {
+                if (isset($pages[$cmid])) {
+                    $category['sports'][] = [
+                        'name' => $pages[$cmid]->name,
+                        'id' => $cmid,
+                        'table' => format_text("[allekurseliste lazy=true category=" . $pages[$cmid]->name . "]"),
+                    ];
+                }
+            }
+            $data['categories'][] = $category;
+        }
+
+        return $OUTPUT->render_from_template('local_musi/shortcodes_rendersportcategories', $data);
+    }
+
 
     /**
      * Prints out list of bookingoptions.

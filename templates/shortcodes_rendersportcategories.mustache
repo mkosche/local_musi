@@ -1,0 +1,75 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template local_musi/table
+    Template which defines a mooduell view page.
+    Classes required for JS:
+    * none
+    Data attributes required for JS:
+    * none
+    Context variables required for this template:
+    * statistics - array: An array with values.
+    * opengames - array: empty array, will be filled with JS.
+    * finishedgames - array: empty array, will be filled with JS.
+    * highscores - array: empty array, will be filled with JS.
+
+    Example context (json):
+    {
+       "categories" : [
+
+          'name': 'myname',
+          'talbe': 'myrenderedtable',
+       ]
+    }
+}}
+
+<div id="accordion">
+  {{#categories}}
+    <div class="card">
+      <div class="card-header" id="headingOne">
+        <h5 class="mb-0">
+          <button class="btn btn-link" data-toggle="collapse" data-target="#category-{{id}}" aria-expanded="true" aria-controls="collapseOne">
+            {{name}}
+          </button>
+        </h5>
+      </div>
+
+      <div id="category-{{id}}" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
+        <div class="card-body">
+            <div id="accordionsport">
+              {{#sports}}
+                <div class="card">
+                  <div class="card-header" id="headingOne">
+                    <h5 class="mb-0">
+                      <button class="btn btn-link" data-toggle="collapse" data-target="#sport-{{id}}" aria-expanded="true" aria-controls="collapseOne">
+                        {{name}}
+                      </button>
+                    </h5>
+                  </div>
+
+                  <div id="sport-{{id}}" class="collapse" aria-labelledby="headingOne" data-parent="#accordionsport">
+                    <div class="card-body">
+                      <div>{{{table}}}</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              {{/sports}}
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  {{/categories}}
+</div>

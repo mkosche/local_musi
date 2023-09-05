@@ -67,4 +67,9 @@ $shortcodes = [
         'wraps' => false,
         'description' => 'shortcodesuserinformation'
     ],
+    'showallsports' => [
+        'callback' => 'local_musi\shortcodes::showallsports',
+        'wraps' => false,
+        'description' => 'shortcodesshowallsports'
+    ],
 ];

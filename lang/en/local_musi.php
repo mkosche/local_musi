@@ -45,6 +45,7 @@ $string['shortcodeslistofmybookingoptionsascards'] = 'My courses as cards';
 $string['shortcodeslistofmybookingoptionsaslist'] = 'My courses as list';
 $string['shortcodeslistofteachersascards'] = 'List of teachers as cards';
 $string['shortcodeslistofmyteachedbookingoptionsascards'] = 'Courses I teach as cards';
+$string['shortcodesshowallsports'] = "List of all sports";
 
 // General strings.
 $string['campaigns'] = 'Campaigns';

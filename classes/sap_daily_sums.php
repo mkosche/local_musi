@@ -137,6 +137,9 @@ class sap_daily_sums {
                 if (empty($kostenstelle)) {
                     $linehaserrors = true;
                 }
+                if (empty($record->lastname)) {
+                    $linehaserrors = true;
+                }
 
                 /*
                  * Mandant - 3 Stellen alphanumerisch - immer "101"
@@ -177,7 +180,11 @@ class sap_daily_sums {
                     $currentline .= str_pad('', 3, " ", STR_PAD_LEFT) . '#';
                 }
                 // Buchungstext - 50 Stellen alphanumerisch.
-                $buchungstext = " US $record->userid " . self::clean_string_for_sap($record->lastname);
+                $lastname = 'UNKNOWN';
+                if (!empty($record->lastname)) {
+                    $lastname = self::clean_string_for_sap($record->lastname);
+                }
+                $buchungstext = " US $record->userid " . $lastname;
                 if (strlen($buchungstext) > 50) {
                     $buchungstext = substr($buchungstext, 0, 50);
                 }

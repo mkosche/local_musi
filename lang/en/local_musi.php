@@ -55,6 +55,7 @@ $string['editavailability'] = 'Edit availability';
 $string['editdescription'] = 'Edit description';
 $string['gateway'] = 'Gateway';
 $string['invisibleoption'] = '<i class="fa fa-eye-slash" aria-hidden="true"></i>';
+$string['sportsdivisions'] = 'Sports divisions';
 $string['titleprefix'] = 'Course number';
 
 // Errors.

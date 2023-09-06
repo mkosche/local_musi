@@ -89,7 +89,7 @@ class shortcodes {
                     $category['sports'][] = [
                         'name' => $pages[$cmid]->name,
                         'id' => $cmid,
-                        'table' => format_text("[allekurseliste sort=1 search=1 lazy=1 category=" . $pages[$cmid]->name . "]"),
+                        'table' => format_text('[allekurseliste sort=1 search=1 lazy=1 category="' . $pages[$cmid]->name . '"]'),
                     ];
                 }
             }

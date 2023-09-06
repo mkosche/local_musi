@@ -34,13 +34,13 @@
     }
 }}
 
-<div id="accordion">
+<div class="allsports">
   {{#categories}}
-    <div class="h3">{{name}}</div>
+    <div class="h4">{{name}}</div>
     <div id="accordionsport" class="mb-3">
       {{#sports}}
         <div class="card border-0">
-          <div class="card-header border-0 bg-white text-primary text-left p-2" id="headingTwo"
+          <div class="card-header border-0 bg-white text-primary text-left p-1" id="headingTwo"
             data-toggle="collapse" data-target="#sport-{{id}}" aria-expanded="true" aria-controls="collapseTwo">
             <span class="h5" style="cursor: pointer;">{{name}}</span>
           </div>

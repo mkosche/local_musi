@@ -36,40 +36,22 @@
 
 <div id="accordion">
   {{#categories}}
-    <div class="card">
-      <div class="card-header" id="headingOne">
-        <h5 class="mb-0">
-          <button class="btn btn-link" data-toggle="collapse" data-target="#category-{{id}}" aria-expanded="true" aria-controls="collapseOne">
-            {{name}}
-          </button>
-        </h5>
-      </div>
+    <div class="h3">{{name}}</div>
+    <div id="accordionsport" class="mb-3">
+      {{#sports}}
+        <div class="card border-0">
+          <div class="card-header border-0 bg-white text-primary text-left p-2" id="headingTwo"
+            data-toggle="collapse" data-target="#sport-{{id}}" aria-expanded="true" aria-controls="collapseTwo">
+            <span class="h5" style="cursor: pointer;">{{name}}</span>
+          </div>
 
-      <div id="category-{{id}}" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
-        <div class="card-body">
-            <div id="accordionsport">
-              {{#sports}}
-                <div class="card">
-                  <div class="card-header" id="headingOne">
-                    <h5 class="mb-0">
-                      <button class="btn btn-link" data-toggle="collapse" data-target="#sport-{{id}}" aria-expanded="true" aria-controls="collapseOne">
-                        {{name}}
-                      </button>
-                    </h5>
-                  </div>
-
-                  <div id="sport-{{id}}" class="collapse" aria-labelledby="headingOne" data-parent="#accordionsport">
-                    <div class="card-body">
-                      <div>{{{table}}}</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              {{/sports}}
+          <div id="sport-{{id}}" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionsport">
+            <div class="card-body border-0">
+              <div>{{{table}}}</div>
             </div>
+          </div>
         </div>
-      </div>
+      {{/sports}}
     </div>
-  </div>
   {{/categories}}
 </div>

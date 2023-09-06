@@ -89,7 +89,7 @@ class shortcodes {
                     $category['sports'][] = [
                         'name' => $pages[$cmid]->name,
                         'id' => $cmid,
-                        'table' => format_text("[allekurseliste lazy=true category=" . $pages[$cmid]->name . "]"),
+                        'table' => format_text("[allekurseliste sort=1 search=1 lazy=1 category=" . $pages[$cmid]->name . "]"),
                     ];
                 }
             }
@@ -215,7 +215,7 @@ class shortcodes {
         $table->tabletemplate = 'local_musi/table_list';
 
         // If we find "nolazy='1'", we return the table directly, without lazy loading.
-        if (isset($args['lazy']) && ($args['lazy'] == 1)) {
+        if (!empty($args['lazy'])) {
 
             list($idstring, $encodedtable, $out) = $table->lazyouthtml($perpage, true);
 
@@ -352,7 +352,7 @@ class shortcodes {
         $table->tabletemplate = 'local_musi/table_grid_list';
 
         // If we find "nolazy='1'", we return the table directly, without lazy loading.
-        if (isset($args['lazy']) && ($args['lazy'] == 1)) {
+        if (!empty($args['lazy'])) {
 
             list($idstring, $encodedtable, $out) = $table->lazyouthtml($perpage, true);
 
@@ -435,7 +435,7 @@ class shortcodes {
         $table->tabletemplate = 'local_musi/table_card';
 
         // If we find "nolazy='1'", we return the table directly, without lazy loading.
-        if (isset($args['lazy']) && ($args['lazy'] == 1)) {
+        if (!empty($args['lazy'])) {
 
             list($idstring, $encodedtable, $out) = $table->lazyouthtml($perpage, true);
 
@@ -512,7 +512,7 @@ class shortcodes {
         $table->tabletemplate = 'local_musi/table_card';
 
         // If we find "nolazy='1'", we return the table directly, without lazy loading.
-        if (isset($args['lazy']) && ($args['lazy'] == 1)) {
+        if (!empty($args['lazy'])) {
 
             list($idstring, $encodedtable, $out) = $table->lazyouthtml($perpage, true);
 
@@ -575,7 +575,7 @@ class shortcodes {
         $table->tabletemplate = 'local_musi/table_card';
 
         // If we find "nolazy='1'", we return the table directly, without lazy loading.
-        if (isset($args['lazy']) && ($args['lazy'] == 1)) {
+        if (!empty($args['lazy'])) {
 
             list($idstring, $encodedtable, $out) = $table->lazyouthtml($perpage, true);
 
@@ -655,7 +655,7 @@ class shortcodes {
         $table->tabletemplate = 'local_musi/table_list';
 
         // If we find "nolazy='1'", we return the table directly, without lazy loading.
-        if (isset($args['lazy']) && ($args['lazy'] == 1)) {
+        if (!empty($args['lazy'])) {
 
             list($idstring, $encodedtable, $out) = $table->lazyouthtml($perpage, true);
 

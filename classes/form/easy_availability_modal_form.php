@@ -92,10 +92,9 @@ class easy_availability_modal_form extends \core_form\dynamic_form {
             'valuehtmlcallback' => function($value) {
                 global $OUTPUT;
                 $user = singleton_service::get_instance_of_user((int)$value);
-                if (!$user || !user_can_view_profile($user)) {
-                    return false;
-                }
                 $details = user_get_user_details($user);
+                $details['firstname'] = $user->firstname;
+                $details['lastname'] = $user->lastname;
                 return $OUTPUT->render_from_template(
                         'local_shopping_cart/form-user-selector-suggestion', $details);
             }

@@ -43,5 +43,7 @@ $PAGE->set_heading($title);
 $PAGE->set_pagelayout('standard');
 $PAGE->add_body_class('local_musi-showallsports');
 echo $OUTPUT->header();
+echo "<div style='margin-left: 3%'>";
 echo format_text("[showallsports]", FORMAT_HTML);
+echo "</div>";
 echo $OUTPUT->footer();

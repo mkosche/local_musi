@@ -58,16 +58,18 @@ class sports {
         global $DB;
 
         $courseid = $DB->get_field_sql(
-            "SELECT DISTINCT cm.course
-            FROM {page} p
-            JOIN {course_modules} cm
-            ON cm.instance = p.id
-            JOIN {modules} m
-            ON m.id = cm.module
-            WHERE m.name = 'page'
-            AND (p.content LIKE '%allekurse%category%'
-            OR p.intro LIKE '%allekurse%category%')
-            LIMIT 1");
+            "SELECT s1.course FROM (
+                SELECT DISTINCT cm.course, count(cm.course)
+                FROM {page} p
+                JOIN {course_modules} cm
+                ON cm.instance = p.id
+                JOIN {modules} m
+                ON m.id = cm.module
+                WHERE (p.content LIKE '%allekurse%category%' OR p.intro LIKE '%allekurse%category%')
+                AND m.name = 'page'
+                GROUP BY cm.course
+                ORDER BY count(cm.course) DESC
+            ) s1 LIMIT 1");
 
         return $courseid;
     }

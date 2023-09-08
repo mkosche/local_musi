@@ -188,8 +188,8 @@
     </div>
   </div>
 </div>
-
 {{#js}}
+{{^norecords}}
   require(['local_musi/easyavailabilitymodal'], function(fn) {
     fn.init(
       '{{#optionid}}{{#value}}{{{value}}}{{/value}}{{/optionid}}',
@@ -197,4 +197,5 @@
       '{{#str}} editavailabilityanddescription, local_musi {{/str}}',
     );
   });
+{{/norecords}}
 {{/js}}

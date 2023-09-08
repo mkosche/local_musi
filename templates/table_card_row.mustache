@@ -163,7 +163,7 @@
     {{/cardfooter}}
   </div>
 </div>
-
+{{^norecords}}
 {{#js}}
   require(['local_musi/easyavailabilitymodal'], function(fn) {
     fn.init(
@@ -173,3 +173,4 @@
     );
   });
 {{/js}}
+{{/norecords}}

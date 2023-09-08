@@ -91,9 +91,10 @@
      </div>
 </div>
 
-
+{{^norecords}}
 {{#js}}
     require(['local_wunderbyte_table/init'], function(init) {
     init.init('{{idstring}}', '{{encodedtable}}');
     });
 {{/js}}
+{{/norecords}}

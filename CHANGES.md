@@ -1,3 +1,17 @@
+## Version 0.6.4 (2023090800)
+**New features:**
+* New feature: Show all sports, their categories and their courses with the [showallsports] shortcode.
+
+**Improvements:**
+* Improvement: Always gender using a colon (":").
+* Improvement: Even better sports divisions list, better styling, show in M:USI dashboard and fix some bugs.
+
+**Bugfixes:**
+* Bugfix: SAP files crash if lastname is null.
+* Bugfix: Fix a bug where firstname and lastname of users were missing in easy availability modal.
+* Bugfix: Fix display of empty tables.
+* Bugfix: Add missing call of init.initprepageinline to table_list.
+
 ## Version 0.6.3 (2023083100)
 **Improvements:**
 * Improvement: Easy availability modal no longer gets locked with incompatible conditions.

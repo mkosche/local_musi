@@ -463,7 +463,7 @@ class musi_table extends wunderbyte_table {
                 'optionid' => $values->optionid
             ));
             // Use html_entity_decode to convert "&amp;" to a simple "&" character.
-            $link = html_entity_decode($link->out());
+            $link = html_entity_decode($link->out(), ENT_QUOTES);
 
             if (!$this->is_downloading()) {
                 // Only format as a button if it's not an export.

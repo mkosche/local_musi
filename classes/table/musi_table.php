@@ -56,12 +56,8 @@ class musi_table extends wunderbyte_table {
     /** @var context_module $buyforuser */
     private $context = null;
 
-    /** @var bool $showunits */
+    /** @var array $displayoptions */
     private $displayoptions = [];
-
-
-    /** @var bool $showunits */
-    private $showunits = false;
 
     /**
      * Constructor

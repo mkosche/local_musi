@@ -181,7 +181,7 @@ class musi_table extends wunderbyte_table {
     public function col_text($values) {
 
         if (!$this->booking) {
-            $this->booking = singleton_service::get_instance_of_booking_by_optionid($values->id);
+            $this->booking = singleton_service::get_instance_of_booking_by_bookingid($values->bookingid);
         }
 
         if ($this->booking) {
@@ -495,7 +495,7 @@ class musi_table extends wunderbyte_table {
     public function col_action($values) {
 
         if (!$this->booking) {
-            $this->booking = singleton_service::get_instance_of_booking_by_optionid($values->id, $values);
+            $this->booking = singleton_service::get_instance_of_booking_by_bookingid($values->bookingid, $values);
         }
 
         $data = new stdClass();

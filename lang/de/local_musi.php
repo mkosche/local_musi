@@ -124,7 +124,7 @@ $string['createbotag:helptext'] = '<p>
 
 // Edit sports.
 $string['editsports'] = 'Sportarten bearbeiten';
-$string['youneedcustomfieldsport'] = 'Das booking customfield mit dem Shortname "sport" ist nicht vorhanden.';
+$string['youneedcustomfieldsport'] = 'Das benutzerdefinierte Feld mit dem Shortname "sport" ist bei dieser Buchungsoption nicht gesetzt.';
 
 // Shortcodes.
 $string['shortcodeslistofbookingoptions'] = 'Liste der buchbaren Kurse';

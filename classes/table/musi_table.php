@@ -86,15 +86,30 @@ class musi_table extends wunderbyte_table {
             $this->buyforuser = singleton_service::get_instance_of_user($buyforuserid);
         }
 
-        $this->set_display_options([]);
-
         // Columns and headers are not defined in constructor, in order to keep things as generic as possible.
     }
 
     public function set_display_options($displayoptions) {
-        $this->displayoptions['showunits'] = !empty($displayoptions['show_units']) ? $displayoptions['show_units'] : false;
-        $this->displayoptions['showmaxanwers'] = !empty($displayoptions['show_max_registrations']) ?
-            $displayoptions['show_max_registrations'] : false;
+
+        // Units, e.g. "(UE: 1,3)".
+        if (isset($displayoptions['showunits'])) { // Do not use empty here!!
+            $this->displayoptions['showunits'] = (bool) $displayoptions['showunits'];
+            // We need this for mustache tow work.
+            if (!$this->displayoptions['showunits']) {
+                unset($this->displayoptions['showunits']);
+            }
+        }
+
+        // Max. answers.
+        if (!isset($displayoptions['showmaxanwers'])) { // Do not use empty here!!
+            $this->displayoptions['showmaxanwers'] = true; // Max. answers are shown by default.
+        } else {
+            $this->displayoptions['showmaxanwers'] = (bool) $displayoptions['showmaxanwers'];
+            // We need this for mustache tow work.
+            if (!$this->displayoptions['showmaxanwers']) {
+                unset($this->displayoptions['showmaxanwers']);
+            }
+        }
     }
 
     /**
@@ -220,7 +235,9 @@ class musi_table extends wunderbyte_table {
         $settings = singleton_service::get_instance_of_booking_option_settings($values->id, $values);
         // Render col_bookings using a template.
         $data = new col_availableplaces($values, $settings, $this->buyforuser);
-        $data->showmaxanswers = $this->displayoptions['showmaxanwers'];
+        if (!empty($this->displayoptions['showmaxanwers'])) {
+            $data->showmaxanswers = $this->displayoptions['showmaxanwers'];
+        }
         $output = singleton_service::get_renderer('local_musi');
         return $output->render_col_availableplaces($data);
     }
@@ -406,7 +423,7 @@ class musi_table extends wunderbyte_table {
             } else {
                 $ret = get_string('datenotset', 'mod_booking');
             }
-            if (!$this->is_downloading() &&  $this->displayoptions['showunits']) {
+            if (!$this->is_downloading() &&  !empty($this->displayoptions['showunits'])) {
                 $units = dates_handler::calculate_and_render_educational_units($settings->dayofweektime);
                 $ret .= " ($units)";
             }

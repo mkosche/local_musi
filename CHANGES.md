@@ -1,3 +1,6 @@
+## Version 0.6.6 (2023091401)
+* Improvement: Show parent entitiy with entity
+* Improvement: Upgrade all existing location fields in booking with new (parent) entity for better filtering.
 ## Version 0.6.5 (2023091400)
 * Improvement: Moodle 4.2 compatibility issue with html_entity_decode.
 * Improvement: Speed up table.

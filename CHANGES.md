@@ -1,3 +1,8 @@
+## Version 0.6.5 (2023091400)
+* Improvement: Moodle 4.2 compatibility issue with html_entity_decode.
+* Improvement: Speed up table.
+* Improvement: Show max answers as default.
+
 ## Version 0.6.4 (2023090800)
 **New features:**
 * New feature: Show all sports, their categories and their courses with the [showallsports] shortcode.

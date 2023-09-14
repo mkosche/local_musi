@@ -25,13 +25,13 @@
 defined('MOODLE_INTERNAL') || die();
 
 $plugin->component = 'local_musi';
-$plugin->release = '0.6.4';
-$plugin->version = 2023090800;
+$plugin->release = '0.6.5';
+$plugin->version = 2023091400;
 $plugin->requires = 2022041900; // Requires this Moodle version. Current: Moodle 4.0.0.
 $plugin->maturity = MATURITY_ALPHA;
 $plugin->dependencies = [
-    'mod_booking' => 2023090800,
-    'local_wunderbyte_table' => 2023090800,
-    'local_shopping_cart' => 2023090600,
+    'mod_booking' => 2023091400,
+    'local_wunderbyte_table' => 2023091400,
+    'local_shopping_cart' => 2023091400,
     'local_entities' => 2023081100,
 ];

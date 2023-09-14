@@ -129,5 +129,43 @@ function xmldb_local_musi_upgrade($oldversion) {
         upgrade_plugin_savepoint(true, 2023041700, 'local', 'musi');
     }
 
+    if ($oldversion < 2023091401) {
+
+        // We need to run a correction on all the booking option.
+
+        if (class_exists('local_entities\entitiesrelation_handler')) {
+
+            global $DB;
+
+            // Get the record with all the entities relations and their parents.
+            $sql = "SELECT ler.*, e.name, (
+                                        SELECT pe.name
+                                        FROM {local_entities} pe
+                                        WHERE pe.id=e.parentid) as parentname
+
+                                FROM {local_entities_relations} ler
+                                JOIN {local_entities} e
+                                ON e.id=ler.entityid
+                                WHERE component='mod_booking'
+                                AND area='option'";
+
+            $records = $DB->get_records_sql($sql);
+
+            foreach ($records as $record) {
+
+                $data = (object)[
+                    'id' => $record->instanceid,
+                    'location' => $record->parentname ?? $record->name,
+                ];
+
+                $DB->update_record('booking_options', $data, true);
+            }
+
+        }
+
+        // Musi savepoint reached.
+        upgrade_plugin_savepoint(true, 2023091401, 'local', 'musi');
+    }
+
     return true;
 }

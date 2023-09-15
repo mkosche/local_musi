@@ -92,11 +92,14 @@ class easy_availability_modal_form extends \core_form\dynamic_form {
             'valuehtmlcallback' => function($value) {
                 global $OUTPUT;
                 $user = singleton_service::get_instance_of_user((int)$value);
-                $details = user_get_user_details($user);
-                $details['firstname'] = $user->firstname;
-                $details['lastname'] = $user->lastname;
+                $details = [
+                    'id' => $user->id,
+                    'email' => $user->email,
+                    'firstname' => $user->firstname,
+                    'lastname' => $user->lastname,
+                ];
                 return $OUTPUT->render_from_template(
-                        'local_shopping_cart/form-user-selector-suggestion', $details);
+                        'mod_booking/form-user-selector-suggestion', $details);
             }
         ];
         $mform->addElement('autocomplete', 'bo_cond_selectusers_userids',
@@ -202,7 +205,7 @@ class easy_availability_modal_form extends \core_form\dynamic_form {
                             $data->bo_cond_selectusers_restrict = true;
                             $data->bo_cond_selectusers_userids = $av->userids;
                         }
-                        if (in_array(BO_COND_FULLYBOOKED, $av->overrides) && in_array(BO_COND_NOTIFYMELIST, $av->overrides)) {
+                        if (in_array(BO_COND_FULLYBOOKED, $av->overrides ?? []) && in_array(BO_COND_NOTIFYMELIST, $av->overrides ?? [])) {
                             $data->selectusersoverbookcheckbox = true;
                         } else {
                             $data->selectusersoverbookcheckbox = false;
@@ -213,7 +216,7 @@ class easy_availability_modal_form extends \core_form\dynamic_form {
                             $data->bo_cond_previouslybooked_restrict = true;
                             $data->bo_cond_previouslybooked_optionid = (int)$av->optionid;
                         }
-                        if (in_array(BO_COND_FULLYBOOKED, $av->overrides) && in_array(BO_COND_NOTIFYMELIST, $av->overrides)) {
+                        if (in_array(BO_COND_FULLYBOOKED, $av->overrides ?? []) && in_array(BO_COND_NOTIFYMELIST, $av->overrides ?? [])) {
                             $data->previouslybookedoverbookcheckbox = true;
                         } else {
                             $data->previouslybookedoverbookcheckbox = false;

@@ -25,7 +25,7 @@
 require_once(__DIR__ . '/../../config.php');
 
 // Second param: allow guest autologin.
-require_login(0, true);
+// require_login(0, true);
 
 global $DB, $PAGE, $OUTPUT, $USER;
 

@@ -1,3 +1,5 @@
+## Version 0.6.8 (2023091900)
+* Improvement: Show Sparten without login
 ## Version 0.6.6 (2023091401)
 * Improvement: Show parent entitiy with entity
 * Improvement: Upgrade all existing location fields in booking with new (parent) entity for better filtering.

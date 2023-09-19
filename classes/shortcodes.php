@@ -908,7 +908,9 @@ class shortcodes {
         }
 
         if (!empty($args['search'])) {
-            $table->define_fulltextsearchcolumns(['titleprefix', 'text', 'sport', 'description', 'location', 'teacherobjects']);
+            $table->define_fulltextsearchcolumns([
+                'titleprefix', 'text', 'sport', 'description', 'location',
+                'teacherobjects', 'botags']);
         }
 
         if (!empty($args['sort'])) {

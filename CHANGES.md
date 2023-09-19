@@ -1,3 +1,6 @@
+## Version 0.6.9 (2023091901)
+* Improvement: Add Tags to full text search.
+
 ## Version 0.6.8 (2023091900)
 * Improvement: Show Sparten without login
 ## Version 0.6.6 (2023091401)

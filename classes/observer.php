@@ -180,7 +180,7 @@ class observer {
             // phpcs:ignore Squiz.PHP.CommentedOutCode.Found
             /* $identifier = $useidentifierfrommusiorderid ? $musiidentifier : $identifier; */
 
-            if (!$existingpaymentrecord = $DB->get_records('payments', [
+            if (!$existingpaymentrecord = $DB->get_record('payments', [
                 'component' => 'local_shopping_cart',
                 'itemid' => $identifier,
                 'userid' => $userid

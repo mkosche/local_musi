@@ -108,7 +108,7 @@ while ($starttimestamp <= $yesterday) {
     }
     $starttimestamp = strtotime('+1 day', $starttimestamp);
     // Collect all files in single directory.
-    sap_daily_sums::copy_file_todir($file, $filename);
+    sap_daily_sums::copy_file_to_dir($file, $filename);
 }
 
 // List all existing files as links.

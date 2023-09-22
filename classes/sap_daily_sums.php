@@ -26,6 +26,10 @@
 
 namespace local_musi;
 
+use core_payment\account;
+use moodle_exception;
+use stored_file;
+
 /**
  * Deals with local_shortcodes regarding booking.
  */
@@ -46,7 +50,7 @@ class sap_daily_sums {
         $accountid = get_config('local_shopping_cart', 'accountid');
         $account = null;
         if (!empty($accountid)) {
-            $account = new \core_payment\account($accountid);
+            $account = new account($accountid);
         }
 
         // Create selects for each payment gateway.
@@ -293,29 +297,45 @@ class sap_daily_sums {
     /**
      * Collect all files without errors in a single directory.
      *
-     * @param \stored_file $file
+     * @param stored_file $file
      * @param string $filename
      * @return void
      */
-    public static function copy_file_todir(\stored_file $file, string $filename) {
+    public static function copy_file_to_dir(stored_file $file, string $filename) {
         global $CFG;
         // Copy the file to a directory in moodleroot, create dir if it does not.
-        $dataroot = $CFG->dataroot;
-        $datadir = $dataroot . '/sapfiles';
-        $filepath = $datadir . "/" . $filename;
-        if (!is_dir($datadir)) {
-            // Create the directory if it doesn't exist
-            if (!make_upload_directory('sapfiles')) {
-                // Handle directory creation error (e.g., display an error message)
-                throw new \moodle_exception('errorcreatingdirectory', 'local_musi');
+        try {
+            $dataroot = $CFG->dataroot;
+            $datadir = $dataroot . '/sapfiles';
+            $filepath = $datadir . "/" . $filename;
+            if (!is_dir($datadir)) {
+                // Create the directory if it doesn't exist
+                if (!make_upload_directory('sapfiles')) {
+                    // Handle directory creation error (e.g., display an error message)
+                    throw new moodle_exception('errorcreatingdirectory', 'local_musi');
+                }
             }
-        }
-        // Copy the file to the sapfiles directory.
-        if (file_exists($filepath)) {
-            return;
-        }
-        if (!$file->copy_content_to($filepath)) {
-            throw new \moodle_exception('errorcopyingfiles', 'local_musi');
+            // Copy the file to the sapfiles directory.
+            if (file_exists($filepath)) {
+                return;
+            }
+            if (!$file->copy_content_to($filepath)) {
+                throw new moodle_exception('errorcopyingfiles', 'local_musi');
+            }
+        } catch (moodle_exception $e) {
+            // Exception handling.
+            $message = $e->getMessage();
+            $code = $e->getCode();
+            // Get detailed information about $file.
+            $fileInfo = array(
+                    'filename' => $file->get_filename(),
+                    'filepath' => $file->get_filepath(),
+                    'filesize' => $file->get_filesize(),
+                    'filearea' => $file->get_filearea(),
+                    'timecreated' => $file->get_timecreated(),
+
+            );
+            error_log("Moodle Exception: $message (Code: $code). File Info: " . print_r($fileInfo, true));
         }
     }
 }

@@ -86,7 +86,7 @@ while ($starttimestamp <= $yesterday) {
         );
 
         list($content, $errorcontent) = sap_daily_sums::generate_sap_text_file_for_date(date('Y-m-d', $starttimestamp));
-        $fs->create_file_from_string($fileinfo, $content);
+        $file = $fs->create_file_from_string($fileinfo, $content);
 
         // If we have error content, we create an error file.
         if (!empty($errorcontent)) {
@@ -107,6 +107,8 @@ while ($starttimestamp <= $yesterday) {
         }
     }
     $starttimestamp = strtotime('+1 day', $starttimestamp);
+    // Collect all files in single directory.
+    sap_daily_sums::copy_file_todir($file, $filename);
 }
 
 // List all existing files as links.
@@ -161,14 +163,12 @@ echo $OUTPUT->footer();
  * @param array $dataforsapfiletemplate
  * @return string the html
  */
-function build_sapfiles_accordion(array $dataforsapfiletemplate) {
+function build_sapfiles_accordion(array $dataforsapfiletemplate): string {
 
     // Unfortunately, the nested array did not work properly with mustache.
     // So we build the HTML with this function.
 
-    $html = '';
-    $html .=
-    '<div id="sapfiles-years-accordion">
+    $html = '<div id="sapfiles-years-accordion">
         <div class="sapfiles-year">';
 
     if (!empty($dataforsapfiletemplate['year'])) {

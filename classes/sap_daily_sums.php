@@ -36,7 +36,7 @@ class sap_daily_sums {
      * @param string $day formatted day to generate the SAP text file for
      * @return array [$content, $errorcontent] file content and content of the error file
      */
-    public static function generate_sap_text_file_for_date(string $day) {
+    public static function generate_sap_text_file_for_date(string $day): array {
         global $DB;
 
         $startofday = strtotime($day . ' 00:00');
@@ -239,10 +239,11 @@ class sap_daily_sums {
     /**
      * Helper function to replace special characters like "ä" with "ae" etc.
      * And convert to uppercase letters.
-     * @param string $inputstring the input string
-     * @param return string the cleaned output string
+     *
+     * @param string $stringwithspecialchars
+     * @return string the cleaned output string
      */
-    public static function clean_string_for_sap(string $stringwithspecialchars) {
+    public static function clean_string_for_sap(string $stringwithspecialchars): string {
 
         // At first replace special chars.
         $umlaute = [
@@ -286,8 +287,35 @@ class sap_daily_sums {
         $string = utf8_encode($string);
 
         // At last, make it UPPERCASE.
-        $string = strtoupper($string);
+        return strtoupper($string);
+    }
 
-        return $string;
+    /**
+     * Collect all files without errors in a single directory.
+     *
+     * @param \stored_file $file
+     * @param string $filename
+     * @return void
+     */
+    public static function copy_file_todir(\stored_file $file, string $filename) {
+        global $CFG;
+        // Copy the file to a directory in moodleroot, create dir if it does not.
+        $dataroot = $CFG->dataroot;
+        $datadir = $dataroot . '/sapfiles';
+        $filepath = $datadir . "/" . $filename;
+        if (!is_dir($datadir)) {
+            // Create the directory if it doesn't exist
+            if (!make_upload_directory('sapfiles')) {
+                // Handle directory creation error (e.g., display an error message)
+                throw new Exception('Error creating sapfiles directory');
+            }
+        }
+        // Copy the file to the sapfiles directory.
+        if (file_exists($filepath)) {
+            return;
+        }
+        if (!$file->copy_content_to($filepath)) {
+            throw new Exception('Error copying the file to sapfiles directory');
+        }
     }
 }

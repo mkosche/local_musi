@@ -307,7 +307,7 @@ class sap_daily_sums {
             // Create the directory if it doesn't exist
             if (!make_upload_directory('sapfiles')) {
                 // Handle directory creation error (e.g., display an error message)
-                throw new Exception('Error creating sapfiles directory');
+                throw new \moodle_exception('errorcreatingdirectory', 'local_musi');
             }
         }
         // Copy the file to the sapfiles directory.
@@ -315,7 +315,7 @@ class sap_daily_sums {
             return;
         }
         if (!$file->copy_content_to($filepath)) {
-            throw new Exception('Error copying the file to sapfiles directory');
+            throw new \moodle_exception('errorcopyingfiles', 'local_musi');
         }
     }
 }

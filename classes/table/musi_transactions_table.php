@@ -203,7 +203,7 @@ class musi_transactions_table extends wunderbyte_table {
             // Transaction could not be verified.
             return [
                 'success' => 0,
-                'message' => get_string('statusnotchanged', 'local_musi')
+                'message' => get_string('statusnotchanged', 'local_musi') . " : " . $e->getMessage()
             ];
         }
         // Delete cache if successfull -> data has been changed.
@@ -216,7 +216,7 @@ class musi_transactions_table extends wunderbyte_table {
         } else {
             return [
                 'success' => 0,
-                'message' => get_string('statusnotchanged', 'local_musi')
+                'message' => get_string('statusnotchanged', 'local_musi') . " : " . $result['message']
             ];
         }
     }

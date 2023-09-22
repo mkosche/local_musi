@@ -288,7 +288,8 @@ class sap_daily_sums {
         $string = preg_replace("/[^A-Za-z0-9 ]/", '', $string);
 
         // Now make sure, it's encoded as UTF-8.
-        $string = utf8_encode($string);
+        // Note: utf8_encode() has been deprecated since php 8.2 .
+        $string = mb_convert_encoding($string, 'UTF-8', 'ISO-8859-1');
 
         // At last, make it UPPERCASE.
         return strtoupper($string);
@@ -309,9 +310,9 @@ class sap_daily_sums {
             $datadir = $dataroot . '/sapfiles';
             $filepath = $datadir . "/" . $filename;
             if (!is_dir($datadir)) {
-                // Create the directory if it doesn't exist
+                // Create the directory if it doesn't exist.
                 if (!make_upload_directory('sapfiles')) {
-                    // Handle directory creation error (e.g., display an error message)
+                    // Handle directory creation error (e.g., display an error message).
                     throw new moodle_exception('errorcreatingdirectory', 'local_musi');
                 }
             }
@@ -327,7 +328,7 @@ class sap_daily_sums {
             $message = $e->getMessage();
             $code = $e->getCode();
             // Get detailed information about $file.
-            $fileInfo = array(
+            $fileinfo = array(
                     'filename' => $file->get_filename(),
                     'filepath' => $file->get_filepath(),
                     'filesize' => $file->get_filesize(),
@@ -335,7 +336,7 @@ class sap_daily_sums {
                     'timecreated' => $file->get_timecreated(),
 
             );
-            error_log("Moodle Exception: $message (Code: $code). File Info: " . print_r($fileInfo, true));
+            debugging("Moodle Exception: $message (Code: $code). File Info: " . var_dump($fileinfo, true));
         }
     }
 }

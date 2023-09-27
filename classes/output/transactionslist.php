@@ -89,8 +89,10 @@ class transactionslist implements renderable, templatable {
 
         $table->define_cache('local_musi', 'cachedpaymenttable');
 
+        $table->pageable(true);
+
         // Pass html to render.
-        list($idstring, $encodedtable, $html) = $table->lazyouthtml(20, true);
+        list($idstring, $encodedtable, $html) = $table->lazyouthtml(50, true);
         $this->tabledata = $html;
         // phpcs:ignore Squiz.PHP.CommentedOutCode.Found
         // Not lazy laod : $this->tabledata = $table->outhtml(20, true).

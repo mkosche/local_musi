@@ -1,3 +1,11 @@
+## Version 0.7.0 (2023092700)
+* Improvement: Copy SAP files to single dir.
+* Improvement: Better Feedback for check status button.
+* Improvement: Paging for transactions list.
+* Improvement: [showallsports] can now be used with German shortcode [sparten] too.
+* Bugfix: Use get_record for existing payment record.
+* Bugfix: Fix exception handling.
+
 ## Version 0.6.9 (2023091901)
 * Improvement: Add Tags to full text search.
 

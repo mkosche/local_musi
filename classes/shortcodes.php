@@ -79,7 +79,8 @@ class shortcodes {
 
             $category = [
                 'name' => $section->name,
-                'id' => $section->id,
+                'categoryid' => $section->id,
+                'summary' => $section->summary,
                 'sports' => []
             ];
 

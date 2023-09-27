@@ -26,6 +26,7 @@
 
 namespace local_musi;
 
+use context_system;
 use core_payment\account;
 use moodle_exception;
 use stored_file;
@@ -337,6 +338,66 @@ class sap_daily_sums {
 
             );
             debugging("Moodle Exception: $message (Code: $code). File Info: " . var_dump($fileinfo, true));
+        }
+    }
+
+    /**
+     * @param string $starttimestamp
+     * @return void
+     * @throws \file_exception
+     * @throws \stored_file_creation_exception
+     * @throws moodle_exception
+     */
+    public static function create_sap_files_from_date(int $starttimestamp): void {
+        $now = time();
+        if (!$context = context_system::instance()) {
+            throw new moodle_exception('badcontext');
+        }
+        $yesterday = strtotime('-1 day', $now);
+        $fs = get_file_storage();
+        $contextid = $context->id;
+        $component = 'local_musi';
+        $filearea = 'musi_sap_dailysums';
+        $itemid = 0;
+        $filepath = '/';
+        while ($starttimestamp <= $yesterday) {
+            $filename = 'SAP_USI_' . date('Ymd', $starttimestamp);
+            // Retrieve the file from the Files API.
+            $file = $fs->get_file($contextid, $component, $filearea, $itemid, $filepath, $filename);
+            if (!$file) {
+                $fileinfo = array(
+                        'contextid' => $contextid,
+                        'component' => $component,
+                        'filearea' => $filearea,
+                        'itemid' => $itemid,
+                        'filepath' => $filepath,
+                        'filename' => $filename
+                );
+
+                list($content, $errorcontent) = sap_daily_sums::generate_sap_text_file_for_date(date('Y-m-d', $starttimestamp));
+                $file = $fs->create_file_from_string($fileinfo, $content);
+
+                // If we have error content, we create an error file.
+                if (!empty($errorcontent)) {
+                    $errorfilename = 'SAP_USI_' . date('Ymd', $starttimestamp) . '_errors';
+                    $errorfile = $fs->get_file($contextid, $component, $filearea, $itemid, $filepath, $errorfilename);
+                    if (!$errorfile) {
+                        $errorfileinfo = array(
+                                'contextid' => $contextid,
+                                'component' => $component,
+                                'filearea' => $filearea,
+                                'itemid' => $itemid,
+                                'filepath' => $filepath,
+                                'filename' => $errorfilename
+                        );
+                        $fs->create_file_from_string($errorfileinfo, $errorcontent);
+                    }
+
+                }
+            }
+            $starttimestamp = strtotime('+1 day', $starttimestamp);
+            // Collect all files in single directory.
+            sap_daily_sums::copy_file_to_dir($file, $filename);
         }
     }
 }

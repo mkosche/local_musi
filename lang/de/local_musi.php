@@ -214,3 +214,6 @@ $string['easyavailability:formincompatible'] = '<div class="alert alert-warning"
 $string['easyavailability:openingtime'] = 'Kann gebucht werden ab';
 $string['easyavailability:closingtime'] = 'Kann gebucht werden bis';
 $string['easyavailability:heading'] = '<div class="alert alert-info">Sie bearbeiten die Verfügbarkeit von "<b>{$a}</b>"</div>';
+
+// Task.
+$string['create_sap_files'] = 'Die täglichen SAP Dateien erstellen.';

@@ -58,58 +58,11 @@ $PAGE->set_pagelayout('standard');
 echo $OUTPUT->header();
 
 $now = time(); // Current timestamp.
-$yesterday = strtotime('-1 day', $now);
 $dateoneyearago = strtotime('-365 days', $now);
 
 $fs = get_file_storage();
 
-$contextid = $context->id;
-$component = 'local_musi';
-$filearea = 'musi_sap_dailysums';
-$itemid = 0;
-$filepath = '/';
-
-$starttimestamp = $dateoneyearago;
-while ($starttimestamp <= $yesterday) {
-    $filename = 'SAP_USI_' . date('Ymd', $starttimestamp);
-
-    // Retrieve the file from the Files API.
-    $file = $fs->get_file($contextid, $component, $filearea, $itemid, $filepath, $filename);
-    if (!$file) {
-        $fileinfo = array(
-            'contextid' => $contextid,
-            'component' => $component,
-            'filearea' => $filearea,
-            'itemid' => $itemid,
-            'filepath' => $filepath,
-            'filename' => $filename
-        );
-
-        list($content, $errorcontent) = sap_daily_sums::generate_sap_text_file_for_date(date('Y-m-d', $starttimestamp));
-        $file = $fs->create_file_from_string($fileinfo, $content);
-
-        // If we have error content, we create an error file.
-        if (!empty($errorcontent)) {
-            $errorfilename = 'SAP_USI_' . date('Ymd', $starttimestamp) . '_errors';
-            $errorfile = $fs->get_file($contextid, $component, $filearea, $itemid, $filepath, $errorfilename);
-            if (!$errorfile) {
-                $errorfileinfo = array(
-                    'contextid' => $contextid,
-                    'component' => $component,
-                    'filearea' => $filearea,
-                    'itemid' => $itemid,
-                    'filepath' => $filepath,
-                    'filename' => $errorfilename
-                );
-                $fs->create_file_from_string($errorfileinfo, $errorcontent);
-            }
-
-        }
-    }
-    $starttimestamp = strtotime('+1 day', $starttimestamp);
-    // Collect all files in single directory.
-    sap_daily_sums::copy_file_to_dir($file, $filename);
-}
+sap_daily_sums::create_sap_files_from_date($dateoneyearago);
 
 // List all existing files as links.
 // Revert the order, so we have the newest files on top.

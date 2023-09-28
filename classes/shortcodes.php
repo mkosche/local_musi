@@ -87,8 +87,16 @@ class shortcodes {
             // Sports.
             foreach ($cmids as $cmid) {
                 if (isset($pages[$cmid])) {
+
+                    $description = null;
+                    // We do not add descriptions, if they contain one of the "[allekurse..." shorcodes.
+                    if (strpos($pages[$cmid]->intro, "[allekurse") == false) {
+                        $description = $pages[$cmid]->intro;
+                    }
+
                     $category['sports'][] = [
                         'name' => $pages[$cmid]->name,
+                        'description' => $description,
                         'id' => $cmid,
                         'table' => format_text('[allekurseliste sort=1 search=1 lazy=1 category="' . $pages[$cmid]->name . '"]'),
                     ];

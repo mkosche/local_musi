@@ -45,7 +45,7 @@
       </div>
 
       <div id="accordionsport-{{categoryid}}" class="collapse mb-3">
-        <div class="ml-3 mt-1">{{{summary}}}</div>
+        {{#summary}}<div class="sportsdivision-summary ml-3 mt-1">{{{summary}}}</div>{{/summary}}
         {{#sports}}
           <div class="card border-0">
             <div class="card-header border-0 bg-white text-primary text-left p-1" id="heading-sport-{{id}}"
@@ -54,7 +54,8 @@
             </div>
 
             <div id="sport-{{id}}" class="collapse" aria-labelledby="heading-sport-{{id}}" data-parent="#accordionsport-{{categoryid}}">
-              <div class="card-body border-0">
+              <div class="card-body p-2 mb-3 border-0">
+                {{#description}}<div class="sport-description mb-1 ml-3">{{{description}}}</div>{{/description}}
                 <div>{{{table}}}</div>
               </div>
             </div>

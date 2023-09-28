@@ -36,7 +36,7 @@ class sports {
     public static function return_list_of_pages() {
         global $DB;
 
-        $sql = "SELECT cm.id, p.name
+        $sql = "SELECT cm.id, p.name, p.intro
                 FROM {page} p
                 LEFT JOIN {course_modules} cm
                 ON cm.instance = p.id

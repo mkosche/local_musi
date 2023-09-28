@@ -59,6 +59,7 @@ echo $OUTPUT->header();
 
 $now = time(); // Current timestamp.
 $dateoneyearago = strtotime('-365 days', $now);
+$contextid = $context->id;
 
 $fs = get_file_storage();
 

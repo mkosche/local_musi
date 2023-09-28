@@ -29,7 +29,6 @@ class create_sap_files extends scheduled_task {
     /**
      * Get name of the task.
      * @return string
-     * @throws \coding_exception
      */
     public function get_name() {
         return get_string('create_sap_files', 'local_musi');
@@ -38,9 +37,6 @@ class create_sap_files extends scheduled_task {
     /**
      * Scheduled task that creates the SAP files needed for reporting.
      *
-     * @throws \coding_exception
-     * @throws \dml_exception
-     * @throws \moodle_exception
      */
     public function execute() {
         $now = time();

@@ -59,7 +59,6 @@ echo $OUTPUT->header();
 
 $now = time(); // Current timestamp.
 $dateoneyearago = strtotime('-365 days', $now);
-$contextid = $context->id;
 
 $fs = get_file_storage();
 
@@ -81,11 +80,11 @@ foreach ($files as $file) {
     $month = substr($datepart, 4, 2);
 
     $url = moodle_url::make_pluginfile_url(
-        $contextid,
-        $component,
-        $filearea,
-        $itemid,
-        $filepath,
+        $context->id,
+        $file->get_component(),
+        $file->get_filearea(),
+        $file->get_itemid(),
+        $file->get_filepath(),
         $filename,
         true // Force download of the file.
     );

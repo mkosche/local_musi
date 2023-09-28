@@ -37,7 +37,6 @@ use local_shopping_cart\shopping_cart_credits;
 use mod_booking\booking;
 use mod_booking\singleton_service;
 use moodle_url;
-use stdClass;
 
 /**
  * Deals with local_shortcodes regarding booking.
@@ -87,6 +86,12 @@ class shortcodes {
             // Sports.
             foreach ($cmids as $cmid) {
                 if (isset($pages[$cmid])) {
+
+                    // If the page is hidden, we do not want to add it.
+                    list($course, $cm) = get_course_and_cm_from_cmid($cmid);
+                    if (empty($cm->visible)) {
+                        continue;
+                    }
 
                     $description = null;
                     // We do not add descriptions, if they contain one of the "[allekurse..." shorcodes.

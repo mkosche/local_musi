@@ -27,7 +27,6 @@
 namespace local_musi;
 
 use Closure;
-use context_module;
 use context_system;
 use mod_booking\output\page_allteachers;
 use local_musi\output\userinformation;
@@ -67,6 +66,9 @@ class shortcodes {
 
         $data['categories'] = [];
 
+        $caneditsubstitutionspool = has_capability('local/musi:editsubstitutionspool', context_system::instance());
+        // TODO: $canviewsubstitutions ... for teachers. They can view but not edit.
+
         // Iterate through sport categories.
         foreach ($sections as $section) {
 
@@ -93,17 +95,27 @@ class shortcodes {
                         continue;
                     }
 
+                    $sport = $pages[$cmid]->name;
+
                     $description = null;
                     // We do not add descriptions, if they contain one of the "[allekurse..." shorcodes.
                     if (strpos($pages[$cmid]->intro, "[allekurse") == false) {
                         $description = $pages[$cmid]->intro;
                     }
 
+                    $editsubstitutionspool = null;
+                    if ($caneditsubstitutionspool) {
+                        $editsubstitutionspool = true;
+                    }
+                    // TODO: $canviewsubstitutions.
+
                     $category['sports'][] = [
                         'name' => $pages[$cmid]->name,
+                        'editsubstitutionspool' => $editsubstitutionspool,
+                        // TODO: $canviewsubstitutions.
                         'description' => $description,
                         'id' => $cmid,
-                        'table' => format_text('[allekurseliste sort=1 search=1 lazy=1 category="' . $pages[$cmid]->name . '"]'),
+                        'table' => format_text('[allekurseliste sort=1 search=1 lazy=1 category="' . $sport . '"]'),
                     ];
                 }
             }

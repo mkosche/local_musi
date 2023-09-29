@@ -167,5 +167,31 @@ function xmldb_local_musi_upgrade($oldversion) {
         upgrade_plugin_savepoint(true, 2023091401, 'local', 'musi');
     }
 
+    if ($oldversion < 2023092900) {
+
+        // Define table local_musi_substitutions to be created.
+        $table = new xmldb_table('local_musi_substitutions');
+
+        // Adding fields to table local_musi_substitutions.
+        $table->add_field('id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, XMLDB_SEQUENCE, null);
+        $table->add_field('sport', XMLDB_TYPE_CHAR, '255', null, XMLDB_NOTNULL, null, null);
+        $table->add_field('teachers', XMLDB_TYPE_TEXT, null, null, null, null, null);
+        $table->add_field('usermodified', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
+        $table->add_field('timecreated', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
+        $table->add_field('timemodified', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
+
+        // Adding keys to table local_musi_substitutions.
+        $table->add_key('primary', XMLDB_KEY_PRIMARY, ['id']);
+        $table->add_key('usermodified', XMLDB_KEY_FOREIGN, ['usermodified'], 'user', ['id']);
+
+        // Conditionally launch create table for local_musi_substitutions.
+        if (!$dbman->table_exists($table)) {
+            $dbman->create_table($table);
+        }
+
+        // Musi savepoint reached.
+        upgrade_plugin_savepoint(true, 2023092900, 'local', 'musi');
+    }
+
     return true;
 }

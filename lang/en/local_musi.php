@@ -31,6 +31,7 @@ $string['dashboard'] = 'Dashboard';
 $string['messageprovider:sendmessages'] = 'Send messages';
 $string['musi:cansendmessages'] = 'Can send messages';
 $string['musi:editavailability'] = 'Can change availability and reservations';
+$string['musi:editsubstitutionspool'] = 'Can edit the substitutions pool of teachers for different sports';
 
 // Caches.
 $string['cachedef_cachedpaymenttable'] = 'Cached payment table (transaction list).';
@@ -53,6 +54,8 @@ $string['dayofweek'] = 'Weekday';
 $string['editavailabilityanddescription'] = 'Edit availability & description';
 $string['editavailability'] = 'Edit availability';
 $string['editdescription'] = 'Edit description';
+$string['editsubstitutionspool'] = 'Edit substitutions pool';
+$string['substitutionspool:infotext'] = 'Teachers allowed to substitute <b>{$a}</b>:';
 $string['gateway'] = 'Gateway';
 $string['invisibleoption'] = '<i class="fa fa-eye-slash" aria-hidden="true"></i>';
 $string['sportsdivisions'] = 'Sports divisions';

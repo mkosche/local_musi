@@ -40,6 +40,13 @@ $capabilities = [
             'manager' => CAP_ALLOW
         ],
     ],
+    'local/musi:editsubstitutionspool' => [
+        'captype' => 'write',
+        'contextlevel' => CONTEXT_SYSTEM,
+        'archetypes' => [
+            'manager' => CAP_ALLOW
+        ],
+    ],
     'local/musi:cansendmessages' => [
         'captype' => 'write',
         'contextlevel' => CONTEXT_SYSTEM,

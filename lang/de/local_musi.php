@@ -32,6 +32,7 @@ $string['messageprovider:sendmessages'] = 'Verschicke Nachrichten';
 $string['musi:cansendmessages'] = 'Kann Nachrichten schicken.';
 $string['musi:editavailability'] = 'Kann die Verfügbarkeit von Buchungsoptionen ändern und Vorreservierungen anlegen';
 $string['musi:editsubstitutionspool'] = 'Kann den Vertretungspool für einzelne Sportarten bearbeiten';
+$string['musi:viewsubstitutionspool'] = 'Kann den Vertretungspool für einzelne Sportarten sehen und E-Mails an den Vertretungspool senden';
 
 // Caches.
 $string['cachedef_cachedpaymenttable'] = 'Zahlungstransaktionen (Cache)';
@@ -54,7 +55,10 @@ $string['dayofweek'] = 'Wochentag';
 $string['editavailabilityanddescription'] = 'Verfügbarkeit & Beschreibung bearbeiten';
 $string['editavailability'] = 'Verfügbarkeit bearbeiten';
 $string['editdescription'] = 'Beschreibung bearbeiten';
+$string['substitutionspool'] = 'Vertretungspool für {$a}';
 $string['editsubstitutionspool'] = 'Vertretungspool bearbeiten';
+$string['viewsubstitutionspool'] = 'Vertretungspool ansehen';
+$string['mailtosubstitutionspool'] = 'E-Mail an Vertretungspool senden';
 $string['substitutionspool:infotext'] = 'Trainer:innen, die <b>{$a}</b> vertreten dürfen:';
 $string['gateway'] = 'Gateway';
 $string['invisibleoption'] = '<i class="fa fa-eye-slash" aria-hidden="true"></i>';

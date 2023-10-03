@@ -239,3 +239,8 @@ div.columnclass.titleprefix {
 .wunderbyteTableFilter > div {
     background-color: #fff;
 }
+
+/* Substitutions pool teacher selector. */
+div[id*="substitutionspoolteachers"] .form-autocomplete-suggestions {
+    position: fixed;
+}

@@ -54,7 +54,7 @@ class sports {
      *
      * @return array
      */
-    public static function return_courseids() {
+    public static function return_courseid() {
         global $DB;
 
         $courseid = $DB->get_field_sql(

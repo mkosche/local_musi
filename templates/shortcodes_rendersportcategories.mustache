@@ -56,9 +56,9 @@
             <div id="sport-{{id}}" class="collapse" aria-labelledby="heading-sport-{{id}}" data-parent="#accordionsport-{{categoryid}}">
               <div class="card-body p-2 mb-3 border-0">
                 {{#editsubstitutionspool}}
-                  <button class="btn btn-sm btn-light ml-3 mb-3" data-action="editsubstitutionspool-{{id}}" data-sport="{{name}}" data-id="{{id}}">
-                    <i class="fa fa-user"></i>&nbsp;<i class="fa fa-exchange"></i>&nbsp;<i class="fa fa-users"></i>
-                    &nbsp;{{#str}} editsubstitutionspool, local_musi {{/str}}
+                  <button class="btn btn-sm btn-light ml-1 mb-3" data-action="editsubstitutionspool-{{id}}" data-sport="{{name}}" data-id="{{id}}">
+                    <i class="fa fa-cog" aria-hidden="true"></i>&nbsp;
+                    {{#str}} editsubstitutionspool, local_musi {{/str}}
                   </button>
                   {{#js}}
                     require(['local_musi/substitutionspool'], function(fn) {
@@ -70,6 +70,32 @@
                     });
                   {{/js}}
                 {{/editsubstitutionspool}}
+                {{#viewsubstitutionspool}}
+                  {{#mailtolink}}
+                    <a href="{{mailtolink}}" class="btn btn-sm btn-light ml-1 mb-3" role="button">
+                      <i class="fa fa-envelope" aria-hidden="true"></i>&nbsp;
+                      {{#str}} mailtosubstitutionspool, local_musi {{/str}}&nbsp;
+                    </a>
+                  {{/mailtolink}}
+                  <button class="btn btn-sm btn-light ml-1 mb-3" type="button" data-toggle="collapse" data-target="#substitutionteachers"
+                    aria-expanded="false" aria-controls="substitutionteachers">
+                    <i class="fa fa-eye" aria-hidden="true"></i>&nbsp;
+                    {{#str}} viewsubstitutionspool, local_musi {{/str}}
+                  </button>
+                  <div class="collapse" id="substitutionteachers">
+                    <div class="card card-body mb-3">
+                      <h5>
+                        <i class="fa fa-user"></i>&nbsp;
+                        <i class="fa fa-exchange"></i>&nbsp;
+                        <i class="fa fa-users"></i>&nbsp;
+                        {{#str}} substitutionspool, local_musi, {{name}} {{/str}}
+                      </h5>
+                      {{#substitutionteachers}}
+                        <a href="{{url}}" target="_blank">{{firstname}} {{lastname}}</a>
+                      {{/substitutionteachers}}
+                    </div>
+                  </div>
+                {{/viewsubstitutionspool}}
                 {{#description}}<div class="sport-description mb-1 ml-3">{{{description}}}</div>{{/description}}
                 <div>{{{table}}}</div>
               </div>
@@ -80,8 +106,3 @@
     </div>
   {{/categories}}
 </div>
-{{#js}}
-  require(['local_musi/'], function(fn) {
-    fn.init();
-  });
-{{/js}}

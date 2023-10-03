@@ -36,6 +36,7 @@ use local_shopping_cart\shopping_cart_credits;
 use mod_booking\booking;
 use mod_booking\singleton_service;
 use moodle_url;
+use stdClass;
 
 /**
  * Deals with local_shortcodes regarding booking.
@@ -55,10 +56,10 @@ class shortcodes {
      */
     public static function showallsports($shortcode, $args, $content, $env, $next) {
 
-        global $DB, $OUTPUT;
+        global $DB, $OUTPUT, $USER;
 
-        // TODO: Retrieve courseid, preferably via settings.
-        $courseid = sports::return_courseids();
+        // Get the ID of the course containing the sports categories.
+        $courseid = sports::return_courseid();
 
         $sections = $DB->get_records('course_sections', ['course' => $courseid]);
 
@@ -67,7 +68,7 @@ class shortcodes {
         $data['categories'] = [];
 
         $caneditsubstitutionspool = has_capability('local/musi:editsubstitutionspool', context_system::instance());
-        // TODO: $canviewsubstitutions ... for teachers. They can view but not edit.
+        $canviewsubstitutionspool = has_capability('local/musi:viewsubstitutionspool', context_system::instance());
 
         // Iterate through sport categories.
         foreach ($sections as $section) {
@@ -107,12 +108,50 @@ class shortcodes {
                     if ($caneditsubstitutionspool) {
                         $editsubstitutionspool = true;
                     }
-                    // TODO: $canviewsubstitutions.
+
+                    $viewsubstitutionspool = null;
+                    $substitutionteachers = [];
+                    if ($canviewsubstitutionspool) {
+                        $viewsubstitutionspool = true;
+                        // Retrieve the list of teachers who can substitute.
+                        if ($record = $DB->get_record('local_musi_substitutions', ['sport' => $sport])) {
+                            if (!empty($record->teachers)) {
+                                $teacherids = explode(',', $record->teachers);
+                                foreach ($teacherids as $teacherid) {
+                                    $fullteacher = singleton_service::get_instance_of_user((int)$teacherid);
+                                    if (!empty($fullteacher)) {
+                                        $teacher['id'] = $fullteacher->id;
+                                        $teacher['firstname'] = $fullteacher->firstname;
+                                        $teacher['lastname'] = $fullteacher->lastname;
+                                        $teacher['email'] = $fullteacher->email;
+                                        $teacher['url'] = new moodle_url('/mod/booking/teacher.php',
+                                            ['teacherid' => $fullteacher->id]);
+                                        $substitutionteachers[] = $teacher;
+                                    }
+                                }
+                            }
+                        }
+                        // Generate mailto-Link.
+                        $emailstring = '';
+                        if (!empty($substitutionteachers)) {
+                            foreach ($substitutionteachers as $teacher) {
+                                if (!empty($teacher['email']) && ($teacher['email'] != $USER->email)) {
+                                    $emailstring .= $teacher['email'] . ";";
+                                }
+                            }
+                            if (!empty($emailstring)) {
+                                $emailstring = trim($emailstring, ';');
+                                $mailtolink = "mailto:$emailstring";
+                            }
+                        }
+                    }
 
                     $category['sports'][] = [
-                        'name' => $pages[$cmid]->name,
+                        'name' => $sport,
                         'editsubstitutionspool' => $editsubstitutionspool,
-                        // TODO: $canviewsubstitutions.
+                        'viewsubstitutionspool' => $viewsubstitutionspool,
+                        'substitutionteachers' => $substitutionteachers,
+                        'mailtolink' => $mailtolink ?? null,
                         'description' => $description,
                         'id' => $cmid,
                         'table' => format_text('[allekurseliste sort=1 search=1 lazy=1 category="' . $sport . '"]'),
@@ -121,10 +160,8 @@ class shortcodes {
             }
             $data['categories'][] = $category;
         }
-
         return $OUTPUT->render_from_template('local_musi/shortcodes_rendersportcategories', $data);
     }
-
 
     /**
      * Prints out list of bookingoptions.

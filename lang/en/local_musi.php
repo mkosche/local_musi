@@ -202,7 +202,7 @@ $string['statusnotchanged'] = 'Status not changed';
 
 $string['id'] = 'Entry';
 $string['transactionid'] = 'Internal ID';
-$string['itemid'] = 'Item ID';
+$string['itemid'] = 'ItemID';
 $string['username'] = 'User';
 $string['price'] = 'Amount';
 $string['names'] = 'Purchases';

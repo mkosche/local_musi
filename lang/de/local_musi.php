@@ -206,7 +206,7 @@ $string['statusnotchanged'] = 'Status nicht geändert';
 
 $string['id'] = 'Eintrag';
 $string['transactionid'] = 'Interne ID';
-$string['itemid'] = 'Item ID';
+$string['itemid'] = 'ItemID';
 $string['username'] = 'Nutzer';
 $string['price'] = 'Betrag';
 $string['names'] = 'Buchungen';

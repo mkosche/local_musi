@@ -103,7 +103,7 @@ class substitutionspool_form extends \core_form\dynamic_form {
         $sport = $data->sport;
 
         $teacheridsarr = $data->substitutionspoolteachers;
-        $teacherids = implode(',', $teacheridsarr);
+        $teacherids = trim(implode(',', $teacheridsarr), ',');
         $now = time();
 
         if ($existingrecord = $DB->get_record('local_musi_substitutions', ['sport' => $sport])) {

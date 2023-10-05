@@ -61,7 +61,7 @@ class shortcodes {
         // Get the ID of the course containing the sports categories.
         $courseid = sports::return_courseid();
 
-        $sections = $DB->get_records('course_sections', ['course' => $courseid]);
+        $sections = $DB->get_records('course_sections', ['course' => $courseid], 'section ASC');
 
         $pages = sports::return_list_of_pages();
 

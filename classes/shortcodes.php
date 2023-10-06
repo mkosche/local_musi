@@ -141,7 +141,9 @@ class shortcodes {
                             }
                             if (!empty($emailstring)) {
                                 $emailstring = trim($emailstring, ';');
-                                $mailtolink = "mailto:$emailstring";
+                                $loggedinuseremail = $USER->email;
+                                $mailtolink = str_replace(' ', '%20', htmlspecialchars("mailto:$loggedinuseremail?bcc=$emailstring",
+                                    ENT_QUOTES));
                             }
                         }
                     }

@@ -86,6 +86,21 @@ class shortcodes {
                 'sports' => []
             ];
 
+            // For performance.
+            // Get all sport records.
+            $sportrecords = $DB->get_records_sql("SELECT sport, teachers FROM {local_musi_substitutions}");
+            // Get all teacher records.
+            $teachersarr = [];
+            foreach ($sportrecords as $sportrecord) {
+                $teacherids = explode(',', $sportrecord->teachers);
+                foreach ($teacherids as $teacherid) {
+                    $teachersarr[$teacherid] = $teacherid;
+                }
+            }
+            list($inorequal, $params) = $DB->get_in_or_equal($teachersarr);
+            $sql = "SELECT id, firstname, lastname, email, phone1, phone2 FROM {user} WHERE id $inorequal";
+            $teacherrecords = $DB->get_records_sql($sql, $params);
+
             // Sports.
             foreach ($cmids as $cmid) {
                 if (isset($pages[$cmid])) {
@@ -114,11 +129,12 @@ class shortcodes {
                     if ($canviewsubstitutionspool) {
                         $viewsubstitutionspool = true;
                         // Retrieve the list of teachers who can substitute.
-                        if ($record = $DB->get_record('local_musi_substitutions', ['sport' => $sport])) {
+                        if (!empty($sportrecords[$sport])) {
+                            $record = $sportrecords[$sport];
                             if (!empty($record->teachers)) {
                                 $teacherids = explode(',', $record->teachers);
                                 foreach ($teacherids as $teacherid) {
-                                    $fullteacher = singleton_service::get_instance_of_user((int)$teacherid);
+                                    $fullteacher = $teacherrecords[$teacherid] ?? null;
                                     if (!empty($fullteacher)) {
                                         $teacher['id'] = $fullteacher->id;
                                         $teacher['firstname'] = $fullteacher->firstname;

@@ -24,6 +24,7 @@ require_once($CFG->libdir.'/tablelib.php');
 
 use coding_exception;
 use context_module;
+use context_system;
 use dml_exception;
 use html_writer;
 use local_wunderbyte_table\wunderbyte_table;
@@ -391,10 +392,12 @@ class musi_table extends wunderbyte_table {
 
         if (!empty($settings->courseid) && (
                 $status == STATUSPARAM_BOOKED ||
-                has_capability('mod/booking:updatebooking', $this->context) ||
-                (has_capability('mod/booking:addeditownoption', $this->context) && $isteacherofthisoption) ||
-                (has_capability('mod/booking:limitededitownoption', $this->context) && $isteacherofthisoption)
-        )) {
+                has_capability('mod/booking:updatebooking', context_system::instance()) ||
+                $isteacherofthisoption)) {
+            // The link will be shown to everyone who...
+            // ...has booked this option.
+            // ...is a teacher of this option.
+            // ...has the system-wide "updatebooking" capability (admins).
             $gotomoodlecourse = get_string('tocoursecontent', 'local_musi');
             $ret = "<a href='$courseurl' target='_self' class='btn btn-primary mt-2 mb-2 w-100'>
                 <i class='fa fa-graduation-cap fa-fw' aria-hidden='true'></i>&nbsp;&nbsp;$gotomoodlecourse

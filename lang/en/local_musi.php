@@ -60,6 +60,8 @@ $string['editsubstitutionspool'] = 'Edit substitutions pool';
 $string['viewsubstitutionspool'] = 'View substitutions pool';
 $string['mailtosubstitutionspool'] = 'Send email to substitutions pool';
 $string['substitutionspool:infotext'] = 'Teachers allowed to substitute <b>{$a}</b>:';
+$string['substitutionspool:mailproblems'] = 'Click here if you have problems with sending emails...';
+$string['substitutionspool:copypastemails'] = 'You can copy the emails manually and paste them into the BCC of your mail client:';
 $string['gateway'] = 'Gateway';
 $string['invisibleoption'] = '<i class="fa fa-eye-slash" aria-hidden="true"></i>';
 $string['sportsdivisions'] = 'Sports divisions';

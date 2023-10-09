@@ -56,7 +56,7 @@
             <div id="sport-{{id}}" class="collapse" aria-labelledby="heading-sport-{{id}}" data-parent="#accordionsport-{{categoryid}}">
               <div class="card-body p-2 mb-3 border-0">
                 {{#editsubstitutionspool}}
-                  <button class="btn btn-sm btn-light ml-1 mb-3" data-action="editsubstitutionspool-{{id}}" data-sport="{{name}}" data-id="{{id}}">
+                  <button class="btn btn-sm btn-light ml-1" data-action="editsubstitutionspool-{{id}}" data-sport="{{name}}" data-id="{{id}}">
                     <i class="fa fa-cog" aria-hidden="true"></i>&nbsp;
                     {{#str}} editsubstitutionspool, local_musi {{/str}}
                   </button>
@@ -72,31 +72,59 @@
                 {{/editsubstitutionspool}}
                 {{#viewsubstitutionspool}}
                   {{#mailtolink}}
-                    <a href="{{mailtolink}}" class="btn btn-sm btn-light ml-1 mb-3" role="button">
+                    <a href="{{mailtolink}}" class="btn btn-sm btn-light ml-1" role="button">
                       <i class="fa fa-envelope" aria-hidden="true"></i>&nbsp;
                       {{#str}} mailtosubstitutionspool, local_musi {{/str}}&nbsp;
                     </a>
                   {{/mailtolink}}
-                  <button class="btn btn-sm btn-light ml-1 mb-3" type="button" data-toggle="collapse" data-target="#substitutionteachers"
+                  <button class="btn btn-sm btn-light ml-1" type="button" data-toggle="collapse" data-target="#substitutionteachers"
                     aria-expanded="false" aria-controls="substitutionteachers">
                     <i class="fa fa-eye" aria-hidden="true"></i>&nbsp;
                     {{#str}} viewsubstitutionspool, local_musi {{/str}}
                   </button>
                   <div class="collapse" id="substitutionteachers">
                     <div class="card card-body mb-3">
-                      <h5>
+                      <h5 class="mb-2">
                         <i class="fa fa-user"></i>&nbsp;
                         <i class="fa fa-exchange"></i>&nbsp;
                         <i class="fa fa-users"></i>&nbsp;
                         {{#str}} substitutionspool, local_musi, {{name}} {{/str}}
                       </h5>
+                      <table class="border-0" style="width: fit-content;">
                       {{#substitutionteachers}}
-                        <a href="{{url}}" target="_blank">{{firstname}} {{lastname}}</a>
+                        <tr>
+                          <td>
+                            {{lastname}}, {{firstname}}
+                          </td>
+                          <td class="pl-3">
+                            {{#email}}<i class="fa fa-envelope" aria-hidden="true"></i>&nbsp;<a href="mailto:{{.}}">{{.}}</a>{{/email}}
+                          </td>
+                          <td class="pl-3">
+                            {{#phone1}}<i class="fa fa-phone" aria-hidden="true"></i>&nbsp;{{.}}{{/phone1}}
+                          </td>
+                          <td class="pl-3">
+                            {{#phone2}}<i class="fa fa-phone" aria-hidden="true"></i>&nbsp;{{.}}{{/phone2}}
+                          </td>
+                        </tr>
                       {{/substitutionteachers}}
+                      </table>
                     </div>
                   </div>
+                  {{#emailstring}}
+                  <div>
+                    <a class="small ml-3 mt-1 mb-3" data-toggle="collapse" href="#substitutionteachersemails" role="button" aria-expanded="false" aria-controls="substitutionteachersemails">
+                      <i class="fa fa-question-circle" aria-hidden="true"></i>&nbsp;&nbsp;{{#str}} substitutionspool:mailproblems, local_musi {{/str}}
+                    </a>
+                    <div class="collapse" id="substitutionteachersemails">
+                      <div class="mt-1 ml-3 mb-3">
+                        {{#str}} substitutionspool:copypastemails, local_musi {{/str}}<br>
+                        <pre class="bg-light m-1 p-3">{{emailstring}}</pre>
+                      </div>
+                    </div>
+                  </div>
+                  {{/emailstring}}
                 {{/viewsubstitutionspool}}
-                {{#description}}<div class="sport-description mb-1 ml-3">{{{description}}}</div>{{/description}}
+                {{#description}}<div class="sport-description mt-3 mb-1 ml-3">{{{description}}}</div>{{/description}}
                 <div>{{{table}}}</div>
               </div>
             </div>

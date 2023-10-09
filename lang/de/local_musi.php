@@ -60,6 +60,8 @@ $string['editsubstitutionspool'] = 'Vertretungspool bearbeiten';
 $string['viewsubstitutionspool'] = 'Vertretungspool ansehen';
 $string['mailtosubstitutionspool'] = 'E-Mail an Vertretungspool senden';
 $string['substitutionspool:infotext'] = 'Trainer:innen, die <b>{$a}</b> vertreten dürfen:';
+$string['substitutionspool:mailproblems'] = 'Hier klicken, wenn Sie Probleme beim Versenden der E-Mails haben...';
+$string['substitutionspool:copypastemails'] = 'Kopieren Sie die folgenden E-Mail-Adressen in das BCC-Feld Ihres E-Mail-Programms:';
 $string['gateway'] = 'Gateway';
 $string['invisibleoption'] = '<i class="fa fa-eye-slash" aria-hidden="true"></i>';
 $string['sportsdivisions'] = 'Sparten';

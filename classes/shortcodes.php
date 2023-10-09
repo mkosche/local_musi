@@ -140,11 +140,15 @@ class shortcodes {
                                         $teacher['firstname'] = $fullteacher->firstname;
                                         $teacher['lastname'] = $fullteacher->lastname;
                                         $teacher['email'] = $fullteacher->email;
-                                        $teacher['url'] = new moodle_url('/mod/booking/teacher.php',
-                                            ['teacherid' => $fullteacher->id]);
+                                        $teacher['phone1'] = $fullteacher->phone1;
+                                        $teacher['phone2'] = $fullteacher->phone2;
                                         $substitutionteachers[] = $teacher;
                                     }
                                 }
+                                // Now sort the teachers by last name.
+                                usort($substitutionteachers, function($a, $b) {
+                                    return $a['lastname'] <=> $b['lastname'];
+                                });
                             }
                         }
                         // Generate mailto-Link.
@@ -170,6 +174,7 @@ class shortcodes {
                         'viewsubstitutionspool' => $viewsubstitutionspool,
                         'substitutionteachers' => $substitutionteachers,
                         'mailtolink' => $mailtolink ?? null,
+                        'emailstring' => $emailstring ?? null,
                         'description' => $description,
                         'id' => $cmid,
                         'table' => format_text('[allekurseliste sort=1 search=1 lazy=1 category="' . $sport . '"]'),

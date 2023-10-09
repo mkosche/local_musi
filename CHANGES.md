@@ -1,3 +1,16 @@
+## Version 0.7.1 (2023100900)
+* New feature: Show and edit substitution pools and write direct emails to all teachers within a pool.
+* Improvement: Create SAP files daily in mdata.
+* Improvement: Fix contextid and undefinded vars with SAP files.
+* Improvement: Better sports divisions with possibility to hide divisions (if page is hidden, division will be hidden too).
+* Improvement: Show descriptions for sports divisions and sports in divisions list.
+* Improvement: Order sections in showallsports shortcode the same way they are ordered in course.
+* Improvement: Better styling for sports divisions list.
+* Improvement: Access restrictions for "Go to Moodle course" now make more sense.
+* Improvement: Show mail addresses of substitution users in BCC.
+* Improvement: Better performance for substitutions pool.
+* Bugfix: Trim ',' at beginning and end of imploded teacher ids.
+
 ## Version 0.7.0 (2023092700)
 * Improvement: Copy SAP files to single dir.
 * Improvement: Better Feedback for check status button.

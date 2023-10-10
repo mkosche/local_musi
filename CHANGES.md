@@ -1,3 +1,7 @@
+## Version 0.7.2 (2023101000)
+* Improvement: Better substitutions pool with phone numbers and possibility to copy all mail addresses.
+* Bugfix: Add missing JS (initbookitbutton) to MUSI table list template.
+
 ## Version 0.7.1 (2023100900)
 * New feature: Show and edit substitution pools and write direct emails to all teachers within a pool.
 * Improvement: Create SAP files daily in mdata.

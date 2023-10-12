@@ -61,7 +61,7 @@ class substitutionspool_form extends \core_form\dynamic_form {
                     'lastname' => $user->lastname,
                 ];
                 return $OUTPUT->render_from_template(
-                        'mod_booking/form-user-selector-suggestion-small', $details);
+                        'mod_booking/form-user-selector-suggestion', $details);
             }
         ];
         $mform->addElement('autocomplete', 'substitutionspoolteachers',

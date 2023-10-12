@@ -58,6 +58,8 @@ class shortcodes {
 
         global $DB, $OUTPUT, $USER;
 
+        self::fix_args($args);
+
         // Get the ID of the course containing the sports categories.
         $courseid = sports::return_courseid();
 
@@ -201,6 +203,8 @@ class shortcodes {
 
         global $USER, $PAGE;
 
+        self::fix_args($args);
+
         $userid = $args['userid'] ?? 0;
         // If the id argument was not passed on, we have a fallback in the connfig.
         $context = context_system::instance();
@@ -232,6 +236,8 @@ class shortcodes {
      * @return void
      */
     public static function allcourseslist($shortcode, $args, $content, $env, $next) {
+
+        self::fix_args($args);
 
         $booking = self::get_booking($args);
 
@@ -326,6 +332,8 @@ class shortcodes {
      * @return void
      */
     public static function allcoursesgrid($shortcode, $args, $content, $env, $next) {
+
+        self::fix_args($args);
 
         $booking = self::get_booking($args);
 
@@ -468,7 +476,7 @@ class shortcodes {
         /* if (!has_capability('moodle/site:config', $env->context)) {
             return '';
         } */
-
+        self::fix_args($args);
         $booking = self::get_booking($args);
 
         if (!isset($args['category']) || !$category = ($args['category'])) {
@@ -548,7 +556,7 @@ class shortcodes {
     public static function mycoursescards($shortcode, $args, $content, $env, $next) {
 
         global $USER;
-
+        self::fix_args($args);
         $booking = self::get_booking($args);
 
         if (!isset($args['category']) || !$category = ($args['category'])) {
@@ -623,7 +631,7 @@ class shortcodes {
     public static function myteachedcoursescards($shortcode, $args, $content, $env, $next) {
 
         global $USER;
-
+        self::fix_args($args);
         $booking = self::get_booking($args);
 
         if (
@@ -686,7 +694,7 @@ class shortcodes {
     public static function mycourseslist($shortcode, $args, $content, $env, $next) {
 
         global $USER;
-
+        self::fix_args($args);
         $booking = self::get_booking($args);
 
         if (!isset($args['category']) || !$category = ($args['category'])) {
@@ -764,7 +772,7 @@ class shortcodes {
      */
     public static function userdashboardcards($shortcode, $args, $content, $env, $next) {
         global $DB, $PAGE, $USER;
-
+        self::fix_args($args);
         // If the id argument was not passed on, we have a fallback in the connfig.
         if (!isset($args['id'])) {
             $args['id'] = get_config('local_musi', 'shortcodessetinstance');
@@ -807,7 +815,7 @@ class shortcodes {
      */
     public static function allteacherscards($shortcode, $args, $content, $env, $next) {
         global $DB, $PAGE;
-
+        self::fix_args($args);
         $teacherids = [];
 
         // Now get all teachers that we're interested in.
@@ -848,7 +856,7 @@ class shortcodes {
         /* if (!has_capability('moodle/site:config', $env->context)) {
             return '';
         } */
-
+        self::fix_args($args);
         $booking = self::get_booking($args);
 
         if (!isset($args['category']) || !$category = ($args['category'])) {
@@ -968,6 +976,7 @@ class shortcodes {
     }
 
     private static function get_booking($args) {
+        self::fix_args($args);
         // If the id argument was not passed on, we have a fallback in the connfig.
         if (!isset($args['id'])) {
             $args['id'] = get_config('local_musi', 'shortcodessetinstance');
@@ -986,7 +995,9 @@ class shortcodes {
     }
 
     private static function set_table_options_from_arguments(&$table, $args) {
+        self::fix_args($args);
 
+        /** @var musi_table $table */
         $table->set_display_options($args);
 
         if (!empty($args['filter'])) {
@@ -1006,12 +1017,23 @@ class shortcodes {
                 'sport' => get_string('sport', 'local_musi'),
                 'location' => get_string('location', 'local_musi'),
             ]);
+        }
+
+        if (!empty($args['sortby'])) {
+            $defaultorder = SORT_ASC; // Default.
+            if (!empty($args['sortorder'])) {
+                if (strtolower($args['sortorder']) === "desc") {
+                    $defaultorder = SORT_DESC;
+                }
+            }
+            $table->sortable(true, $args['sortby'], $defaultorder);
         } else {
-            $table->sortable(true, 'text');
+            $table->sortable(true, 'text', SORT_ASC);
         }
     }
 
     private static function generate_table_for_cards(&$table, $args) {
+        self::fix_args($args);
         $table->define_cache('mod_booking', 'bookingoptionstable');
 
         // We define it here so we can pass it with the mustache template.
@@ -1066,6 +1088,7 @@ class shortcodes {
     }
 
     private static function generate_table_for_list(&$table, $args) {
+        self::fix_args($args);
         $subcolumnsleftside = ['text'];
         $subcolumnsinfo = ['teacher', 'dayofweektime', 'location', 'institution', 'bookings'];
 
@@ -1170,5 +1193,17 @@ class shortcodes {
         );
 
         $table->is_downloading('', 'List of booking options');
+    }
+
+    /**
+     * Helper function to remove quotation marks from args.
+     * @param array &$args reference to arguments array
+     */
+    private static function fix_args(array &$args) {
+        foreach ($args as $key => &$value) {
+            // Get rid of quotation marks.
+            $value = str_replace('"', '', $value);
+            $value = str_replace("'", "", $value);
+        }
     }
 }

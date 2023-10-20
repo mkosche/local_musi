@@ -1,3 +1,8 @@
+## Version 0.7.3 (2023102000)
+* New feature: Add possibility to set default sort column (sortby) and sort direction (sortorder) with args.
+* Improvement: We now use the small user selector everywhere.
+* Improvement: Show mobile phone (phone2) before phone (phone1) and use mobile phone icon.
+
 ## Version 0.7.2 (2023101000)
 * Improvement: Better substitutions pool with phone numbers and possibility to copy all mail addresses.
 * Bugfix: Add missing JS (initbookitbutton) to MUSI table list template.

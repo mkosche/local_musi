@@ -25,8 +25,8 @@
 namespace local_musi\output\tabs;
 
 use html_writer;
-use local_musi\output\page_teacher;
 use mod_booking\singleton_service;
+use mod_booking\output\page_allteachers;
 use moodle_url;
 use renderer_base;
 use renderable;
@@ -49,6 +49,7 @@ class teacher extends base {
      * @return array
      */
     public function export_for_template(renderer_base $output) {
+        //error_log(print_r( $this->get_teachers(),true));
         return $this->get_teachers();
     }
 
@@ -96,63 +97,28 @@ class teacher extends base {
             $PAGE->set_context($context);
         }
 
+        $teacherids = [];
+
+// Now get all teachers that we're interested in.
         $sqlteachers =
-            "SELECT DISTINCT u.id, u.firstname, u.lastname, u.email, u.picture, u.description, u.descriptionformat, u.email, u.maildisplay
-            FROM {booking_teachers} bt
-            LEFT JOIN {user} u
-            ON u.id = bt.userid
-            ORDER BY u.lastname ASC";
+            "SELECT DISTINCT bt.userid, u.firstname, u.lastname, u.email
+    FROM {booking_teachers} bt
+    LEFT JOIN {user} u
+    ON u.id = bt.userid
+    ORDER BY u.lastname ASC";
 
-        $teacherrecords = $DB->get_records_sql($sqlteachers);
-        // We transform the data object to an array where we can read key & value.
-        foreach ($teacherrecords as $teacher) {
-            if($teacher->id != null) {
-                // Here we can load custom userprofile fields and add the to the array to render.
-                // Right now, we just use a few standard pieces of information.
-
-                $teacherarr = [
-                    'teacherid' => $teacher->id,
-                    'firstname' => $teacher->firstname,
-                    'lastname' => $teacher->lastname,
-                    'orderletter' => substr($teacher->lastname, 0, 1), // First letter of the teacher's last name.
-                    'description' => format_text($teacher->description, $teacher->descriptionformat)
-                ];
-
-                if ($teacher->picture) {
-                    $picture = new \user_picture($teacher);
-                    $picture->size = 70;
-                    $imageurl = $picture->get_url($PAGE);
-                    $teacherarr['image'] = $imageurl;
-                }
-
-                // Add a link to the report of performed teaching units.
-                // But only, if the user has the appropriate capability.
-                if ((has_capability('mod/booking:updatebooking', $PAGE->context))) {
-                    $url = new moodle_url('/mod/booking/teacher_performed_units_report.php', ['teacherid' => $teacher->id]);
-                    $teacherarr['linktoperformedunitsreport'] = $url->out();
-                }
-
-                // If the user has set to hide e-mails, we won't show them.
-                // However, a site admin will always see e-mail addresses.
-                if (!empty($teacher->email) &&
-                    ($teacher->maildisplay == 1 || has_capability('local/musi:canedit', $context))) {
-                    $teacherarr['email'] = $teacher->email;
-                }
-
-                if (page_teacher::teacher_messaging_is_possible($teacher->id)) {
-                    $teacherarr['messagingispossible'] = true;
-                }
-
-                $link = new moodle_url('/local/musi/teacher.php', ['teacherid' => $teacher->id]);
-                $teacherarr['link'] = $link->out(false);
-
-                $messagelink = new moodle_url('/message/index.php', ['id' => $teacher->id]);
-                $teacherarr['messagelink'] = $messagelink->out(false);
-
-                $returnarray['teachers'][] = $teacherarr;
+        if ($teacherrecords = $DB->get_records_sql($sqlteachers)) {
+            foreach ($teacherrecords as $teacherrecord) {
+                $teacherids[] = $teacherrecord->userid;
             }
         }
 
-        return $returnarray;
+// Now prepare the data for all teachers.
+        $data = new page_allteachers($teacherids);
+
+        $output = $PAGE->get_renderer('local_musi');
+
+// And return the rendered page showing all teachers.
+       return $data->export_for_template($output);
     }
 }

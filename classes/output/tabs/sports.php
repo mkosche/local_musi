@@ -51,7 +51,8 @@ class sports extends base {
      * @return array
      */
     public function export_for_template(renderer_base $output) {
-       return $this->get_sports();
+        $retarr['content'] = format_text("[sparten]", FORMAT_HTML);
+       return $retarr;
     }
 
     /**
@@ -79,7 +80,7 @@ class sports extends base {
      * @return string
      */
     public function get_template(): string {
-        return 'local_musi/dashboard_card_quicklinks';
+        return 'local_musi/tabs/html_content';
     }
 
     private function get_sports() {

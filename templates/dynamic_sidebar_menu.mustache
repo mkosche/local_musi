@@ -42,16 +42,14 @@
 
 <div class="container-fluid" >
     <div class="dynamictabs row">
-        <nav class="col-md-2 d-none d-md-block bg-white sidebar shadow" style="border-right: gray 1px solid">
-            <nav class="navbar sticky-top flex-md-nowrap p-0 bg-white">
-                <a class="navbar-brand col-sm-3 col-md-2 mr-0 bg-white" href="#">{{#str}} musi, local_musi {{/str}}</a>
-            </nav>
-            <div class="sidebar-sticky">
+
+            <div class="sidebar-sticky col ">
+                <div class="card">
             {{#showtabsnavigation}}
                 <ul class="nav flex-column  mb-4 moodle-has-zindex" id="dynamictabs-tabs" role="tablist">
                     {{#tabs}}
-                        <li class="nav-item" role="presentation">
-                            <a class="nav-link {{#active}}active{{/active}} {{^enabled}}disabled{{/enabled}}" id="{{shortname}}-tab" data-toggle="tab" href="#{{shortname}}" role="tab" aria-controls="{{shortname}}">
+                        <li class="nav-item" role="presentation" style="line-height: 2; font-size: 120%; ">
+                            <a class="nav-link  text-secondary {{#active}}active{{/active}} {{^enabled}}disabled{{/enabled}}" id="{{shortname}}-tab" data-toggle="tab" href="#{{shortname}}" role="tab" aria-controls="{{shortname}}">
                                 {{#dataattributes}}<i class="fa {{value}}"></i>{{/dataattributes}} {{{displayname}}}
                             </a>
                         </li>
@@ -59,8 +57,9 @@
                 </ul>
             {{/showtabsnavigation}}
             </div>
-        </nav>
-            <div class="tab-content col-md-9 bg-light" id="dynamictabs-content">
+            </div>
+
+            <div class="tab-content col-md-10 bg-light" id="dynamictabs-content">
                 {{#tabs}}
                     <div class="tab-pane fade container-fluid {{#active}}show active{{/active}}"
                          id="{{shortname}}"

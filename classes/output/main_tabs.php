@@ -37,7 +37,7 @@ class main_tabs {
     /**
      * Create standard dashboard.
      *
-     * @return void
+     * @return array
      */
     public function get_main_tabs() {
 

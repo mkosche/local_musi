@@ -26,6 +26,7 @@ namespace local_musi\output\tabs;
 
 use html_writer;
 use mod_booking\singleton_service;
+use mod_booking\output\view;
 use moodle_url;
 use renderer_base;
 use renderable;
@@ -75,12 +76,13 @@ class overview extends base {
         $returnarray['coursesavailable'] = $data->coursesavailable;
         $returnarray['coursesbooked'] = $data->coursesbooked;
         $returnarray['locations'] = $data->locations;
+        $returnarray['courses'] = $data->courses;
 
         return $returnarray;
     }
 
     private function return_content() {
-        global $DB;
+        global $DB, $PAGE;
 
         $data = new stdClass();
 
@@ -122,6 +124,12 @@ class overview extends base {
         $data->coursesbooked = $coursesbooked;
         $data->locations = $locations;
 
+        $_POST['id'] = $cmid;
+        $courseview = new view($cmid, 'showall', 0);
+        $output = $PAGE->get_renderer('mod_booking');
+        $data->courses = $output->render_view($courseview);
+
+
         return $data;
     }
 
@@ -131,7 +139,7 @@ class overview extends base {
      * @return string
      */
     public function get_tab_label(): string {
-        return get_string('settingsandreports', 'local_musi');
+        return get_string('numberofcourses', 'local_musi');
     }
 
     /**

@@ -23,6 +23,7 @@
     Data attributes required for JS:
     * data-region
 }}
+
 <div class="row">
     <div class="col-md-4">
         <div class="card">
@@ -49,20 +50,12 @@
         </div>
     </div>
 </div>
-<div class="row mt-2 mb-3">
-    <div class="col-md-4">
-        <div class="card">
-            <div class="card-header text-center bg-white">
-                <h4>Qucklinks</h4>
-            </div>
+
+<div class="card col-12 mt-4">
     <div class="card-body">
-        {{#item}}
-            {{#link}}
-                <a href="{{.}}" class=" btn btn-outline-info btn-lg btn-block"><i class="fa {{{icon}}}"></i> {{{key}}} </a>
-            {{/link}}
-        {{/item}}
-    </div>
-        </div>
+        {{{courses}}}
     </div>
 </div>
 </div>
+
+

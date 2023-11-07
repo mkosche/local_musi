@@ -291,3 +291,18 @@ div.columnclass.titleprefix {
 div[id*="substitutionspoolteachers"] .form-autocomplete-suggestions {
     position: fixed;
 }
+
+#page-local-musi-dashboard #page{
+    margin-top: 0px;
+    background-color:#F8F9FB;
+
+}
+
+#page-local-musi-dashboard .dynamictabs{
+    background-color:#F8F9FB;
+    margin-bottom: 2rem;
+}
+
+#page-local-musi-dashboard #maincontent{
+    display: none;
+}

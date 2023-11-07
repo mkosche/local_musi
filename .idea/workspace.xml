@@ -5,17 +5,19 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="07400882-b435-4020-80c0-383e2c808d84" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/classes/output/tabs/prices.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/page_allteachers.mustache" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/tabs/html_content.mustache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/musi.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/musi.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/classes/output/main_tabs.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/output/main_tabs.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/classes/output/tabs/overview.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/output/tabs/overview.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dashboard.php" beforeDir="false" afterPath="$PROJECT_DIR$/dashboard.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lang/de/local_musi.php" beforeDir="false" afterPath="$PROJECT_DIR$/lang/de/local_musi.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lang/en/local_musi.php" beforeDir="false" afterPath="$PROJECT_DIR$/lang/en/local_musi.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/classes/output/tabs/sports.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/output/tabs/sports.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/classes/output/tabs/teacher.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/output/tabs/teacher.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/classes/shortcodes.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/shortcodes.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/styles.css" beforeDir="false" afterPath="$PROJECT_DIR$/styles.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/dashboard.mustache" beforeDir="false" afterPath="$PROJECT_DIR$/templates/dashboard.mustache" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/templates/dashboard_card_quicklinks.mustache" beforeDir="false" afterPath="$PROJECT_DIR$/templates/dashboard_card_quicklinks.mustache" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/templates/dynamic_sidebar_menu.mustache" beforeDir="false" afterPath="$PROJECT_DIR$/templates/dynamic_sidebar_menu.mustache" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/version.php" beforeDir="false" afterPath="$PROJECT_DIR$/version.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -39,6 +41,9 @@
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 1
+}</component>
   <component name="ProjectId" id="2Ij1WVtPyXPp7UQfIjx10kFwGIi" />
   <component name="ProjectViewState">
     <option name="autoscrollFromSource" value="true" />
@@ -51,6 +56,7 @@
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;TODO_SCOPE&quot;: &quot;All Places&quot;,
     &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;ReorgDashboard&quot;,
     &quot;last_opened_file_path&quot;: &quot;/Users/mikosche/Projects/moodle/mdl_dev/data/mdl/moodle/local/musi/templates&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
@@ -81,6 +87,9 @@
       <workItem from="1674126261391" duration="58808000" />
       <workItem from="1675132284811" duration="598000" />
       <workItem from="1675162371526" duration="598000" />
+      <workItem from="1698745673215" duration="512000" />
+      <workItem from="1698748416396" duration="525000" />
+      <workItem from="1698752739566" duration="11991000" />
     </task>
     <servers />
   </component>

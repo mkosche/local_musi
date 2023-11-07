@@ -84,8 +84,8 @@ $string['numberofcourses_desc'] = 'Informationen über die Kurse und Buchungen a
 $string['numberofentities'] = 'Anzahl der Sportstätten';
 $string['numberofentities_desc'] = 'Informationen über die Sportstätten auf der Plattform.';
 
-$string['coursesavailable'] = "Buchbare Kurse";
-$string['coursesbooked'] = 'Gebuchte Kurse';
+$string['coursesavailable'] = "Buchbare <br> Kurse";
+$string['coursesbooked'] = 'Gebuchte <br> Kurse';
 $string['coursesincart'] = 'Im Warenkorb';
 $string['coursesdeleted'] = 'Gelöschte Kurse';
 $string['coursesboughtcard'] = 'Gekaufte Kurse (Online)';
@@ -94,11 +94,14 @@ $string['coursesboughtcashier'] = 'Gekaufte Kurse (Kassa)';
 $string['paymentsaborted'] = 'Abgebrochene Zahlungen';
 $string['bookinganswersdeleted'] = "Gelöschte Buchungen";
 
+$string['quicklinks'] = 'Quicklinks';
+$string['quicklinks_desc'] = 'Die wichtigsten Links auf einen Blick';
 $string['settingsandreports'] = 'Einstellungen & Berichte';
 $string['settingsandreports_desc'] = 'Verschiedene Einstellungen und Berichte, die für M:USI relevant sind.';
 $string['editentities'] = 'Sportstätten bearbeiten';
 $string['editentitiescategories'] = 'Kategorien der Sportstätten bearbeiten';
 $string['importentities'] = 'Sportstätten importieren';
+$string['entitiesavailable'] = 'Verfügbare <br> Sportstätten';
 $string['editbookinginstance'] = 'Semester-Instanz bearbeiten';
 $string['editbookings'] = 'Kurs-Übersicht';
 $string['viewteachers'] = 'Trainer:innen-Übersicht';

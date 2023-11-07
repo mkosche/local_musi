@@ -43,30 +43,9 @@
 <!--        </div>-->
 <!--    </div>-->
 
-
-<!--{{#quicklinks}}-->
-<!--    <div class="text-center">-->
-
-<!--    {{> local_musi/dashboard_card }}-->
-
-<!--    </div>-->
-<!--{{/quicklinks}}-->
-    <div class="row h-100">
-        <div class="col-4">
-        {{#cards}}
-            <a class="nav-link" id="v-pills-{{identifier}}-tab" data-toggle="pill" href="#v-pills-{{identifier}}" role="tab" aria-controls="v-pills-{{identifier}}" aria-selected="true">{{title}}</a>
-        {{/cards}}
-        </div>
-        <div class="col-8">
-            <div class="tab-content" id="v-pills-tabContent">
-        {{#cards}}
-                <div class="tab-pane fade show" id="v-pills-{{identifier}}" role="tabpanel" aria-labelledby="v-pills-{{identifier}}-tab">{{> local_musi/dashboard_card }}</div>
-        {{/cards}}
-            </div>
-        </div>
-<!--<div class="card-group">-->
-<!--    {{#cards}}-->
-<!--        {{> local_musi/dashboard_card }}-->
-<!--    {{/cards}}-->
-<!--</div>-->
+<div class="card">
+    <div class="card-body">
+        {{{content}}}
     </div>
+</div>
+

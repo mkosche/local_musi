@@ -84,8 +84,8 @@ $string['numberofcourses_desc'] = 'Information about courses and bookings on thi
 $string['numberofentities'] = 'Number of entities';
 $string['numberofentities_desc'] = 'Information about the sport facilities on the platform.';
 
-$string['coursesavailable'] = 'Courses available';
-$string['coursesbooked'] = 'Courses booked';
+$string['coursesavailable'] = 'Courses <br> available';
+$string['coursesbooked'] = 'Courses <br> booked';
 $string['coursesincart'] = 'Courses in shopping cart';
 $string['coursesdeleted'] = 'Deleted courses';
 $string['coursesboughtcard'] = 'Courses bought online';
@@ -94,11 +94,14 @@ $string['coursesboughtcashier'] = 'Courses bought at cashier';
 $string['paymentsaborted'] = 'Aborted payments';
 $string['bookinganswersdeleted'] = "Deleted booking answers";
 
+$string['quicklinks'] = 'Quicklinks';
+$string['quicklinks_desc'] = 'Overview of the most important links.';
 $string['settingsandreports'] = 'Settings & Reports';
 $string['settingsandreports_desc'] = 'Various settings and reports relevant for M:USI.';
 $string['editentities'] = 'Edit entities';
 $string['editentitiescategories'] = 'Edit categories of entities';
 $string['importentities'] = 'Import entities';
+$string['entitiesavailable'] = 'Entities <br> available';
 $string['editbookinginstance'] = 'Edit semester instance';
 $string['editbookings'] = 'Overview of courses';
 $string['viewteachers'] = 'Teacher overview';

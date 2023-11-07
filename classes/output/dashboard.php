@@ -40,6 +40,7 @@ class dashboard implements renderable, templatable {
 
     /** @var stdClass $cards */
     public $cards = [];
+    public $quicklinks;
 
     /**
      * Constructor
@@ -57,6 +58,9 @@ class dashboard implements renderable, templatable {
      * @return void
      */
     public function create_standard_dashboard() {
+
+        // Add the card with quicklinks for this system.
+        $this->card_quicklinks();
 
         // Add the card with information about the entities on this system.
         $this->card_settings();
@@ -82,6 +86,7 @@ class dashboard implements renderable, templatable {
         $data = new card_content_sports();
 
         $card = new card(
+            'sports',
             get_string('listofsports', 'local_musi'),
             $output->render_card_content($data),
             get_string('listofsports_desc', 'local_musi'),
@@ -101,6 +106,7 @@ class dashboard implements renderable, templatable {
         $data = new card_content_entities();
 
         $card = new card(
+            'entities',
             get_string('entities', 'local_musi'),
             $output->render_card_content($data),
             get_string('numberofentities_desc', 'local_musi'),
@@ -121,6 +127,7 @@ class dashboard implements renderable, templatable {
         $data = new card_content_stats1();
 
         $card = new card(
+            'stats1',
             get_string('numberofcourses', 'local_musi'),
             $output->render_card_content($data),
             get_string('numberofcourses_desc', 'local_musi'),
@@ -141,12 +148,34 @@ class dashboard implements renderable, templatable {
         $data = new card_content_settings();
 
         $card = new card(
+            'settings',
             get_string('settingsandreports', 'local_musi'),
             $output->render_card_content($data),
             get_string('settingsandreports_desc', 'local_musi'),
             'bg-light'
         );
         $this->add_card($card);
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @return void
+     */
+    public function card_quicklinks() {
+        global $PAGE;
+
+        $output = $PAGE->get_renderer('local_musi');
+        $data = new card_content_quicklinks();
+
+        $card = new card(
+            'quicklinks',
+            get_string('settingsandreports', 'local_musi'),
+            $output->render_card_quicklinks($data),
+            get_string('settingsandreports', 'local_musi'),
+            'bg-light'
+        );
+        $this->quicklinks = $card;
     }
 
     /**
@@ -169,6 +198,7 @@ class dashboard implements renderable, templatable {
      */
     public function export_for_template(renderer_base $output) {
         $returnarray = array(
+                'quicklinks' => $this->quicklinks,
                 'cards' => (array)$this->cards
         );
         return $returnarray;

@@ -22,12 +22,19 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace local_musi\output;
+namespace local_musi\output\tabs;
 
+use html_writer;
+use moodle_url;
 use renderer_base;
 use renderable;
 use stdClass;
 use templatable;
+use context_system;
+use core\output\dynamic_tabs\base;
+use core_reportbuilder\system_report_factory;
+use report_configlog\local\systemreports\config_changes;
+use \local_entities\entities as local_entities;
 
 /**
  * This class prepares data for displaying a booking option instance
@@ -36,54 +43,42 @@ use templatable;
  * @copyright 2021 Georg Maißer {@link http://www.wunderbyte.at}
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class card implements renderable, templatable {
+class entities extends base {
 
-    /** @var string $title */
-    public $identifier = null;
-
-    /** @var string $title */
-    public $titel = null;
-
-    /** @var string $content */
-    public $content = null;
-
-    /** @var string $footer */
-    public $footer = null;
-
-     /** @var modle_url $img */
-     public $img = null;
-
-     /** @var modle_url $img */
-     public $link = null;
-
-     /** @var string $headerbgcolor */
-     public $headerbgcolor = '';
-
-    /**
-     * Constructor.
-     */
-    public function __construct($identifier, $title = null, $content = null, $footer = null, $headerbgcolor = "bg-primary") {
-
-        $this->identifier = $identifier;
-        $this->title = $title ?? "dummy title";
-        $this->content = $content ?? "dummy content";
-        $this->footer = $footer ?? "dummy footer";
-        $this->headerbgcolor = $headerbgcolor;
-    }
 
     /**
      * @param renderer_base $output
      * @return array
      */
     public function export_for_template(renderer_base $output) {
+        return local_entities::build_whole_entitytree();
+    }
 
-        $returnarray = array(
-                'title' => $this->title,
-                'content' => $this->content,
-                'footer' => $this->footer,
-                'headerbgcolor' => $this->headerbgcolor
-        );
+    /**
+     * The label to be displayed on the tab
+     *
+     * @return string
+     */
+    public function get_tab_label(): string {
+        return get_string('entities', 'local_musi');
+    }
 
-        return $returnarray;
+    /**
+     * Check permission of the current user to access this tab
+     *
+     * @return bool
+     */
+    public function is_available(): bool {
+        // Define the correct permissions here.
+        return true;
+    }
+
+    /**
+     * Template to use to display tab contents
+     *
+     * @return string
+     */
+    public function get_template(): string {
+        return 'local_entities/entitiestree';
     }
 }

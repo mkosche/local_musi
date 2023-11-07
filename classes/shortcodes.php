@@ -54,7 +54,7 @@ class shortcodes {
      * @param Closure $next
      * @return void
      */
-    public static function showallsports($shortcode, $args, $content, $env, $next) {
+    public static function showallsports($shortcode, $args = [], $content, $env, $next) {
 
         global $DB, $OUTPUT, $USER;
 
@@ -99,9 +99,11 @@ class shortcodes {
                     $teachersarr[$teacherid] = $teacherid;
                 }
             }
-            list($inorequal, $params) = $DB->get_in_or_equal($teachersarr);
-            $sql = "SELECT id, firstname, lastname, email, phone1, phone2 FROM {user} WHERE id $inorequal";
-            $teacherrecords = $DB->get_records_sql($sql, $params);
+            if(!empty($teachersarr)) {
+                list($inorequal, $params) = $DB->get_in_or_equal($teachersarr);
+                $sql = "SELECT id, firstname, lastname, email, phone1, phone2 FROM {user} WHERE id $inorequal";
+                $teacherrecords = $DB->get_records_sql($sql, $params);
+            }
 
             // Sports.
             foreach ($cmids as $cmid) {
@@ -199,7 +201,7 @@ class shortcodes {
      * @param Closure $next
      * @return void
      */
-    public static function userinformation($shortcode, $args, $content, $env, $next) {
+    public static function userinformation($shortcode, $args = [], $content, $env, $next) {
 
         global $USER, $PAGE;
 
@@ -235,7 +237,7 @@ class shortcodes {
      * @param Closure $next
      * @return void
      */
-    public static function allcourseslist($shortcode, $args, $content, $env, $next) {
+    public static function allcourseslist($shortcode, $args = [], $content, $env, $next) {
 
         self::fix_args($args);
 
@@ -331,7 +333,7 @@ class shortcodes {
      * @param Closure $next
      * @return void
      */
-    public static function allcoursesgrid($shortcode, $args, $content, $env, $next) {
+    public static function allcoursesgrid($shortcode, $args = [], $content, $env, $next) {
 
         self::fix_args($args);
 
@@ -469,7 +471,7 @@ class shortcodes {
      * @param Closure $next
      * @return void
      */
-    public static function allcoursescards($shortcode, $args, $content, $env, $next) {
+    public static function allcoursescards($shortcode, $args = [], $content, $env, $next) {
 
         // TODO: Define capality.
         // phpcs:ignore Squiz.PHP.CommentedOutCode.Found
@@ -553,7 +555,7 @@ class shortcodes {
      * @param Closure $next
      * @return void
      */
-    public static function mycoursescards($shortcode, $args, $content, $env, $next) {
+    public static function mycoursescards($shortcode, $args = [], $content, $env, $next) {
 
         global $USER;
         self::fix_args($args);
@@ -628,7 +630,7 @@ class shortcodes {
      * @param Closure $next
      * @return void
      */
-    public static function myteachedcoursescards($shortcode, $args, $content, $env, $next) {
+    public static function myteachedcoursescards($shortcode, $args = [], $content, $env, $next) {
 
         global $USER;
         self::fix_args($args);
@@ -691,7 +693,7 @@ class shortcodes {
      * @param Closure $next
      * @return void
      */
-    public static function mycourseslist($shortcode, $args, $content, $env, $next) {
+    public static function mycourseslist($shortcode, $args = [], $content, $env, $next) {
 
         global $USER;
         self::fix_args($args);
@@ -770,7 +772,7 @@ class shortcodes {
      * @param Closure $next
      * @return void
      */
-    public static function userdashboardcards($shortcode, $args, $content, $env, $next) {
+    public static function userdashboardcards($shortcode, $args = [], $content, $env, $next) {
         global $DB, $PAGE, $USER;
         self::fix_args($args);
         // If the id argument was not passed on, we have a fallback in the connfig.
@@ -813,7 +815,7 @@ class shortcodes {
      * @param Closure $next
      * @return void
      */
-    public static function allteacherscards($shortcode, $args, $content, $env, $next) {
+    public static function allteacherscards($shortcode, $args = [], $content, $env, $next) {
         global $DB, $PAGE;
         self::fix_args($args);
         $teacherids = [];
@@ -849,7 +851,7 @@ class shortcodes {
      * @param [type] $next
      * @return array
      */
-    private static function return_base_table($shortcode, $args, $content, $env, $next) {
+    private static function return_base_table($shortcode, $args = [], $content, $env, $next) {
 
         // TODO: Define capality.
         // phpcs:ignore Squiz.PHP.CommentedOutCode.Found
@@ -1199,11 +1201,13 @@ class shortcodes {
      * Helper function to remove quotation marks from args.
      * @param array &$args reference to arguments array
      */
-    private static function fix_args(array &$args) {
-        foreach ($args as $key => &$value) {
-            // Get rid of quotation marks.
-            $value = str_replace('"', '', $value);
-            $value = str_replace("'", "", $value);
+    private static function fix_args( &$args) {
+        if(!empty($args)) {
+            foreach ($args as $key => &$value) {
+                // Get rid of quotation marks.
+                $value = str_replace('"', '', $value);
+                $value = str_replace("'", "", $value);
+            }
         }
     }
 }

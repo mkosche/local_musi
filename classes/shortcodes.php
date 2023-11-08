@@ -99,9 +99,14 @@ class shortcodes {
                     $teachersarr[$teacherid] = $teacherid;
                 }
             }
-            list($inorequal, $params) = $DB->get_in_or_equal($teachersarr);
-            $sql = "SELECT id, firstname, lastname, email, phone1, phone2 FROM {user} WHERE id $inorequal";
-            $teacherrecords = $DB->get_records_sql($sql, $params);
+
+            if (!empty($teachersarr)) {
+                list($inorequal, $params) = $DB->get_in_or_equal($teachersarr);
+                $sql = "SELECT id, firstname, lastname, email, phone1, phone2 FROM {user} WHERE id $inorequal";
+                $teacherrecords = $DB->get_records_sql($sql, $params);
+            } else {
+                $teacherrecords = [];
+            }
 
             // Sports.
             foreach ($cmids as $cmid) {

@@ -51,8 +51,4 @@ $observers = [
         'eventname' => '\paygw_mpay24\event\payment_successful',
         'callback' => '\local_musi\observer::payment_successful',
     ],
-    [
-        'eventname' => '\local_shopping_cart\event\payment_rebooked',
-        'callback' => '\local_musi\observer::payment_rebooked',
-    ],
 ];

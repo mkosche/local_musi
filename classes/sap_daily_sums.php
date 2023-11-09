@@ -374,7 +374,7 @@ class sap_daily_sums {
                         'filename' => $filename
                 );
 
-                list($content, $errorcontent) = sap_daily_sums::generate_sap_text_file_for_date(date('Y-m-d', $starttimestamp));
+                list($content, $errorcontent) = self::generate_sap_text_file_for_date(date('Y-m-d', $starttimestamp));
                 $file = $fs->create_file_from_string($fileinfo, $content);
 
                 // If we have error content, we create an error file.
@@ -397,7 +397,7 @@ class sap_daily_sums {
             }
             $starttimestamp = strtotime('+1 day', $starttimestamp);
             // Collect all files in single directory.
-            sap_daily_sums::copy_file_to_dir($file, $filename);
+            self::copy_file_to_dir($file, $filename);
         }
     }
 }

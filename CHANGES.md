@@ -1,3 +1,7 @@
+## Version 0.7.4 (2023111300)
+* Bugfix: No error when there are no substiution teachers.
+* Improvement: With manual rebookings, we do not write into payment tables anymore but only in ledger!
+
 ## Version 0.7.3 (2023102000)
 * New feature: Add possibility to set default sort column (sortby) and sort direction (sortorder) with args.
 * Improvement: We now use the small user selector everywhere.

@@ -70,8 +70,8 @@ class userinformation implements renderable, templatable {
         $options = array(
             'visibletoscreenreaders' => false,
             'size' => 150,
-            'link' => true, // make image clickable - the link leads to user profile
-            'popup' => true, // open in popup
+            'link' => true, // Make image clickable - the link leads to user profile.
+            'popup' => true, // Open in popup.
         );
 
         $this->data['picture'] = $OUTPUT->user_picture($user, $options);
@@ -82,7 +82,7 @@ class userinformation implements renderable, templatable {
                 continue;
             }
 
-            $additional_data[] = [
+            $additionaldata[] = [
                 'key' => get_string($key, 'core'),
                 'value' => $value,
             ];
@@ -96,13 +96,13 @@ class userinformation implements renderable, templatable {
                 continue;
             }
             $localized = $DB->get_field('user_info_field', 'name', ['shortname' => $key]);
-            $additional_data[] = [
+            $additionaldata[] = [
                 'key' => $localized,
                 'value' => $value,
             ];
         }
 
-        $this->data['additionaldata'] = $additional_data;
+        $this->data['additionaldata'] = $additionaldata ?? [];
 
     }
 

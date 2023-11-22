@@ -226,3 +226,7 @@ $string['easyavailability:heading'] = '<div class="alert alert-info">Sie bearbei
 
 // Task.
 $string['create_sap_files'] = 'Die täglichen SAP Dateien erstellen.';
+$string['add_sports_division'] = 'Die Sparten zu den Sportarten automatisch hinzufügen';
+
+// Sports division
+$string['nosportsdivision'] = 'Keine Sport Sparten auf dieser Website verfügbar.';

@@ -25,4 +25,12 @@ $tasks = [
             'dayofweek' => '*',
             'month' => '*'
         ],
+        ['classname' => '\local_musi\task\add_sports_division',
+            'blocking' => 0,
+            'minute' => 'R',
+            'hour' => '2',
+            'day' => '*',
+            'dayofweek' => '*',
+            'month' => '*'
+        ],
 ];

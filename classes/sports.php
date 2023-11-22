@@ -16,7 +16,11 @@
 
 namespace local_musi;
 
+use coding_exception;
 use context_system;
+use dml_exception;
+use moodle_exception;
+use HTMLPurifier_Exception;
 
 /**
  * Helper functions for payment stuff.
@@ -52,7 +56,7 @@ class sports {
     /**
      * Generate a list of all Sports.
      *
-     * @return array
+     * @return int
      */
     public static function return_courseid() {
         global $DB;
@@ -72,5 +76,169 @@ class sports {
             ) s1 LIMIT 1");
 
         return $courseid;
+    }
+
+
+    /**
+     * Returns the sports divisions
+     * @param int $courseid
+     * @param bool $noprint
+     * @return void
+     * @throws dml_exception
+     * @throws coding_exception
+     * @throws moodle_exception
+     * @throws HTMLPurifier_Exception
+     */
+    public static function get_all_sportsdivisions_data(int $courseid, $print = true) {
+
+        global $DB, $USER;
+
+        $sections = $DB->get_records('course_sections', ['course' => $courseid], 'section ASC');
+        $pages = self::return_list_of_pages();
+
+        $data['categories'] = [];
+
+        $caneditsubstitutionspool = has_capability('local/musi:editsubstitutionspool', context_system::instance());
+        $canviewsubstitutionspool = has_capability('local/musi:viewsubstitutionspool', context_system::instance());
+
+        // Iterate through sport categories.
+        foreach ($sections as $section) {
+
+            if (empty($section->name)) {
+                continue;
+            }
+
+            $cmids = explode(',', $section->sequence);
+
+            $category = [
+                'name' => $section->name,
+                'categoryid' => $section->id,
+                'summary' => $section->summary,
+                'sports' => []
+            ];
+
+            // For performance.
+            // Get all sport records.
+            $sportrecords = $DB->get_records_sql("SELECT sport, teachers FROM {local_musi_substitutions}");
+            // Get all teacher records.
+            $teachersarr = [];
+            foreach ($sportrecords as $sportrecord) {
+                $teacherids = explode(',', $sportrecord->teachers);
+                foreach ($teacherids as $teacherid) {
+                    $teachersarr[$teacherid] = $teacherid;
+                }
+            }
+
+            if (!empty($teachersarr)) {
+                list($inorequal, $params) = $DB->get_in_or_equal($teachersarr);
+                $sql = "SELECT id, firstname, lastname, email, phone1, phone2 FROM {user} WHERE id $inorequal";
+                $teacherrecords = $DB->get_records_sql($sql, $params);
+            } else {
+                $teacherrecords = [];
+            }
+
+            // Sports.
+            foreach ($cmids as $cmid) {
+                if (isset($pages[$cmid])) {
+
+                    // If the page is hidden, we do not want to add it.
+                    list($course, $cm) = get_course_and_cm_from_cmid($cmid);
+                    if (empty($cm->visible)) {
+                        continue;
+                    }
+
+                    $sport = $pages[$cmid]->name;
+
+                    $description = null;
+                    // We do not add descriptions, if they contain one of the "[allekurse..." shorcodes.
+                    if (strpos($pages[$cmid]->intro, "[allekurse") == false) {
+                        $description = $pages[$cmid]->intro;
+                    }
+
+                    $editsubstitutionspool = null;
+                    if ($caneditsubstitutionspool) {
+                        $editsubstitutionspool = true;
+                    }
+
+                    $viewsubstitutionspool = null;
+                    $substitutionteachers = [];
+                    if ($canviewsubstitutionspool) {
+                        $viewsubstitutionspool = true;
+                        // Retrieve the list of teachers who can substitute.
+                        if (!empty($sportrecords[$sport])) {
+                            $record = $sportrecords[$sport];
+                            if (!empty($record->teachers)) {
+                                $teacherids = explode(',', $record->teachers);
+                                foreach ($teacherids as $teacherid) {
+                                    $fullteacher = $teacherrecords[$teacherid] ?? null;
+                                    if (!empty($fullteacher)) {
+                                        $teacher['id'] = $fullteacher->id;
+                                        $teacher['firstname'] = $fullteacher->firstname;
+                                        $teacher['lastname'] = $fullteacher->lastname;
+                                        $teacher['email'] = $fullteacher->email;
+                                        $teacher['phone1'] = $fullteacher->phone1;
+                                        $teacher['phone2'] = $fullteacher->phone2;
+                                        $substitutionteachers[] = $teacher;
+                                    }
+                                }
+                                // Now sort the teachers by last name.
+                                usort($substitutionteachers, function($a, $b) {
+                                    return $a['lastname'] <=> $b['lastname'];
+                                });
+                            }
+                        }
+                        // Generate mailto-Link.
+                        $emailstring = '';
+                        if (!empty($substitutionteachers)) {
+                            foreach ($substitutionteachers as $teacher) {
+                                if (!empty($teacher['email']) && ($teacher['email'] != $USER->email)) {
+                                    $emailstring .= $teacher['email'] . ";";
+                                }
+                            }
+                            if (!empty($emailstring)) {
+                                $emailstring = trim($emailstring, ';');
+                                $loggedinuseremail = $USER->email;
+                                $mailtolink = str_replace(' ', '%20', htmlspecialchars("mailto:$loggedinuseremail?bcc=$emailstring",
+                                    ENT_QUOTES));
+                            }
+                        }
+                    }
+
+                    $category['sports'][] = [
+                        'name' => $sport,
+                        'editsubstitutionspool' => $editsubstitutionspool,
+                        'viewsubstitutionspool' => $viewsubstitutionspool,
+                        'substitutionteachers' => $substitutionteachers,
+                        'mailtolink' => $mailtolink ?? null,
+                        'emailstring' => $emailstring ?? null,
+                        'description' => $description,
+                        'id' => $cmid,
+                        'table' => $print ? format_text('[allekurseliste sort=1 search=1 lazy=1 category="' . $sport . '"]') : null,
+                    ];
+                }
+            }
+            $data['categories'][] = $category;
+        }
+
+        return $data;
+    }
+
+    public static function return_list_of_boids_with_sport(string $sportname, $bookingid = 0) {
+
+        global $DB;
+
+        $sqllikesport = $DB->sql_like('cfd.value', ':sportname', false, false);
+
+        $sql = "SELECT bo.id
+                FROM m_booking_options bo
+                JOIN m_customfield_data cfd ON bo.id=cfd.instanceid
+                JOIN m_customfield_field cff ON cff.id=cfd.fieldid
+                WHERE cff.shortname='sport' AND $sqllikesport";
+
+        $params = [
+            'sportname' => $sportname,
+        ];
+
+        return $DB->get_records_sql($sql, $params);
     }
 }

@@ -22,6 +22,8 @@
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+use local_musi\task\add_sports_division;
+
 require_once(__DIR__ . '/../../config.php');
 
 // Second param: allow guest autologin.

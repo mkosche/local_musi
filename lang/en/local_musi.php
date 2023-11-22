@@ -222,3 +222,7 @@ $string['easyavailability:heading'] = '<div class="alert alert-info">You are edi
 
 // Task.
 $string['create_sap_files'] = 'Create the daily SAP files';
+$string['add_sports_division'] = 'Add sport divisions to sports';
+
+// Sports division
+$string['nosportsdivision'] = 'No sports divisions set on this site.';

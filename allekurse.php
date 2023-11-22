@@ -20,11 +20,12 @@
  * @copyright 2022 Georg Maißer <info@wunderbyte.at>
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
+// phpcs:ignore moodle.Files.RequireLogin.Missing
 require_once(__DIR__ . '/../../config.php');
 
 // No guest autologin.
-// require_login(0, false);
+// phpcs:ignore Squiz.PHP.CommentedOutCode.Found
+/* require_login(0, false); */
 
 global $DB, $PAGE, $OUTPUT, $USER;
 

@@ -24,10 +24,12 @@
 
 use local_musi\task\add_sports_division;
 
+// phpcs:ignore moodle.Files.RequireLogin.Missing
 require_once(__DIR__ . '/../../config.php');
 
 // Second param: allow guest autologin.
-// require_login(0, true);
+// phpcs:ignore Squiz.PHP.CommentedOutCode.Found
+/* require_login(0, true); */
 
 global $DB, $PAGE, $OUTPUT, $USER;
 

@@ -64,6 +64,7 @@ $string['substitutionspool:mailproblems'] = 'Click here if you have problems wit
 $string['substitutionspool:copypastemails'] = 'You can copy the emails manually and paste them into the BCC of your mail client:';
 $string['gateway'] = 'Gateway';
 $string['invisibleoption'] = '<i class="fa fa-eye-slash" aria-hidden="true"></i>';
+$string['sportsdivision'] = 'Sports division';
 $string['sportsdivisions'] = 'Sports divisions';
 $string['titleprefix'] = 'Course number';
 
@@ -224,5 +225,5 @@ $string['easyavailability:heading'] = '<div class="alert alert-info">You are edi
 $string['create_sap_files'] = 'Create the daily SAP files';
 $string['add_sports_division'] = 'Add sport divisions to sports';
 
-// Sports division
-$string['nosportsdivision'] = 'No sports divisions set on this site.';
+// Sports division.
+$string['nosportsdivision'] = 'No sports divisions set on this site';

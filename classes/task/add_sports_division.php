@@ -16,11 +16,10 @@
 
 namespace local_musi\task;
 
+use cache_helper;
 use core\task\scheduled_task;
 use local_musi\sports;
 use mod_booking\customfield\booking_handler;
-
-defined('MOODLE_INTERNAL') || die();
 
 /**
  * Scheduled task creates SAP files in Moodle data directory.
@@ -84,5 +83,8 @@ class add_sports_division extends scheduled_task {
             }
 
         }
+        // Important: Purge caches here!
+        cache_helper::purge_by_event('setbackoptionstable');
+        cache_helper::purge_by_event('setbackoptionsettings');
     }
 }

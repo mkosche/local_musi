@@ -244,3 +244,13 @@ div.columnclass.titleprefix {
 div[id*="substitutionspoolteachers"] .form-autocomplete-suggestions {
     position: fixed;
 }
+
+.sportsdivision {
+    display: block;
+}
+
+.sportsdivision-badge a {
+    font-size: smaller;
+    color: gray;
+    text-decoration: none;
+}

@@ -56,7 +56,7 @@ class shortcodes {
      */
     public static function showallsports($shortcode, $args, $content, $env, $next) {
 
-        global $OUTPUT, $USER;
+        global $OUTPUT;
 
         self::fix_args($args);
 
@@ -264,8 +264,8 @@ class shortcodes {
 
         $table->define_cache('mod_booking', 'bookingoptionstable');
 
-        $table->add_subcolumns('entrybody', ['text', 'dayofweektime', 'sport', 'teacher', 'location', 'bookings', 'minanswers',
-            'price', 'action']);
+        $table->add_subcolumns('entrybody', ['text', 'dayofweektime', 'sport', 'sportsdivision',
+            'teacher', 'location', 'bookings', 'minanswers', 'price', 'action']);
 
         // This avoids showing all keys in list view.
         $table->add_classes_to_subcolumns('entrybody', ['columnkeyclass' => 'd-md-none']);
@@ -277,6 +277,9 @@ class shortcodes {
 
         $table->add_classes_to_subcolumns('entrybody', ['columnclass' => 'grid-area-sport'], ['sport']);
         $table->add_classes_to_subcolumns('entrybody', ['columnvalueclass' => 'sport-badge bg-info text-light'], ['sport']);
+
+        $table->add_classes_to_subcolumns('entrybody', ['columnclass' => 'grid-area-sportsdivision'], ['sportsdivision']);
+        $table->add_classes_to_subcolumns('entrybody', ['columnvalueclass' => 'sportsdivision-badge'], ['sportsdivision']);
 
         $table->add_classes_to_subcolumns('entrybody', ['columnclass' => 'grid-area-teacher'], ['teacher']);
 
@@ -724,95 +727,6 @@ class shortcodes {
         return $output->render_allteacherspage($data);
     }
 
-    /**
-     * Undocumented function
-     *
-     * @param [type] $shortcode
-     * @param [type] $args
-     * @param [type] $content
-     * @param [type] $env
-     * @param [type] $next
-     * @return array
-     */
-    private static function return_base_table($shortcode, $args, $content, $env, $next) {
-
-        // TODO: Define capality.
-        // phpcs:ignore Squiz.PHP.CommentedOutCode.Found
-        /* if (!has_capability('moodle/site:config', $env->context)) {
-            return '';
-        } */
-        self::fix_args($args);
-        $booking = self::get_booking($args);
-
-        if (!isset($args['category']) || !$category = ($args['category'])) {
-            $category = '';
-        }
-
-        // phpcs:ignore Squiz.PHP.CommentedOutCode.Found
-        /* if (!isset($args['infinitescrollpage']) || !$infinitescrollpage = ($args['infinitescrollpage'])) {
-            $infinitescrollpage = 20;
-        } */
-
-        if (
-            !isset($args['perpage'])
-            || !is_int((int)$args['perpage'])
-            || !$perpage = ($args['perpage'])
-        ) {
-            $perpage = 1000;
-        }
-
-        $table = self::inittableforcourses($booking);
-
-        $wherearray = ['bookingid' => (int)$booking->id];
-
-        if (!empty($category)) {
-            $wherearray['sport'] = $category;
-        };
-
-        $table->use_pages = false;
-
-        $table->define_cache('mod_booking', 'bookingoptionstable');
-
-        $table->add_subcolumns('itemcategory', ['sport']);
-        $table->add_subcolumns('itemday', ['dayofweektime']);
-        $table->add_subcolumns('cardimage', ['image']);
-        $table->add_subcolumns('optioninvisible', ['invisibleoption']);
-
-        $table->add_subcolumns('cardbody', ['invisibleoption', 'sport', 'text', 'teacher']);
-        $table->add_classes_to_subcolumns('cardbody', ['columnkeyclass' => 'd-none']);
-        $table->add_classes_to_subcolumns(
-            'cardbody',
-            ['columnvalueclass' => 'shortcodes_option_info_invisible'],
-            ['invisibleoption']
-        );
-        $table->add_classes_to_subcolumns('cardbody', ['columnvalueclass' => 'h6'], ['sports']);
-        $table->add_classes_to_subcolumns('cardbody', ['columnvalueclass' => 'm-0 mb-1 h5'], ['text']);
-
-        $table->add_subcolumns('cardlist', ['dayofweektime', 'location', 'bookings', 'minanswers', 'botags']);
-        $table->add_classes_to_subcolumns('cardlist', ['columnkeyclass' => 'd-none']);
-        $table->add_classes_to_subcolumns('cardlist', ['columniclassbefore' => 'fa fa-fw fa-clock-o mr-1'], ['dayofweektime']);
-        $table->add_classes_to_subcolumns('cardlist', ['columniclassbefore' => 'fa fa-fw fa-map-marker mr-1'], ['location']);
-        $table->add_classes_to_subcolumns('cardlist', ['columniclassbefore' => 'fa fa-fw fa-users mr-1'], ['bookings']);
-        $table->add_classes_to_subcolumns('cardlist', ['columniclassbefore' => 'fa fa-fw fa-arrow-up mr-1'], ['minanswers']);
-        $table->add_classes_to_subcolumns('cardlist', ['columniclassbefore' => 'fa fa-fw fa-tag mr-1'], ['botags']);
-
-        $table->add_subcolumns('cardfooter', ['price']);
-        $table->add_classes_to_subcolumns('cardfooter', ['columnkeyclass' => 'd-none']);
-
-        $table->set_tableclass('cardimageclass', 'w-100');
-
-        $table->is_downloading('', 'List of booking options');
-
-        self::set_table_options_from_arguments($table, $args);
-
-        // This allows us to use infinite scrolling, No pages will be used.
-        $table->infinitescroll = 100;
-
-        $table->tabletemplate = 'local_musi/nolazytable';
-
-        return [$table, $booking, $category];
-    }
-
     private static function inittableforcourses($booking) {
 
         global $PAGE, $USER;
@@ -841,9 +755,14 @@ class shortcodes {
 
     private static function define_filtercolumns(&$table) {
         $table->define_filtercolumns([
-            'id', 'sport' => [
+            'id',
+            'sportsdivision' => [
+                'localizedname' => get_string('sportsdivision', 'local_musi')
+            ],
+            'sport' => [
                 'localizedname' => get_string('sport', 'local_musi')
-            ], 'dayofweek' => [
+            ],
+            'dayofweek' => [
                 'localizedname' => get_string('dayofweek', 'local_musi'),
                 'monday' => get_string('monday', 'mod_booking'),
                 'tuesday' => get_string('tuesday', 'mod_booking'),
@@ -891,7 +810,7 @@ class shortcodes {
 
         if (!empty($args['search'])) {
             $table->define_fulltextsearchcolumns([
-                'titleprefix', 'text', 'sport', 'description', 'location',
+                'titleprefix', 'text', 'sportsdivision', 'sport', 'description', 'location',
                 'teacherobjects', 'botags']);
         }
 
@@ -899,6 +818,7 @@ class shortcodes {
             $table->define_sortablecolumns([
                 'titleprefix' => get_string('titleprefix', 'local_musi'),
                 'text' => get_string('coursename', 'local_musi'),
+                'sportsdivision' => get_string('sportsdivision', 'local_musi'),
                 'sport' => get_string('sport', 'local_musi'),
                 'location' => get_string('location', 'local_musi'),
             ]);
@@ -924,11 +844,10 @@ class shortcodes {
         // We define it here so we can pass it with the mustache template.
         $table->add_subcolumns('optionid', ['id']);
 
-        $table->add_subcolumns('itemcategory', ['sport']);
         $table->add_subcolumns('cardimage', ['image']);
         $table->add_subcolumns('optioninvisible', ['invisibleoption']);
 
-        $table->add_subcolumns('cardbody', ['action', 'invisibleoption', 'sport', 'text', 'botags']);
+        $table->add_subcolumns('cardbody', ['action', 'invisibleoption', 'sportsdivision', 'sport', 'text', 'botags']);
         $table->add_classes_to_subcolumns('cardbody', ['columnkeyclass' => 'd-none']);
         $table->add_classes_to_subcolumns('cardbody', ['columnvalueclass' => 'float-right m-1'], ['action']);
         $table->add_classes_to_subcolumns('cardbody', ['columnvalueclass' => 'font-size-sm'], ['botags']);
@@ -937,7 +856,10 @@ class shortcodes {
             ['columnvalueclass' => 'text-center shortcodes_option_info_invisible'],
             ['invisibleoption']
         );
-        $table->add_classes_to_subcolumns('cardbody', ['columnvalueclass' => 'text-secondary'], ['sport']);
+        $table->add_classes_to_subcolumns('cardbody', ['columnvalueclass' =>
+            'sportsdivision-badge'], ['sportsdivision']);
+        $table->add_classes_to_subcolumns('cardbody', ['columnvalueclass' => 'sport-badge rounded-sm text-gray-800 mt-2'],
+            ['sport']);
         $table->add_classes_to_subcolumns('cardbody', ['columnvalueclass' => 'm-0 mt-1 mb-1 h5'], ['text']);
 
         $subcolumns = ['teacher', 'dayofweektime', 'location', 'institution', 'bookings'];
@@ -991,7 +913,7 @@ class shortcodes {
         // We define it here so we can pass it with the mustache template.
         $table->add_subcolumns('optionid', ['id']);
 
-        $table->add_subcolumns('top', ['sport', 'action']);
+        $table->add_subcolumns('top', ['sportsdivision', 'sport', 'action']);
         $table->add_subcolumns('leftside', $subcolumnsleftside);
         $table->add_subcolumns('info', $subcolumnsinfo);
         // phpcs:ignore Squiz.PHP.CommentedOutCode.Found
@@ -1003,9 +925,11 @@ class shortcodes {
         $table->add_subcolumns('rightside', ['botags', 'invisibleoption', 'course', 'price']);
 
         $table->add_classes_to_subcolumns('top', ['columnkeyclass' => 'd-none']);
-        $table->add_classes_to_subcolumns('top', ['columnclass' => 'text-left col-md-8'], ['sport']);
+        $table->add_classes_to_subcolumns('top', ['columnclass' => 'text-left col-md-8'], ['sport', 'sportsdivision']);
         $table->add_classes_to_subcolumns('top', ['columnvalueclass' =>
             'sport-badge rounded-sm text-gray-800 mt-2'], ['sport']);
+        $table->add_classes_to_subcolumns('top', ['columnvalueclass' =>
+            'sportsdivision-badge'], ['sportsdivision']);
         $table->add_classes_to_subcolumns('top', ['columnclass' => 'text-right col-md-2 position-relative pr-0'], ['action']);
 
         $table->add_classes_to_subcolumns('leftside', ['columnkeyclass' => 'd-none']);

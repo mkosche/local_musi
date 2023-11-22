@@ -64,6 +64,7 @@ $string['substitutionspool:mailproblems'] = 'Hier klicken, wenn Sie Probleme bei
 $string['substitutionspool:copypastemails'] = 'Kopieren Sie die folgenden E-Mail-Adressen in das BCC-Feld Ihres E-Mail-Programms:';
 $string['gateway'] = 'Gateway';
 $string['invisibleoption'] = '<i class="fa fa-eye-slash" aria-hidden="true"></i>';
+$string['sportsdivision'] = 'Sparte';
 $string['sportsdivisions'] = 'Sparten';
 $string['titleprefix'] = 'Kursnummer';
 
@@ -228,5 +229,5 @@ $string['easyavailability:heading'] = '<div class="alert alert-info">Sie bearbei
 $string['create_sap_files'] = 'Die täglichen SAP Dateien erstellen.';
 $string['add_sports_division'] = 'Die Sparten zu den Sportarten automatisch hinzufügen';
 
-// Sports division
-$string['nosportsdivision'] = 'Keine Sport Sparten auf dieser Website verfügbar.';
+// Sports division.
+$string['nosportsdivision'] = 'Keine Sparten auf dieser Website verfügbar';

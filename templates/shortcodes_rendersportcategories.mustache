@@ -36,19 +36,19 @@
 
 <div id="accordionsportscategories" class="allsports">
   {{#categories}}
-    <div class="card mb-3 border-0">
-      <div class="card-header bg-dark border-0 pb-1" id="heading-category-{{categoryid}}"
+    <div class="card mb-3 border-1">
+      <div class="card-header bg-light border-1 pb-1" id="heading-category-{{categoryid}}"
         data-categoryid="{{categoryid}}">
-        <div class="h4 text-light" style="cursor: pointer;" data-toggle="collapse" data-target="#accordionsport-{{categoryid}}" aria-expanded="true"
+        <div class="h4 text-primary" style="cursor: pointer;" data-toggle="collapse" data-target="#accordionsport-{{categoryid}}" aria-expanded="true"
           aria-controls="accordionsport-{{categoryid}}">
           {{name}}
         </div>
       </div>
 
-      <div id="accordionsport-{{categoryid}}" class="collapse mb-3 pt-1 pb-1 border border-dark">
+      <div id="accordionsport-{{categoryid}}" class="collapse mb-3 pt-1 pb-1 border-0">
         {{#summary}}<div class="sportsdivision-summary ml-3 mt-1">{{{summary}}}</div>{{/summary}}
         {{#sports}}
-          <div class="card border-top border-left-0 border-bottom-0 border-right-0 pt-1">
+          <div class="card border-0 pt-1">
             <div class="card-header border-0 bg-white text-primary text-left p-1" id="heading-sport-{{id}}"
               data-toggle="collapse" data-target="#sport-{{id}}" aria-expanded="true" aria-controls="sport-{{id}}">
               <span class="h5 ml-3 mt-1" style="cursor: pointer;">{{name}}</span>

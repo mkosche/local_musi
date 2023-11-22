@@ -756,11 +756,11 @@ class shortcodes {
     private static function define_filtercolumns(&$table) {
         $table->define_filtercolumns([
             'id',
-            'sportsdivision' => [
-                'localizedname' => get_string('sportsdivision', 'local_musi')
-            ],
             'sport' => [
                 'localizedname' => get_string('sport', 'local_musi')
+            ],
+            'sportsdivision' => [
+                'localizedname' => get_string('sportsdivision', 'local_musi')
             ],
             'dayofweek' => [
                 'localizedname' => get_string('dayofweek', 'local_musi'),

@@ -1,3 +1,6 @@
+## Version 0.7.5 (2023112200)
+* Bugfix: Fix messageprovider bug.
+
 ## Version 0.7.4 (2023111300)
 * Bugfix: No error when there are no substiution teachers.
 * Improvement: With manual rebookings, we do not write into payment tables anymore but only in ledger!

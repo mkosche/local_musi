@@ -824,16 +824,16 @@ class shortcodes {
             ]);
         }
 
-        if (!empty($args['sortby'])) {
-            $defaultorder = SORT_ASC; // Default.
-            if (!empty($args['sortorder'])) {
-                if (strtolower($args['sortorder']) === "desc") {
-                    $defaultorder = SORT_DESC;
-                }
+        $defaultorder = SORT_ASC; // Default.
+        if (!empty($args['sortorder'])) {
+            if (strtolower($args['sortorder']) === "desc") {
+                $defaultorder = SORT_DESC;
             }
+        }
+        if (!empty($args['sortby'])) {
             $table->sortable(true, $args['sortby'], $defaultorder);
         } else {
-            $table->sortable(true, 'text', SORT_ASC);
+            $table->sortable(true, 'text', $defaultorder);
         }
     }
 

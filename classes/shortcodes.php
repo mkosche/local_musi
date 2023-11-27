@@ -835,6 +835,10 @@ class shortcodes {
         } else {
             $table->sortable(true, 'text', $defaultorder);
         }
+
+        if (!empty($args['requirelogin']) && $args['requirelogin'] == "false") {
+            $table->requirelogin = false;
+        }
     }
 
     private static function generate_table_for_cards(&$table, $args) {

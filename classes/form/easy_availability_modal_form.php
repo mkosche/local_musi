@@ -200,23 +200,25 @@ class easy_availability_modal_form extends \core_form\dynamic_form {
             $availabilityarray = json_decode($settings->availability);
             foreach ($availabilityarray as $av) {
                 switch ($av->id) {
-                    case BO_COND_JSON_SELECTUSERS:
+                    case MOD_BOOKING_BO_COND_JSON_SELECTUSERS:
                         if (!empty($av->userids)) {
                             $data->bo_cond_selectusers_restrict = true;
                             $data->bo_cond_selectusers_userids = $av->userids;
                         }
-                        if (in_array(BO_COND_FULLYBOOKED, $av->overrides ?? []) && in_array(BO_COND_NOTIFYMELIST, $av->overrides ?? [])) {
+                        if (in_array(MOD_BOOKING_BO_COND_FULLYBOOKED, $av->overrides ?? []) &&
+                            in_array(MOD_BOOKING_BO_COND_NOTIFYMELIST, $av->overrides ?? [])) {
                             $data->selectusersoverbookcheckbox = true;
                         } else {
                             $data->selectusersoverbookcheckbox = false;
                         }
                         break;
-                    case BO_COND_JSON_PREVIOUSLYBOOKED:
+                    case MOD_BOOKING_BO_COND_JSON_PREVIOUSLYBOOKED:
                         if (!empty($av->optionid)) {
                             $data->bo_cond_previouslybooked_restrict = true;
                             $data->bo_cond_previouslybooked_optionid = (int)$av->optionid;
                         }
-                        if (in_array(BO_COND_FULLYBOOKED, $av->overrides ?? []) && in_array(BO_COND_NOTIFYMELIST, $av->overrides ?? [])) {
+                        if (in_array(MOD_BOOKING_BO_COND_FULLYBOOKED, $av->overrides ?? []) &&
+                            in_array(MOD_BOOKING_BO_COND_NOTIFYMELIST, $av->overrides ?? [])) {
                             $data->previouslybookedoverbookcheckbox = true;
                         } else {
                             $data->previouslybookedoverbookcheckbox = false;
@@ -259,14 +261,14 @@ class easy_availability_modal_form extends \core_form\dynamic_form {
 
             // We always override these conditions, so users are always allowed to book outside time restrictions.
             $optionvalues->bo_cond_selectusers_overridecondition = [
-                BO_COND_BOOKING_TIME,
-                BO_COND_OPTIONHASSTARTED
+                MOD_BOOKING_BO_COND_BOOKING_TIME,
+                MOD_BOOKING_BO_COND_OPTIONHASSTARTED
             ];
 
             // If the overbook checkbox has been checked, we also add the conditions so the user(s) can overbook.
             if (!empty($data->selectusersoverbookcheckbox)) {
-                $optionvalues->bo_cond_selectusers_overridecondition[] = BO_COND_FULLYBOOKED;
-                $optionvalues->bo_cond_selectusers_overridecondition[] = BO_COND_NOTIFYMELIST;
+                $optionvalues->bo_cond_selectusers_overridecondition[] = MOD_BOOKING_BO_COND_FULLYBOOKED;
+                $optionvalues->bo_cond_selectusers_overridecondition[] = MOD_BOOKING_BO_COND_NOTIFYMELIST;
             }
         } else {
             $optionvalues->bo_cond_selectusers_restrict = 0;
@@ -280,20 +282,21 @@ class easy_availability_modal_form extends \core_form\dynamic_form {
             $optionvalues->bo_cond_previouslybooked_overrideoperator = 'OR'; // Can be hardcoded here.
             // We always override these 2 conditions, so users are always allowed to book outside time restrictions.
             $optionvalues->bo_cond_previouslybooked_overridecondition = [
-                BO_COND_BOOKING_TIME,
-                BO_COND_OPTIONHASSTARTED
+                MOD_BOOKING_BO_COND_BOOKING_TIME,
+                MOD_BOOKING_BO_COND_OPTIONHASSTARTED
             ];
 
             // If the overbook checkbox has been checked, we also add the conditions so the user(s) can overbook.
             if (!empty($data->previouslybookedoverbookcheckbox)) {
-                $optionvalues->bo_cond_previouslybooked_overridecondition[] = BO_COND_FULLYBOOKED;
-                $optionvalues->bo_cond_previouslybooked_overridecondition[] = BO_COND_NOTIFYMELIST;
+                $optionvalues->bo_cond_previouslybooked_overridecondition[] = MOD_BOOKING_BO_COND_FULLYBOOKED;
+                $optionvalues->bo_cond_previouslybooked_overridecondition[] = MOD_BOOKING_BO_COND_NOTIFYMELIST;
             }
         } else {
             $optionvalues->bo_cond_previouslybooked_restrict = 0;
         }
 
-        if (booking_update_options($optionvalues, $context, UPDATE_OPTIONS_PARAM_REDUCED)) {
+        // Third param is 2 (MOD_BOOKING_UPDATE_OPTIONS_PARAM_REDUCED).
+        if (booking_update_options($optionvalues, $context, 2)) {
             return true;
         }
 
@@ -343,9 +346,9 @@ class easy_availability_modal_form extends \core_form\dynamic_form {
             $availabilityarray = json_decode($settings->availability);
             foreach ($availabilityarray as $av) {
                 if (!in_array($av->id, [
-                    BO_COND_JSON_CUSTOMFORM, // Custom form needs to be compatible with the easy form.
-                    BO_COND_JSON_SELECTUSERS,
-                    BO_COND_JSON_PREVIOUSLYBOOKED])) {
+                    MOD_BOOKING_BO_COND_JSON_CUSTOMFORM, // Custom form needs to be compatible with the easy form.
+                    MOD_BOOKING_BO_COND_JSON_SELECTUSERS,
+                    MOD_BOOKING_BO_COND_JSON_PREVIOUSLYBOOKED])) {
                     $formlocked = true;
                 }
             }

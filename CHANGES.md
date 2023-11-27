@@ -1,3 +1,10 @@
+## Version 0.7.6 (2023112700)
+* New feature: Automatic attribution of sportsdivision via "sparten" shortcode.
+* New feature: Show sports divisions in card and list view.
+* Improvement: Show all courses page fullscreen.
+* Improvement: Better styling for sports divisions page (sparten.php).
+* Improvement: Sports division filter should be after sports filter.
+
 ## Version 0.7.5 (2023112200)
 * Bugfix: Fix messageprovider bug.
 

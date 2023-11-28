@@ -51,14 +51,14 @@ echo $OUTPUT->header();
 
 switch ($type) {
     case 'karten':
-        echo format_text("[allekursekarten filter=1 search=1 sort=1 sortby=text sortorder=asc]", FORMAT_HTML);
+        echo format_text("[allekursekarten filter=1 search=1 sort=1 sortby=text sortorder=asc requirelogin=false]", FORMAT_HTML);
         break;
     case 'grid':
-        echo format_text("[allekursegrid filter=1 search=1 sort=1 sortby=text sortorder=asc]", FORMAT_HTML);
+        echo format_text("[allekursegrid filter=1 search=1 sort=1 sortby=text sortorder=asc requirelogin=false]", FORMAT_HTML);
         break;
     case 'liste':
     default:
-        echo format_text("[allekurseliste filter=1 search=1 sort=1 sortby=text sortorder=asc]", FORMAT_HTML);
+        echo format_text("[allekurseliste filter=1 search=1 sort=1 sortby=text sortorder=asc requirelogin=false]", FORMAT_HTML);
         break;
 }
 

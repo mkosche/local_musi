@@ -836,7 +836,7 @@ class shortcodes {
             $table->sortable(true, 'text', $defaultorder);
         }
 
-        if (!empty($args['requirelogin']) && $args['requirelogin'] == "false") {
+        if (isset($args['requirelogin']) && $args['requirelogin'] == "false") {
             $table->requirelogin = false;
         }
     }

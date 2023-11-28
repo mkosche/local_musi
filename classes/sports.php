@@ -150,7 +150,7 @@ class sports {
                     $sport = $pages[$cmid]->name;
 
                     $description = null;
-                    // We do not add descriptions, if they contain one of the "[allekurse..." shorcodes.
+                    // We do not add descriptions, if they contain one of the "[allekurse..." shortcodes.
                     if (strpos($pages[$cmid]->intro, "[allekurse") == false) {
                         $description = $pages[$cmid]->intro;
                     }
@@ -213,7 +213,8 @@ class sports {
                         'emailstring' => $emailstring ?? null,
                         'description' => $description,
                         'id' => $cmid,
-                        'table' => $print ? format_text('[allekurseliste sort=1 search=1 lazy=1 category="' . $sport . '"]') : null,
+                        'table' => $print ? format_text('[allekurseliste sort=1 search=1 lazy=1 requirelogin=false category="' .
+                            $sport . '"]') : null,
                     ];
                 }
             }

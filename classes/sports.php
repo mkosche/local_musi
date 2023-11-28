@@ -230,9 +230,9 @@ class sports {
         $sqllikesport = $DB->sql_like('cfd.value', ':sportname', false, false);
 
         $sql = "SELECT bo.id
-                FROM m_booking_options bo
-                JOIN m_customfield_data cfd ON bo.id=cfd.instanceid
-                JOIN m_customfield_field cff ON cff.id=cfd.fieldid
+                FROM {booking_options} bo
+                JOIN {customfield_data} cfd ON bo.id=cfd.instanceid
+                JOIN {customfield_field} cff ON cff.id=cfd.fieldid
                 WHERE cff.shortname='sport' AND $sqllikesport";
 
         $params = [

@@ -821,6 +821,8 @@ class shortcodes {
                 'sportsdivision' => get_string('sportsdivision', 'local_musi'),
                 'sport' => get_string('sport', 'local_musi'),
                 'location' => get_string('location', 'local_musi'),
+                'bookingopeningtime' => get_string('bookingopeningtime', 'mod_booking'),
+                'bookingclosingtime' => get_string('bookingclosingtime', 'mod_booking'),
             ]);
         }
 
@@ -866,7 +868,8 @@ class shortcodes {
             ['sport']);
         $table->add_classes_to_subcolumns('cardbody', ['columnvalueclass' => 'm-0 mt-1 mb-1 h5'], ['text']);
 
-        $subcolumns = ['teacher', 'dayofweektime', 'location', 'institution', 'bookings'];
+        $subcolumns = ['teacher', 'dayofweektime', 'location', 'institution',
+            'bookingopeningtime', 'bookingclosingtime', 'bookings'];
         if (!empty($args['showminanswers'])) {
             $subcolumns[] = 'minanswers';
         }
@@ -877,6 +880,8 @@ class shortcodes {
         $table->add_classes_to_subcolumns('cardlist', ['columniclassbefore' => 'text-secondary fa-fw']);
         $table->add_classes_to_subcolumns('cardlist', ['columniclassbefore' => 'fa fa-map-marker'], ['location']);
         $table->add_classes_to_subcolumns('cardlist', ['columniclassbefore' => 'fa fa-building-o'], ['institution']);
+        $table->add_classes_to_subcolumns('cardlist', ['columniclassbefore' => 'fa fa-play'], ['bookingopeningtime']);
+        $table->add_classes_to_subcolumns('cardlist', ['columniclassbefore' => 'fa fa-step-forward'], ['bookingclosingtime']);
         $table->add_classes_to_subcolumns('cardlist', ['columniclassbefore' => 'fa fa-clock-o'], ['dayofweektime']);
         $table->add_classes_to_subcolumns('cardlist', ['columniclassbefore' => 'fa fa-users'], ['bookings']);
         if (!empty($args['showminanswers'])) {
@@ -901,7 +906,8 @@ class shortcodes {
     private static function generate_table_for_list(&$table, $args) {
         self::fix_args($args);
         $subcolumnsleftside = ['text'];
-        $subcolumnsinfo = ['teacher', 'dayofweektime', 'location', 'institution', 'bookings'];
+        $subcolumnsinfo = ['teacher', 'dayofweektime', 'location', 'institution',
+            'bookingopeningtime', 'bookingclosingtime', 'bookings'];
 
         // Check if we should add the description.
         if (get_config('local_musi', 'shortcodelists_showdescriptions')) {
@@ -947,6 +953,8 @@ class shortcodes {
         $table->add_classes_to_subcolumns('info', ['columniclassbefore' => 'fa fa-clock-o'], ['dayofweektime']);
         $table->add_classes_to_subcolumns('info', ['columniclassbefore' => 'fa fa-map-marker'], ['location']);
         $table->add_classes_to_subcolumns('info', ['columniclassbefore' => 'fa fa-building-o'], ['institution']);
+        $table->add_classes_to_subcolumns('info', ['columniclassbefore' => 'fa fa-play'], ['bookingopeningtime']);
+        $table->add_classes_to_subcolumns('info', ['columniclassbefore' => 'fa fa-step-forward'], ['bookingclosingtime']);
         $table->add_classes_to_subcolumns('info', ['columniclassbefore' => 'fa fa-ticket'], ['bookings']);
         if (!empty($args['showminanswers'])) {
             $table->add_classes_to_subcolumns('info', ['columniclassbefore' => 'fa fa-arrow-up'], ['minanswers']);

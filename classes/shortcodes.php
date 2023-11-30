@@ -313,16 +313,6 @@ class shortcodes {
             ['keystring' => get_string('tableheader_maxoverbooking', 'booking')],
             ['maxoverbooking']
         );
-        $table->add_classes_to_subcolumns(
-            'cardbody',
-            ['keystring' => get_string('tableheader_coursestarttime', 'booking')],
-            ['coursestarttime']
-        );
-        $table->add_classes_to_subcolumns(
-            'cardbody',
-            ['keystring' => get_string('tableheader_courseendtime', 'booking')],
-            ['courseendtime']
-        );
 
         $table->is_downloading('', 'List of booking options');
 
@@ -775,7 +765,39 @@ class shortcodes {
                 'localizedname' => get_string('location', 'mod_booking')
             ],  'botags' => [
                 'localizedname' => get_string('tags', 'core')
-            ]
+            ],
+            'coursestarttime' => [
+                'localizedname' => get_string('timefilter:coursetime', 'mod_booking'),
+                'datepicker' => [
+                    'In between' => [
+                        // Timespan filter with two datepicker-filtercontainer applying to two columns (i.e. startdate, enddate).
+                        'possibleoperations' => ['within', 'flexoverlap', 'before', 'after'],
+                        // Will be displayed in select to choose from.
+                        'columntimestart' => 'coursestarttime', // Columnname as is DB query with lower value.
+                        'columntimeend' => 'courseendtime', // Columnname as is DB query with higher value.
+                        'labelstartvalue' => get_string('from', 'mod_booking'),
+                        'defaultvaluestart' => 'now', // Can also be Unix timestamp or string "now".
+                        'labelendvalue' => get_string('until', 'mod_booking'),
+                        'defaultvalueend' => strtotime('+ 1 year', time()), // Can also be Unix timestamp or string "now".
+                        'checkboxlabel' => get_string('apply_filter', 'local_wunderbyte_table'),
+                    ]
+                ]
+            ],
+            'bookingopeningtime' => [
+                'localizedname' => get_string('timefilter:bookingtime', 'mod_booking'),
+                'datepicker' => [
+                    'In between' => [
+                        'possibleoperations' => ['within', 'flexoverlap', 'before', 'after'],
+                        'columntimestart' => 'bookingopeningtime',
+                        'columntimeend' => 'bookingclosingtime',
+                        'labelstartvalue' => get_string('bookingopeningtime', 'mod_booking'),
+                        'defaultvaluestart' => 'now', // Can also be Unix timestamp or string "now".
+                        'labelendvalue' => get_string('bookingclosingtime', 'mod_booking'),
+                        'defaultvalueend' => strtotime('+ 1 year', time()), // Can also be Unix timestamp or string "now".
+                        'checkboxlabel' => get_string('apply_filter', 'local_wunderbyte_table'),
+                    ],
+                ],
+            ],
         ]);
     }
 
@@ -821,6 +843,8 @@ class shortcodes {
                 'sportsdivision' => get_string('sportsdivision', 'local_musi'),
                 'sport' => get_string('sport', 'local_musi'),
                 'location' => get_string('location', 'local_musi'),
+                'coursestarttime' => get_string('coursestarttime', 'mod_booking'),
+                'courseendtime' => get_string('courseendtime', 'mod_booking'),
                 'bookingopeningtime' => get_string('bookingopeningtime', 'mod_booking'),
                 'bookingclosingtime' => get_string('bookingclosingtime', 'mod_booking'),
             ]);
@@ -869,6 +893,7 @@ class shortcodes {
         $table->add_classes_to_subcolumns('cardbody', ['columnvalueclass' => 'm-0 mt-1 mb-1 h5'], ['text']);
 
         $subcolumns = ['teacher', 'dayofweektime', 'location', 'institution',
+            'coursestarttime', 'courseendtime',
             'bookingopeningtime', 'bookingclosingtime', 'bookings'];
         if (!empty($args['showminanswers'])) {
             $subcolumns[] = 'minanswers';
@@ -877,15 +902,17 @@ class shortcodes {
         $table->add_subcolumns('cardlist', $subcolumns);
         $table->add_classes_to_subcolumns('cardlist', ['columnkeyclass' => 'd-none']);
         $table->add_classes_to_subcolumns('cardlist', ['columnvalueclass' => 'text-secondary']);
-        $table->add_classes_to_subcolumns('cardlist', ['columniclassbefore' => 'text-secondary fa-fw']);
-        $table->add_classes_to_subcolumns('cardlist', ['columniclassbefore' => 'fa fa-map-marker'], ['location']);
-        $table->add_classes_to_subcolumns('cardlist', ['columniclassbefore' => 'fa fa-building-o'], ['institution']);
-        $table->add_classes_to_subcolumns('cardlist', ['columniclassbefore' => 'fa fa-play'], ['bookingopeningtime']);
-        $table->add_classes_to_subcolumns('cardlist', ['columniclassbefore' => 'fa fa-step-forward'], ['bookingclosingtime']);
-        $table->add_classes_to_subcolumns('cardlist', ['columniclassbefore' => 'fa fa-clock-o'], ['dayofweektime']);
-        $table->add_classes_to_subcolumns('cardlist', ['columniclassbefore' => 'fa fa-users'], ['bookings']);
+        $table->add_classes_to_subcolumns('cardlist', ['columniclassbefore' => 'text-secondary']);
+        $table->add_classes_to_subcolumns('cardlist', ['columniclassbefore' => 'fa fa-fw fa-map-marker'], ['location']);
+        $table->add_classes_to_subcolumns('cardlist', ['columniclassbefore' => 'fa fa-fw fa-building-o'], ['institution']);
+        $table->add_classes_to_subcolumns('cardlist', ['columniclassbefore' => 'fa fa-fw fa-play'], ['coursestarttime']);
+        $table->add_classes_to_subcolumns('cardlist', ['columniclassbefore' => 'fa fa-fw fa-stop'], ['courseendtime']);
+        $table->add_classes_to_subcolumns('cardlist', ['columniclassbefore' => 'fa fa-fw fa-forward'], ['bookingopeningtime']);
+        $table->add_classes_to_subcolumns('cardlist', ['columniclassbefore' => 'fa fa-fw fa-step-forward'], ['bookingclosingtime']);
+        $table->add_classes_to_subcolumns('cardlist', ['columniclassbefore' => 'fa fa-fw fa-clock-o'], ['dayofweektime']);
+        $table->add_classes_to_subcolumns('cardlist', ['columniclassbefore' => 'fa fa-fw fa-users'], ['bookings']);
         if (!empty($args['showminanswers'])) {
-            $table->add_classes_to_subcolumns('cardlist', ['columniclassbefore' => 'fa fa-arrow-up'], ['minanswers']);
+            $table->add_classes_to_subcolumns('cardlist', ['columniclassbefore' => 'fa fa-fw fa-arrow-up'], ['minanswers']);
         }
 
         // Set additional descriptions.
@@ -907,6 +934,7 @@ class shortcodes {
         self::fix_args($args);
         $subcolumnsleftside = ['text'];
         $subcolumnsinfo = ['teacher', 'dayofweektime', 'location', 'institution',
+            'coursestarttime', 'courseendtime',
             'bookingopeningtime', 'bookingclosingtime', 'bookings'];
 
         // Check if we should add the description.
@@ -926,12 +954,7 @@ class shortcodes {
         $table->add_subcolumns('top', ['sportsdivision', 'sport', 'action']);
         $table->add_subcolumns('leftside', $subcolumnsleftside);
         $table->add_subcolumns('info', $subcolumnsinfo);
-        // phpcs:ignore Squiz.PHP.CommentedOutCode.Found
-        /* $table->add_subcolumns('footer', ['botags']); */
 
-        $table->add_subcolumns('info', $subcolumnsinfo);
-        // phpcs:ignore Squiz.PHP.CommentedOutCode.Found
-        /* $table->add_subcolumns('footer', ['botags']); */
         $table->add_subcolumns('rightside', ['botags', 'invisibleoption', 'course', 'price']);
 
         $table->add_classes_to_subcolumns('top', ['columnkeyclass' => 'd-none']);
@@ -953,7 +976,9 @@ class shortcodes {
         $table->add_classes_to_subcolumns('info', ['columniclassbefore' => 'fa fa-clock-o'], ['dayofweektime']);
         $table->add_classes_to_subcolumns('info', ['columniclassbefore' => 'fa fa-map-marker'], ['location']);
         $table->add_classes_to_subcolumns('info', ['columniclassbefore' => 'fa fa-building-o'], ['institution']);
-        $table->add_classes_to_subcolumns('info', ['columniclassbefore' => 'fa fa-play'], ['bookingopeningtime']);
+        $table->add_classes_to_subcolumns('info', ['columniclassbefore' => 'fa fa-play'], ['coursestarttime']);
+        $table->add_classes_to_subcolumns('info', ['columniclassbefore' => 'fa fa-stop'], ['courseendtime']);
+        $table->add_classes_to_subcolumns('info', ['columniclassbefore' => 'fa fa-forward'], ['bookingopeningtime']);
         $table->add_classes_to_subcolumns('info', ['columniclassbefore' => 'fa fa-step-forward'], ['bookingclosingtime']);
         $table->add_classes_to_subcolumns('info', ['columniclassbefore' => 'fa fa-ticket'], ['bookings']);
         if (!empty($args['showminanswers'])) {
@@ -984,14 +1009,6 @@ class shortcodes {
             ['keystring' => get_string('tableheader_text', 'booking')],
             ['text']
         );
-        // phpcs:ignore Squiz.PHP.CommentedOutCode.Found
-        /*
-        $table->add_classes_to_subcolumns(
-            'leftside',
-            ['keystring' => get_string('tableheader_teacher', 'booking')],
-            ['teacher']
-        );
-        */
         $table->add_classes_to_subcolumns(
             'info',
             ['keystring' => get_string('tableheader_maxanswers', 'booking')],
@@ -1001,16 +1018,6 @@ class shortcodes {
             'info',
             ['keystring' => get_string('tableheader_maxoverbooking', 'booking')],
             ['maxoverbooking']
-        );
-        $table->add_classes_to_subcolumns(
-            'info',
-            ['keystring' => get_string('tableheader_coursestarttime', 'booking')],
-            ['coursestarttime']
-        );
-        $table->add_classes_to_subcolumns(
-            'info',
-            ['keystring' => get_string('tableheader_courseendtime', 'booking')],
-            ['courseendtime']
         );
 
         $table->is_downloading('', 'List of booking options');

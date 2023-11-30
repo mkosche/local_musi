@@ -440,21 +440,15 @@ class musi_table extends wunderbyte_table {
         $ret = '';
         $settings = singleton_service::get_instance_of_booking_option_settings($values->id, $values);
 
-        $units = null;
-
         if (!empty($settings->dayofweektime)) {
             $localweekdays = dates_handler::get_localized_weekdays(current_language());
             $dayinfo = dates_handler::prepare_day_info($settings->dayofweektime);
             if (isset($dayinfo['day']) && $dayinfo['starttime'] && $dayinfo['endtime']) {
-                $ret = $localweekdays[$dayinfo['day']] . ', '.$dayinfo['starttime'] . ' -- ' . $dayinfo['endtime'];
+                $ret = $localweekdays[$dayinfo['day']] . ', '.$dayinfo['starttime'] . ' - ' . $dayinfo['endtime'];
             } else if (!empty($settings->dayofweektime)) {
                 $ret = $settings->dayofweektime;
             } else {
                 $ret = get_string('datenotset', 'mod_booking');
-            }
-            if (!$this->is_downloading() &&  !empty($this->displayoptions['showunits'])) {
-                $units = dates_handler::calculate_and_render_educational_units($settings->dayofweektime);
-                $ret .= " ($units)";
             }
         }
 
@@ -587,6 +581,68 @@ class musi_table extends wunderbyte_table {
             $ret = $renderedbookingclosingtime;
         } else {
             $ret = get_string('bookingclosingtime', 'mod_booking') . ": " . $renderedbookingclosingtime;
+        }
+        return $ret;
+    }
+
+    /**
+     * This function is called for each data row to allow processing of the
+     * "coursestarttime" value.
+     *
+     * @param object $values Contains object with all the values of record.
+     * @return string a string containing the course start time
+     * @throws coding_exception
+     */
+    public function col_coursestarttime($values) {
+        $coursestarttime = $values->coursestarttime;
+        if (empty($coursestarttime)) {
+            return '';
+        }
+
+        switch (current_language()) {
+            case 'de':
+                $renderedcoursestarttime = date('d.m.Y, H:i', $coursestarttime);
+                break;
+            default:
+                $renderedcoursestarttime = date('M d, Y, H:i', $coursestarttime);
+                break;
+        }
+
+        if ($this->is_downloading()) {
+            $ret = $renderedcoursestarttime;
+        } else {
+            $ret = get_string('coursestarttime', 'mod_booking') . ": " . $renderedcoursestarttime;
+        }
+        return $ret;
+    }
+
+    /**
+     * This function is called for each data row to allow processing of the
+     * "courseendtime" value.
+     *
+     * @param object $values Contains object with all the values of record.
+     * @return string a string containing the course end time
+     * @throws coding_exception
+     */
+    public function col_courseendtime($values) {
+        $courseendtime = $values->courseendtime;
+        if (empty($courseendtime)) {
+            return '';
+        }
+
+        switch (current_language()) {
+            case 'de':
+                $renderedcourseendtime = date('d.m.Y, H:i', $courseendtime);
+                break;
+            default:
+                $renderedcourseendtime = date('M d, Y, H:i', $courseendtime);
+                break;
+        }
+
+        if ($this->is_downloading()) {
+            $ret = $renderedcourseendtime;
+        } else {
+            $ret = get_string('courseendtime', 'mod_booking') . ": " . $renderedcourseendtime;
         }
         return $ret;
     }

@@ -21,8 +21,6 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-use local_musi\sap_daily_sums;
-
 require_once(__DIR__ . '/../../config.php');
 require_once(__DIR__ . '/lib.php');
 
@@ -43,12 +41,14 @@ if ((has_capability('mod/booking:updatebooking', $context) || has_capability('mo
     die();
 }
 
+// Important note: SAP daily sums will no longer be generated within this file but by a scheduled task running every night!
+
 // Check if optionid is valid.
 $PAGE->set_context($context);
 
 $title = 'SAP-Textdateien mit Tagessummen';
 
-$PAGE->set_url('/local/musi/createsapdailysums.php');
+$PAGE->set_url('/local/musi/viewsapdailysums.php');
 $PAGE->navbar->add($title);
 $PAGE->set_title(format_string($title));
 
@@ -61,8 +61,6 @@ $now = time(); // Current timestamp.
 $dateoneyearago = strtotime('-365 days', $now);
 
 $fs = get_file_storage();
-
-sap_daily_sums::create_sap_files_from_date($dateoneyearago);
 
 // List all existing files as links.
 // Revert the order, so we have the newest files on top.

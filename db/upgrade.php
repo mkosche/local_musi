@@ -193,5 +193,37 @@ function xmldb_local_musi_upgrade($oldversion) {
         upgrade_plugin_savepoint(true, 2023092900, 'local', 'musi');
     }
 
+    if ($oldversion < 2023120400) {
+
+        // Define table local_musi_sap to be created.
+        $table = new xmldb_table('local_musi_sap');
+
+        // Adding fields to table local_musi_sap.
+        $table->add_field('id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, XMLDB_SEQUENCE, null);
+        $table->add_field('identifier', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
+        $table->add_field('userid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
+        $table->add_field('paymentid', XMLDB_TYPE_INTEGER, '10', null, null, null, '0');
+        $table->add_field('pu_openorderid', XMLDB_TYPE_INTEGER, '10', null, null, null, '0');
+        $table->add_field('sap_line', XMLDB_TYPE_CHAR, '1023', null, XMLDB_NOTNULL, null, null);
+        $table->add_field('filename', XMLDB_TYPE_CHAR, '255', null, null, null, null);
+        $table->add_field('error', XMLDB_TYPE_CHAR, '1023', null, null, null, null);
+        $table->add_field('info', XMLDB_TYPE_CHAR, '1023', null, null, null, null);
+        $table->add_field('usermodified', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
+        $table->add_field('timecreated', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
+        $table->add_field('timemodified', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
+
+        // Adding keys to table local_musi_sap.
+        $table->add_key('primary', XMLDB_KEY_PRIMARY, ['id']);
+        $table->add_key('usermodified', XMLDB_KEY_FOREIGN, ['usermodified'], 'user', ['id']);
+
+        // Conditionally launch create table for local_musi_sap.
+        if (!$dbman->table_exists($table)) {
+            $dbman->create_table($table);
+        }
+
+        // Musi savepoint reached.
+        upgrade_plugin_savepoint(true, 2023120400, 'local', 'musi');
+    }
+
     return true;
 }

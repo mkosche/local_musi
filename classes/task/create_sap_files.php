@@ -19,8 +19,6 @@ namespace local_musi\task;
 use core\task\scheduled_task;
 use local_musi\sap_daily_sums;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * Scheduled task creates SAP files in Moodle data directory.
  */

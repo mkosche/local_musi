@@ -29,6 +29,7 @@ namespace local_musi;
 use context_system;
 use core_payment\account;
 use moodle_exception;
+use stdClass;
 use stored_file;
 
 /**
@@ -41,7 +42,7 @@ class sap_daily_sums {
      * @param string $day formatted day to generate the SAP text file for
      * @return array [$content, $errorcontent] file content and content of the error file
      */
-    public static function generate_sap_text_file_for_date(string $day): array {
+    private static function generate_sap_text_file_for_date(string $day): array {
         global $DB;
 
         $startofday = strtotime($day . ' 00:00');
@@ -112,6 +113,7 @@ class sap_daily_sums {
 
         $content = '';
         $errorcontent = '';
+        $datafordb = [];
         if ($records = $DB->get_records_sql($sql, $params)) {
             foreach ($records as $record) {
 
@@ -119,6 +121,7 @@ class sap_daily_sums {
 
                 // If the SAP line has errors, we need to add it to a separate file.
                 $linehaserrors = false;
+                $errorinfo = null;
 
                 // Kostenstelle.
                 $sqlkostenstelle = "SELECT s1.kst
@@ -141,9 +144,11 @@ class sap_daily_sums {
                 // Wenn die Kostenstelle fehlt, wird die Zeile zum Error-File hinzugefügt.
                 if (empty($kostenstelle)) {
                     $linehaserrors = true;
+                    $errorinfo = 'keinekostenstelle';
                 }
                 if (empty($record->lastname)) {
                     $linehaserrors = true;
+                    $errorinfo = 'keinnachname';
                 }
 
                 /*
@@ -227,6 +232,30 @@ class sap_daily_sums {
                 $currentline .= str_pad('', 2, " ", STR_PAD_LEFT) . '#';
                 // Zahlungsbedingung - 4 Stellen.
                 $currentline .= str_pad('', 4, " ", STR_PAD_LEFT) . '#';
+
+                // Gather data needed to write content to local_musi_sap table.
+                $dbman = $DB->get_manager();
+                $openorderid = 0;
+                // Currently only payunity is supported for openorderid here...
+                // ...as this is needed by USI Wien only by now.
+                if ($dbman->table_exists('paygw_payunity_openorders')) {
+                    $openorderid = $DB->get_field('paygw_payunity_openorders', 'id', [
+                        'itemid' => $record->identifier,
+                        'status' => 3,
+                    ]);
+                    if (empty($openorderid)) {
+                        $openorderid = 0;
+                    }
+                }
+                $currentrecorddata = new stdClass();
+                $currentrecorddata->identifier = $record->identifier;
+                $currentrecorddata->userid = $record->userid;
+                $currentrecorddata->paymentid = $record->id;
+                $currentrecorddata->pu_openorderid = $openorderid;
+                $currentrecorddata->sap_line = $currentline; // Without line break.
+                $currentrecorddata->error = $errorinfo;
+                $datafordb[] = $currentrecorddata;
+
                 // ENDE: Zeilenumbruch.
                 $currentline .= "\n"; // Needs to be LF, not CRLF, so we use \n.
 
@@ -238,7 +267,7 @@ class sap_daily_sums {
             }
         }
 
-        return [$content, $errorcontent];
+        return [$content, $errorcontent, $datafordb];
     }
 
     /**
@@ -349,6 +378,8 @@ class sap_daily_sums {
      * @throws moodle_exception
      */
     public static function create_sap_files_from_date(int $starttimestamp): void {
+        global $DB, $USER;
+
         $now = time();
         if (!$context = context_system::instance()) {
             throw new moodle_exception('badcontext');
@@ -374,7 +405,20 @@ class sap_daily_sums {
                         'filename' => $filename
                 );
 
-                list($content, $errorcontent) = self::generate_sap_text_file_for_date(date('Y-m-d', $starttimestamp));
+                list($content, $errorcontent, $datafordb) =
+                    self::generate_sap_text_file_for_date(date('Y-m-d', $starttimestamp));
+
+                foreach ($datafordb as $recordfordb) {
+                    $recordfordb->filename = $filename;
+                    $recordfordb->usermodified = $USER->id;
+                    $recordfordb->timecreated = $now;
+                    $recordfordb->timemodified = $now;
+                    // We only insert if there is no existing record for this identifier!
+                    if (!$DB->record_exists('local_musi_sap', ['identifier' => $recordfordb->identifier])) {
+                        $DB->insert_record('local_musi_sap', $recordfordb);
+                    }
+                }
+
                 $file = $fs->create_file_from_string($fileinfo, $content);
 
                 // If we have error content, we create an error file.

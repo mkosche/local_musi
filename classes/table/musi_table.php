@@ -797,9 +797,6 @@ class musi_table extends wunderbyte_table {
      * @return void
      */
     public function finish_html() {
-
-        global $PAGE;
-
         $table = new \local_wunderbyte_table\output\table($this);
         $output = singleton_service::get_renderer('mod_booking');
         echo $output->render_bookingoptions_wbtable($table);

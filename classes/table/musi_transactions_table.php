@@ -183,7 +183,7 @@ class musi_transactions_table extends wunderbyte_table {
      * @param string $data
      * @return array
      */
-    public function update_status(int $id, string $data):array {
+    public function action_update_status(int $id, string $data):array {
 
         $data = json_decode($data);
 

@@ -117,121 +117,26 @@ class sap_daily_sums {
         if ($records = $DB->get_records_sql($sql, $params)) {
             foreach ($records as $record) {
 
-                $currentline = '';
-
                 // If the SAP line has errors, we need to add it to a separate file.
                 $linehaserrors = false;
                 $errorinfo = null;
 
-                // Kostenstelle.
-                $sqlkostenstelle = "SELECT s1.kst
-                FROM {payments} p
-                JOIN {local_shopping_cart_history} h
-                ON h.identifier = p.itemid
-                JOIN (
-                    SELECT d.instanceid AS optionid, d.value AS kst
-                    FROM {customfield_field} f
-                    JOIN {customfield_category} c
-                    ON c.id = f.categoryid AND c.component = 'mod_booking' AND f.shortname = 'kst'
-                    JOIN {customfield_data} d
-                    ON d.fieldid = f.id
-                ) s1
-                ON s1.optionid = h.itemid
-                WHERE p.itemid = :identifier AND s1.kst <> '' AND s1.kst IS NOT NULL
-                LIMIT 1";
-                $paramskostenstelle = ['identifier' => $record->identifier];
-                $kostenstelle = $DB->get_field_sql($sqlkostenstelle, $paramskostenstelle);
+                // Kostenstelle ermitteln und zum $record hinzufügen.
+                $record->costcenter = self::get_costcenter_by_identifier($record->identifier);
+
                 // Wenn die Kostenstelle fehlt, wird die Zeile zum Error-File hinzugefügt.
-                if (empty($kostenstelle)) {
+                if (empty($record->costcenter)) {
                     $linehaserrors = true;
-                    $errorinfo = 'keinekostenstelle';
+                    $errorinfo = 'keine_kostenstelle';
                 }
+                // Wenn der Nachname fehlt, wird die Zeile zum Error-File hinzugefügt.
                 if (empty($record->lastname)) {
                     $linehaserrors = true;
-                    $errorinfo = 'keinnachname';
+                    $errorinfo = 'kein_nachname';
                 }
 
-                /*
-                 * Mandant - 3 Stellen alphanumerisch - immer "101"
-                 * Buchungskreis - 4 Stellen alphanumerisch - immer "VIE1"
-                 * Währung - 3 Stellen alphanumerisch - immer "EUR"
-                 * Belegart - 2 Stellen alphanumerisch - Immer "DR"
-                 */
-                $currentline .= "101#VIE1#EUR#DR#";
-                // Referenzbelegnummer - 16 Stellen alphanumerisch.
-                $currentline .= str_pad($record->identifier, 16, " ", STR_PAD_LEFT) . '#';
-                // Buchungsdatum - 10 Stellen.
-                $currentline .= date('d.m.Y', $record->timemodified) . '#';
-                // Belegdatum - 10 Stellen.
-                $currentline .= date('d.m.Y', $record->timecreated) . '#';
-                // Belegkopftext - 25 Stellen alphanumerisch - in unserem Fall immer "US".
-                $currentline .= str_pad('US', 25, " ", STR_PAD_LEFT) . '#';
-                // Betrag - 14 Stellen alphanumerisch - Netto-Betrag.
-                $renderedprice = (string) $record->price;
-                $renderedprice = str_replace('.', ',', $renderedprice);
-                $currentline .= str_pad($renderedprice, 14, " ", STR_PAD_LEFT) . '#';
-                // Steuer rechnen - 1 Stelle alphanumerisch - immer "X".
-                $currentline .= 'X#';
-                /* Steuerbetrag - 14 Stellen alphanumerisch - derzeit sind keine Geschäftsfälle mit Umsatzsteuer vorgesehen,
-                daher bleibt das Feld immer leer. */
-                $currentline .= str_pad('', 14, " ") . '#';
-                /* Werbeabgabe - 14 Stellen alphanumerisch - kein bekannter Geschäftsfall im Moment,
-                daher bleibt das Feld immer leer. */
-                $currentline .= str_pad('', 14, " ") . '#';
-                // Buchungsschlüssel - 2 Stellen alphanumerisch - 50 - bei Rechnungen, 40 - bei Gutschriften
-                // Derzeit können nur Rechnungen geloggt werden, daher immer 50.
-                $currentline .= '50#';
-                // Geschäftsfall-Code - 3 Stellen alphanumerisch - immer "US0".
-                $currentline .= 'US0#';
-                // Zahlungscode - 3 Stellen alphanumerisch.
-                if (!empty($record->paymentbrand)) {
-                    $currentline .= str_pad($record->paymentbrand, 3, " ", STR_PAD_LEFT) . '#';
-                } else {
-                    $currentline .= str_pad('', 3, " ", STR_PAD_LEFT) . '#';
-                }
-                // Buchungstext - 50 Stellen alphanumerisch.
-                $lastname = 'UNKNOWN';
-                if (!empty($record->lastname)) {
-                    $lastname = self::clean_string_for_sap($record->lastname);
-                }
-                $buchungstext = " US $record->userid " . $lastname;
-                if (strlen($buchungstext) > 50) {
-                    $buchungstext = substr($buchungstext, 0, 50);
-                }
-                $currentline .= str_pad($buchungstext, 50, " ", STR_PAD_LEFT) . '#';
-                // Zuordnung - analog "Referenzbelegnummer" - 18 Stellen alphanumerisch.
-                $currentline .= str_pad($record->identifier, 18, " ", STR_PAD_LEFT) . '#';
-
-                // Kostenstelle - 10 Stellen - leer.
-                $currentline .= str_pad('', 10, " ", STR_PAD_LEFT) . '#';
-
-                // Innenauftrag - 12 Stellen - USI Wien immer "ET592002".
-                /* MUSI-350: Dort, wo jetzt immer "ET592002" steht muss der Wert
-                des optionalen Feldes Statistik-Kostenstelle geschrieben werden. */
-                // phpcs:ignore Squiz.PHP.CommentedOutCode.Found
-                /* $currentline .= str_pad('ET592002', 12, " ", STR_PAD_LEFT) . '#'; */
-                $currentline .= str_pad($kostenstelle ?? '', 12, " ", STR_PAD_LEFT) . '#';
-
-                // Anrede - 15 Stellen.
-                $currentline .= str_pad('', 15, " ", STR_PAD_LEFT) . '#';
-                // Name 1 - 35 Stellen.
-                $currentline .= str_pad('', 35, " ", STR_PAD_LEFT) . '#';
-                // Name 2 - 35 Stellen.
-                $currentline .= str_pad('', 35, " ", STR_PAD_LEFT) . '#';
-                // Name 3 - 35 Stellen.
-                $currentline .= str_pad('', 35, " ", STR_PAD_LEFT) . '#';
-                // Name 4 - 35 Stellen.
-                $currentline .= str_pad('', 35, " ", STR_PAD_LEFT) . '#';
-                // Straße / Hausnummer - 35 Stellen.
-                $currentline .= str_pad('', 35, " ", STR_PAD_LEFT) . '#';
-                // Ort - 35 Stellen.
-                $currentline .= str_pad('', 35, " ", STR_PAD_LEFT) . '#';
-                // Postleitzahl - 10 Stellen.
-                $currentline .= str_pad('', 10, " ", STR_PAD_LEFT) . '#';
-                // Land - 2 Stellen.
-                $currentline .= str_pad('', 2, " ", STR_PAD_LEFT) . '#';
-                // Zahlungsbedingung - 4 Stellen.
-                $currentline .= str_pad('', 4, " ", STR_PAD_LEFT) . '#';
+                // Generate the SAP line (without line break).
+                $currentline = self::generate_sap_line_for_record($record);
 
                 // Gather data needed to write content to local_musi_sap table.
                 $dbman = $DB->get_manager();
@@ -267,7 +172,264 @@ class sap_daily_sums {
             }
         }
 
+        // Daten aus manuellen Nachbuchungen hinzufügen.
+        self::add_sap_data_for_manual_rebookings($content, $errorcontent, $datafordb, $startofday, $endofday);
+
         return [$content, $errorcontent, $datafordb];
+    }
+
+    /**
+     * Helper function to generate SAP line for record.
+     * @param string &$content reference to $content
+     * @param string &$errorcontent reference to $errorcontent
+     * @param array &$datafordb reference to $datafordb array
+     * @param int $startofday unix timestamp
+     * @param int $endofday unix timestamp
+     * @return void
+     */
+    private static function add_sap_data_for_manual_rebookings(&$content, &$errorcontent, &$datafordb,
+        int $startofday, int $endofday): void {
+        global $DB;
+
+        // 1. Get one record for each manual rebooking.
+        $sql = 'SELECT s1.*
+                FROM (
+                    SELECT *, ROW_NUMBER() OVER (PARTITION BY identifier ORDER BY itemid DESC) AS n
+                    FROM {local_shopping_cart_ledger}
+                ) AS s1
+                WHERE n = 1 -- Only one row per identifier.
+                AND paymentstatus = 2
+                AND timecreated BETWEEN :startofday AND :endofday AND ' .
+                $DB->sql_like('s1.payment', ':manualrebooking');
+        $params = [
+            'startofday' => $startofday,
+            'endofday' => $endofday,
+            'manualrebooking' => '7',
+        ];
+        $records = $DB->get_records_sql($sql, $params);
+
+        // If we have no manual rebookings, we return.
+        if (empty($records)) {
+            return;
+        }
+
+        foreach ($records as $record) {
+
+            // If the SAP line has errors, we need to add it to a separate file.
+            $linehaserrors = false;
+            $errorinfo = null;
+
+            unset($record->id); // We'll need the paymentid instead.
+            unset($record->price); // Get it from openorders table instead!
+
+            // Wenn die annotation einen identifier enthält, dann diesen verwenden!
+            $annotationarr = explode(' ', $record->annotation);
+            if (is_number($annotationarr[0])) {
+                $record->identifier = (int) $annotationarr[0];
+            }
+            $allowedpaymentbrands = ['VC', 'MC', 'EP', 'DC', 'AX'];
+            if (in_array(end($annotationarr), $allowedpaymentbrands)) {
+                $record->paymentbrand = end($annotationarr);
+            } else {
+                $record->paymentbrand = 'UK';
+                $linehaserrors = true;
+                $errorinfo = 'zahlungsart_ungueltig';
+            }
+
+            // Nachname.
+            $record->lastname = $DB->get_field('user', 'lastname', ['id' => $record->userid]);
+
+            // Wenn die Kostenstelle fehlt, wird die Zeile zum Error-File hinzugefügt.
+            if (empty($record->costcenter)) {
+                $linehaserrors = true;
+                $errorinfo = 'keine_kostenstelle';
+            }
+            // Wenn der Nachname fehlt, wird die Zeile zum Error-File hinzugefügt.
+            if (empty($record->lastname)) {
+                $linehaserrors = true;
+                $errorinfo = 'kein_nachname';
+            }
+
+            // Eintrag in 'paygw_payunity_openorders'-Tabelle vorhanden?
+            // Dann Preis von dort nehmen...
+            $dbman = $DB->get_manager();
+            $openorderid = 0;
+            // Currently only payunity is supported for openorderid here...
+            // ...as this is needed by USI Wien only by now.
+            if ($dbman->table_exists('paygw_payunity_openorders')) {
+                $openordersrecord = $DB->get_record('paygw_payunity_openorders', [
+                    'itemid' => $record->identifier,
+                ]);
+                if (!empty($openordersrecord)) {
+                    $openorderid = $openordersrecord->id;
+                    $record->price = $openordersrecord->price;
+                }
+            }
+            if ($openorderid == 0) {
+                // In this case we have to calculate the price from ledger.
+                $record->price = $DB->get_field_sql(
+                    'SELECT SUM(price) AS price
+                    FROM {local_shopping_cart_ledger}
+                    WHERE identifier = :identifier
+                    AND ' . $DB->sql_like('payment', ':manualrebooking'),
+                    [
+                        'identifier' => $record->identifier,
+                        'manualrebooking' => '7',
+                    ]
+                );
+            }
+            // Round price to full number.
+            $record->price = (int) round($record->price);
+
+            // Nun kann die SAP-Zeile erstellt werden.
+            $currentline = self::generate_sap_line_for_record($record);
+
+            // Eintrag in der Payments-Tabelle vorhanden? Dann paymentid mitspeichern.
+            $paymentid = $DB->get_field('payments', 'id', ['itemid' => $record->identifier]);
+            if (empty($paymentid)) {
+                $paymentid = 0;
+            }
+
+            // Zusätzliche Infos für Eintrag in local_musi_sap-Tabelle.
+            $currentrecorddata = new stdClass();
+            $currentrecorddata->identifier = $record->identifier;
+            $currentrecorddata->userid = $record->userid;
+            $currentrecorddata->paymentid = $paymentid;
+            $currentrecorddata->pu_openorderid = $openorderid;
+            $currentrecorddata->sap_line = $currentline; // Without line break.
+            $currentrecorddata->error = $errorinfo;
+            $currentrecorddata->info = 'manuelle_nachbuchung';
+            $datafordb[] = $currentrecorddata;
+
+            // ENDE: Zeilenumbruch.
+            $currentline .= "\n"; // Needs to be LF, not CRLF, so we use \n.
+
+            if (!$linehaserrors) {
+                $content .= $currentline;
+            } else {
+                $errorcontent .= $currentline;
+            }
+        }
+    }
+
+    /**
+     * Helper function to generate SAP line for record.
+     * @param stdClass $record
+     * @return string
+     */
+    private static function generate_sap_line_for_record(stdClass $record): string {
+        $currentline = '';
+        /*
+            * Mandant - 3 Stellen alphanumerisch - immer "101"
+            * Buchungskreis - 4 Stellen alphanumerisch - immer "VIE1"
+            * Währung - 3 Stellen alphanumerisch - immer "EUR"
+            * Belegart - 2 Stellen alphanumerisch - Immer "DR"
+            */
+        $currentline .= "101#VIE1#EUR#DR#";
+        // Referenzbelegnummer - 16 Stellen alphanumerisch.
+        $currentline .= str_pad($record->identifier, 16, " ", STR_PAD_LEFT) . '#';
+        // Buchungsdatum - 10 Stellen.
+        $currentline .= date('d.m.Y', $record->timemodified) . '#';
+        // Belegdatum - 10 Stellen.
+        $currentline .= date('d.m.Y', $record->timecreated) . '#';
+        // Belegkopftext - 25 Stellen alphanumerisch - in unserem Fall immer "US".
+        $currentline .= str_pad('US', 25, " ", STR_PAD_LEFT) . '#';
+        // Betrag - 14 Stellen alphanumerisch - Netto-Betrag.
+        $renderedprice = (string) $record->price;
+        $renderedprice = str_replace('.', ',', $renderedprice);
+        $currentline .= str_pad($renderedprice, 14, " ", STR_PAD_LEFT) . '#';
+        // Steuer rechnen - 1 Stelle alphanumerisch - immer "X".
+        $currentline .= 'X#';
+        /* Steuerbetrag - 14 Stellen alphanumerisch - derzeit sind keine Geschäftsfälle mit Umsatzsteuer vorgesehen,
+        daher bleibt das Feld immer leer. */
+        $currentline .= str_pad('', 14, " ") . '#';
+        /* Werbeabgabe - 14 Stellen alphanumerisch - kein bekannter Geschäftsfall im Moment,
+        daher bleibt das Feld immer leer. */
+        $currentline .= str_pad('', 14, " ") . '#';
+        // Buchungsschlüssel - 2 Stellen alphanumerisch - 50 - bei Rechnungen, 40 - bei Gutschriften
+        // Derzeit können nur Rechnungen geloggt werden, daher immer 50.
+        $currentline .= '50#';
+        // Geschäftsfall-Code - 3 Stellen alphanumerisch - immer "US0".
+        $currentline .= 'US0#';
+        // Zahlungscode - 3 Stellen alphanumerisch.
+        if (!empty($record->paymentbrand)) {
+            $currentline .= str_pad($record->paymentbrand, 3, " ", STR_PAD_LEFT) . '#';
+        } else {
+            $currentline .= str_pad('', 3, " ", STR_PAD_LEFT) . '#';
+        }
+        // Buchungstext - 50 Stellen alphanumerisch.
+        $lastname = 'UNKNOWN';
+        if (!empty($record->lastname)) {
+            $lastname = self::clean_string_for_sap($record->lastname);
+        }
+        $buchungstext = " US $record->userid " . $lastname;
+        if (strlen($buchungstext) > 50) {
+            $buchungstext = substr($buchungstext, 0, 50);
+        }
+        $currentline .= str_pad($buchungstext, 50, " ", STR_PAD_LEFT) . '#';
+        // Zuordnung - analog "Referenzbelegnummer" - 18 Stellen alphanumerisch.
+        $currentline .= str_pad($record->identifier, 18, " ", STR_PAD_LEFT) . '#';
+
+        // Kostenstelle - 10 Stellen - leer.
+        $currentline .= str_pad('', 10, " ", STR_PAD_LEFT) . '#';
+
+        // Innenauftrag - 12 Stellen - USI Wien immer "ET592002".
+        /* MUSI-350: Dort, wo jetzt immer "ET592002" steht muss der Wert
+        des optionalen Feldes Statistik-Kostenstelle geschrieben werden. */
+        // phpcs:ignore Squiz.PHP.CommentedOutCode.Found
+        /* $currentline .= str_pad('ET592002', 12, " ", STR_PAD_LEFT) . '#'; */
+        $currentline .= str_pad($record->costcenter ?? '', 12, " ", STR_PAD_LEFT) . '#';
+
+        // Anrede - 15 Stellen.
+        $currentline .= str_pad('', 15, " ", STR_PAD_LEFT) . '#';
+        // Name 1 - 35 Stellen.
+        $currentline .= str_pad('', 35, " ", STR_PAD_LEFT) . '#';
+        // Name 2 - 35 Stellen.
+        $currentline .= str_pad('', 35, " ", STR_PAD_LEFT) . '#';
+        // Name 3 - 35 Stellen.
+        $currentline .= str_pad('', 35, " ", STR_PAD_LEFT) . '#';
+        // Name 4 - 35 Stellen.
+        $currentline .= str_pad('', 35, " ", STR_PAD_LEFT) . '#';
+        // Straße / Hausnummer - 35 Stellen.
+        $currentline .= str_pad('', 35, " ", STR_PAD_LEFT) . '#';
+        // Ort - 35 Stellen.
+        $currentline .= str_pad('', 35, " ", STR_PAD_LEFT) . '#';
+        // Postleitzahl - 10 Stellen.
+        $currentline .= str_pad('', 10, " ", STR_PAD_LEFT) . '#';
+        // Land - 2 Stellen.
+        $currentline .= str_pad('', 2, " ", STR_PAD_LEFT) . '#';
+        // Zahlungsbedingung - 4 Stellen.
+        $currentline .= str_pad('', 4, " ", STR_PAD_LEFT) . '#';
+
+        return $currentline;
+    }
+
+    /**
+     * Helper function to get cost center for identifier.
+     * @param int $identifier
+     * @return string
+     */
+    private static function get_costcenter_by_identifier(int $identifier): string {
+        global $DB;
+        // Kostenstelle.
+        $sqlkostenstelle = "SELECT s1.kst
+        FROM {payments} p
+        JOIN {local_shopping_cart_history} h
+        ON h.identifier = p.itemid
+        JOIN (
+            SELECT d.instanceid AS optionid, d.value AS kst
+            FROM {customfield_field} f
+            JOIN {customfield_category} c
+            ON c.id = f.categoryid AND c.component = 'mod_booking' AND f.shortname = 'kst'
+            JOIN {customfield_data} d
+            ON d.fieldid = f.id
+        ) s1
+        ON s1.optionid = h.itemid
+        WHERE p.itemid = :identifier AND s1.kst <> '' AND s1.kst IS NOT NULL
+        LIMIT 1";
+        $paramskostenstelle = ['identifier' => $identifier];
+        $kostenstelle = $DB->get_field_sql($sqlkostenstelle, $paramskostenstelle);
+        return $kostenstelle;
     }
 
     /**
@@ -391,7 +553,7 @@ class sap_daily_sums {
         $filearea = 'musi_sap_dailysums';
         $itemid = 0;
         $filepath = '/';
-        while ($starttimestamp <= $yesterday) {
+        while ($starttimestamp <= $now) { //while ($starttimestamp <= $yesterday) {
             $filename = 'SAP_USI_' . date('Ymd', $starttimestamp);
             // Retrieve the file from the Files API.
             $file = $fs->get_file($contextid, $component, $filearea, $itemid, $filepath, $filename);

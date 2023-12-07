@@ -39,11 +39,14 @@ class sap_daily_sums {
     /**
      * Helper function to create SAP text files for M:USI.
      *
-     * @param string $day formatted day to generate the SAP text file for
+     * @param int $daytimestamp timestamp of day to generate the SAP text file for
      * @return array [$content, $errorcontent] file content and content of the error file
      */
-    private static function generate_sap_text_file_for_date(string $day): array {
+    private static function generate_sap_text_file_for_date(int $daytimestamp): array {
         global $DB;
+
+        $day = date('Y-m-d', $daytimestamp);
+        $filename = 'SAP_USI_' . date('Ymd', $daytimestamp);
 
         $startofday = strtotime($day . ' 00:00');
         $endofday = strtotime($day . ' 24:00');
@@ -120,6 +123,7 @@ class sap_daily_sums {
                 // If the SAP line has errors, we need to add it to a separate file.
                 $linehaserrors = false;
                 $errorinfo = null;
+                $info = null;
 
                 // Kostenstelle ermitteln und zum $record hinzufügen.
                 $record->costcenter = self::get_costcenter_by_identifier($record->identifier);
@@ -152,6 +156,11 @@ class sap_daily_sums {
                         $openorderid = 0;
                     }
                 }
+                // We only insert if there is no existing (error-free) record for this identifier!
+                if ($DB->record_exists('local_musi_sap', ['identifier' => $record->identifier, 'error' => null])) {
+                    $linehaserrors = true;
+                    $errorinfo = 'eintrag_fuer_identifier_existiert_bereits';
+                }
                 $currentrecorddata = new stdClass();
                 $currentrecorddata->identifier = $record->identifier;
                 $currentrecorddata->userid = $record->userid;
@@ -159,6 +168,12 @@ class sap_daily_sums {
                 $currentrecorddata->pu_openorderid = $openorderid;
                 $currentrecorddata->sap_line = $currentline; // Without line break.
                 $currentrecorddata->error = $errorinfo;
+                $currentrecorddata->info = $info;
+                $currentrecorddata->filename = $filename;
+                if ($linehaserrors) {
+                    // If we have errors we show that it was written to errors file.
+                    $currentrecorddata->filename .= '_errors';
+                }
                 $datafordb[] = $currentrecorddata;
 
                 // ENDE: Zeilenumbruch.
@@ -173,7 +188,7 @@ class sap_daily_sums {
         }
 
         // Daten aus manuellen Nachbuchungen hinzufügen.
-        self::add_sap_data_for_manual_rebookings($content, $errorcontent, $datafordb, $startofday, $endofday);
+        self::add_sap_data_for_manual_rebookings($content, $errorcontent, $datafordb, $startofday, $endofday, $filename);
 
         return [$content, $errorcontent, $datafordb];
     }
@@ -185,10 +200,11 @@ class sap_daily_sums {
      * @param array &$datafordb reference to $datafordb array
      * @param int $startofday unix timestamp
      * @param int $endofday unix timestamp
+     * @param string $filename the filename (without _errors suffix)
      * @return void
      */
     private static function add_sap_data_for_manual_rebookings(&$content, &$errorcontent, &$datafordb,
-        int $startofday, int $endofday): void {
+        int $startofday, int $endofday, string $filename): void {
         global $DB;
 
         // 1. Get one record for each manual rebooking.
@@ -218,6 +234,7 @@ class sap_daily_sums {
             // If the SAP line has errors, we need to add it to a separate file.
             $linehaserrors = false;
             $errorinfo = null;
+            $info = 'manuelle_nachbuchung';
 
             unset($record->id); // We'll need the paymentid instead.
             unset($record->price); // Get it from openorders table instead!
@@ -290,6 +307,12 @@ class sap_daily_sums {
                 $paymentid = 0;
             }
 
+            // Es darf pro Identifier nur einen (fehlerfreien) Eintrag geben!
+            if ($DB->record_exists('local_musi_sap', ['identifier' => $record->identifier, 'error' => null])) {
+                $linehaserrors = true;
+                $errorinfo = 'eintrag_fuer_identifier_existiert_bereits';
+            }
+
             // Zusätzliche Infos für Eintrag in local_musi_sap-Tabelle.
             $currentrecorddata = new stdClass();
             $currentrecorddata->identifier = $record->identifier;
@@ -298,7 +321,12 @@ class sap_daily_sums {
             $currentrecorddata->pu_openorderid = $openorderid;
             $currentrecorddata->sap_line = $currentline; // Without line break.
             $currentrecorddata->error = $errorinfo;
-            $currentrecorddata->info = 'manuelle_nachbuchung';
+            $currentrecorddata->info = $info;
+            $currentrecorddata->filename = $filename;
+            if ($linehaserrors) {
+                // If we have errors we show that it was written to errors file.
+                $currentrecorddata->filename .= '_errors';
+            }
             $datafordb[] = $currentrecorddata;
 
             // ENDE: Zeilenumbruch.
@@ -568,22 +596,13 @@ class sap_daily_sums {
                 ];
 
                 list($content, $errorcontent, $datafordb) =
-                    self::generate_sap_text_file_for_date(date('Y-m-d', $starttimestamp));
+                    self::generate_sap_text_file_for_date($starttimestamp);
 
                 foreach ($datafordb as $recordfordb) {
-                    if (empty($recordfordb->error)) {
-                        $recordfordb->filename = $filename;
-                    } else {
-                        // If we have errors we show that it was written to errors file.
-                        $recordfordb->filename .= '_errors';
-                    }
                     $recordfordb->usermodified = $USER->id;
                     $recordfordb->timecreated = $now;
                     $recordfordb->timemodified = $now;
-                    // We only insert if there is no existing record for this identifier!
-                    if (!$DB->record_exists('local_musi_sap', ['identifier' => $recordfordb->identifier])) {
-                        $DB->insert_record('local_musi_sap', $recordfordb);
-                    }
+                    $DB->insert_record('local_musi_sap', $recordfordb);
                 }
 
                 $file = $fs->create_file_from_string($fileinfo, $content);

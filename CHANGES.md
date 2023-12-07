@@ -1,3 +1,15 @@
+## Version 0.7.7 (2023120700)
+* New feature: Improve SAP file creation and log each SAP row in a table called local_musi_sap.
+* New feature: Add manual rebookings to SAP files.
+* New feature: Show booking opening and closing time in all relevant views and add possibility to sort by them.
+* New feature: Filters for booking time and course time.
+* Improvement: Add new requirelogin argument to shortcodes.
+* Improvement: Add requirelogin=false to shortcodes.
+* Improvement: Make sure wbtable container is aligned left by adding left margin of 0 (ml-0).
+* Bugfix: Remove table prefix and use curly brackets.
+* Bugfix: All plugin constants must start with uppercase frankenstyle prefix.
+* Bugfix: Add missing "action_" to update_status function (because of new wbtable security feature).
+
 ## Version 0.7.6 (2023112700)
 * New feature: Automatic attribution of sportsdivision via "sparten" shortcode.
 * New feature: Show sports divisions in card and list view.

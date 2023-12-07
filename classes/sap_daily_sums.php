@@ -553,25 +553,30 @@ class sap_daily_sums {
         $filearea = 'musi_sap_dailysums';
         $itemid = 0;
         $filepath = '/';
-        while ($starttimestamp <= $now) { //while ($starttimestamp <= $yesterday) {
+        while ($starttimestamp <= $yesterday) {
             $filename = 'SAP_USI_' . date('Ymd', $starttimestamp);
             // Retrieve the file from the Files API.
             $file = $fs->get_file($contextid, $component, $filearea, $itemid, $filepath, $filename);
             if (!$file) {
-                $fileinfo = array(
+                $fileinfo = [
                         'contextid' => $contextid,
                         'component' => $component,
                         'filearea' => $filearea,
                         'itemid' => $itemid,
                         'filepath' => $filepath,
-                        'filename' => $filename
-                );
+                        'filename' => $filename,
+                ];
 
                 list($content, $errorcontent, $datafordb) =
                     self::generate_sap_text_file_for_date(date('Y-m-d', $starttimestamp));
 
                 foreach ($datafordb as $recordfordb) {
-                    $recordfordb->filename = $filename;
+                    if (empty($recordfordb->error)) {
+                        $recordfordb->filename = $filename;
+                    } else {
+                        // If we have errors we show that it was written to errors file.
+                        $recordfordb->filename .= '_errors';
+                    }
                     $recordfordb->usermodified = $USER->id;
                     $recordfordb->timecreated = $now;
                     $recordfordb->timemodified = $now;

@@ -506,7 +506,7 @@ class shortcodes {
      * @param Closure $next
      * @return void
      */
-    public static function myteachedcoursescards($shortcode, $args, $content, $env, $next) {
+    public static function mytaughtcoursescards($shortcode, $args, $content, $env, $next) {
 
         global $USER;
         self::fix_args($args);

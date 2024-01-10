@@ -1,3 +1,6 @@
+## Version 0.7.8 (2024011000)
+* Improvement: Replace typo "teached" with "taught".
+
 ## Version 0.7.7 (2023120700)
 * New feature: Improve SAP file creation and log each SAP row in a table called local_musi_sap.
 * New feature: Add manual rebookings to SAP files.

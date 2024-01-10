@@ -191,9 +191,17 @@ class musi_transactions_table extends wunderbyte_table {
             $transactioncomplete = 'paygw_' . $data->gateway . '\external\transaction_complete';
             if (class_exists($transactioncomplete)) {
                 try {
-                    $result = $transactioncomplete::execute('local_shopping_cart', '',
-                    $data->itemid, $data->orderid, '', '',
-                    true, '', $data->userid);
+                    $result = $transactioncomplete::execute(
+                        'local_shopping_cart', // Component.
+                        '', // Paymentarea.
+                        (int) $data->itemid, // Itemid.
+                        $data->orderid, // Tid.
+                        null, // Token.
+                        null, // Customer.
+                        true, // Ischeckstatus.
+                        null, // Resourcepath.
+                        $data->userid ?? 0, // Userid.
+                    );
                 } catch (\Throwable $e) {
                     echo($e);
                 }

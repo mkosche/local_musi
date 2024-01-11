@@ -27,6 +27,12 @@
 defined('MOODLE_INTERNAL') || die();
 
 $observers = [
+
+    // Currently, we add all payment gateways separately.
+    // TODO: We should do this in a more generic way.
+    // For example, we could use a base class or wildcards.
+
+    // Payunity payment plugin.
     [
         'eventname' => '\paygw_payunity\event\payment_added',
         'callback' => '\local_musi\observer::payment_added',
@@ -39,6 +45,8 @@ $observers = [
         'eventname' => '\paygw_payunity\event\payment_successful',
         'callback' => '\local_musi\observer::payment_successful',
     ],
+
+    // Mpay24 payment plugin.
     [
         'eventname' => '\paygw_mpay24\event\payment_added',
         'callback' => '\local_musi\observer::payment_added',
@@ -49,6 +57,20 @@ $observers = [
     ],
     [
         'eventname' => '\paygw_mpay24\event\payment_successful',
+        'callback' => '\local_musi\observer::payment_successful',
+    ],
+
+    // Unigraz payment plugin.
+    [
+        'eventname' => '\paygw_unigraz\event\payment_added',
+        'callback' => '\local_musi\observer::payment_added',
+    ],
+    [
+        'eventname' => '\paygw_unigraz\event\payment_completed',
+        'callback' => '\local_musi\observer::payment_completed',
+    ],
+    [
+        'eventname' => '\paygw_unigraz\event\payment_successful',
         'callback' => '\local_musi\observer::payment_successful',
     ],
 ];

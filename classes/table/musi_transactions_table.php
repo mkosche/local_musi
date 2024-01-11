@@ -23,12 +23,10 @@ require_once(__DIR__ . '/../../lib.php');
 require_once($CFG->libdir.'/tablelib.php');
 
 use cache_helper;
+use local_shopping_cart\interfaces\interface_transaction_complete;
 use local_wunderbyte_table\output\table;
 use local_wunderbyte_table\wunderbyte_table;
-use mod_booking\singleton_service;
-use paygw_payunity\external\transaction_complete as payunity_complete;
-use paygw_mpay24\external\transaction_complete as mpay24_complete;
-
+use moodle_exception;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -188,20 +186,26 @@ class musi_transactions_table extends wunderbyte_table {
         $data = json_decode($data);
 
         try {
-            $transactioncomplete = 'paygw_' . $data->gateway . '\external\transaction_complete';
-            if (class_exists($transactioncomplete)) {
+            $transactioncompletestring = 'paygw_' . $data->gateway . '\external\transaction_complete';
+            if (class_exists($transactioncompletestring)) {
                 try {
-                    $result = $transactioncomplete::execute(
-                        'local_shopping_cart', // Component.
-                        '', // Paymentarea.
-                        (int) $data->itemid, // Itemid.
-                        $data->orderid, // Tid.
-                        null, // Token.
-                        null, // Customer.
-                        true, // Ischeckstatus.
-                        null, // Resourcepath.
-                        $data->userid ?? 0, // Userid.
-                    );
+                    $transactioncomplete = new $transactioncompletestring();
+                    if ($transactioncomplete instanceof interface_transaction_complete) {
+                        $result = $transactioncomplete::execute(
+                            'local_shopping_cart', // Component.
+                            '', // Paymentarea.
+                            (int) $data->itemid, // Itemid.
+                            $data->orderid, // Tid.
+                            '', // Token.
+                            '', // Customer.
+                            true, // Ischeckstatus.
+                            '', // Resourcepath.
+                            $data->userid ?? 0, // Userid.
+                        );
+                    } else {
+                        throw new moodle_exception(
+                            'ERROR: transaction_complete does not implement transaction_complete interface!');
+                    }
                 } catch (\Throwable $e) {
                     echo($e);
                 }

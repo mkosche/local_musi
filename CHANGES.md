@@ -1,3 +1,8 @@
+## Version 0.7.9 (2024011500)
+* Improvement: Check if transaction_complete class implements the interface in shopping cart.
+* Bugfix: Fix call of transaction_complete so that it works with payunity, mpay24 and unigraz.
+* Bugfix: Add missing observers for Unigraz Payment Plugin.
+
 ## Version 0.7.8 (2024011000)
 * Improvement: Replace typo "teached" with "taught".
 

@@ -1,3 +1,8 @@
+## Version 0.8.0 (2024011600)
+* Improvement: "infinitescrollpage" new Argument for shortcodes.
+* Improvement: Add countlabel.
+* Improvement: More efficient reloading of filters because cache is hit more often.
+
 ## Version 0.7.9 (2024011500)
 * Improvement: Check if transaction_complete class implements the interface in shopping cart.
 * Bugfix: Fix call of transaction_complete so that it works with payunity, mpay24 and unigraz.

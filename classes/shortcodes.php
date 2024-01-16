@@ -719,7 +719,7 @@ class shortcodes {
 
         global $PAGE, $USER;
 
-        $tablename = bin2hex(random_bytes(12));
+        $tablename = md5($PAGE->url) ?? bin2hex(random_bytes(12));
 
         // It's important to have the baseurl defined, we use it as a return url at one point.
         $baseurl = $PAGE->url ?? new moodle_url('');

@@ -189,6 +189,7 @@ class shortcodes {
         $table->infinitescroll = $infinitescrollpage;
 
         $table->tabletemplate = 'local_musi/table_list';
+        $table->showcountlabel = true;
 
         // If we find "nolazy='1'", we return the table directly, without lazy loading.
         if (!empty($args['lazy'])) {

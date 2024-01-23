@@ -138,8 +138,10 @@ class shortcodes {
             $args['countlabel'] = false;
         }
 
-        if (!isset($args['infinitescrollpage']) || !$infinitescrollpage = ($args['infinitescrollpage'])) {
+        if (!isset($args['infinitescrollpage']) || !$args['infinitescrollpage']) {
             $infinitescrollpage = 30;
+        } else {
+            $infinitescrollpage = $args['infinitescrollpage'];
         }
 
         if (
@@ -226,8 +228,10 @@ class shortcodes {
             $category = '';
         }
 
-        if (!isset($args['infinitescrollpage']) || !$infinitescrollpage = ($args['infinitescrollpage'])) {
+        if (!isset($args['infinitescrollpage']) || !$args['infinitescrollpage']) {
             $infinitescrollpage = 30;
+        } else {
+            $infinitescrollpage = $args['infinitescrollpage'];
         }
 
         if (
@@ -360,8 +364,10 @@ class shortcodes {
             $category = '';
         }
 
-        if (!isset($args['infinitescrollpage']) || !$infinitescrollpage = ($args['infinitescrollpage'])) {
+        if (!isset($args['infinitescrollpage']) || !$args['infinitescrollpage']) {
             $infinitescrollpage = 30;
+        } else {
+            $infinitescrollpage = $args['infinitescrollpage'];
         }
 
         if (
@@ -589,8 +595,10 @@ class shortcodes {
             $args['countlabel'] = false;
         }
 
-        if (!isset($args['infinitescrollpage']) || !$infinitescrollpage = ($args['infinitescrollpage'])) {
+        if (!isset($args['infinitescrollpage']) || !$args['infinitescrollpage']) {
             $infinitescrollpage = 30;
+        } else {
+            $infinitescrollpage = $args['infinitescrollpage'];
         }
 
         $table = self::inittableforcourses($booking);

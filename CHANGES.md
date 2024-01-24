@@ -1,3 +1,7 @@
+## Version 0.8.1 (2024012400)
+* Bugfix: Improve infinitescrollpage attribute.
+* Bugfix: Use 30 as default for infinite scroll and cast to int earlier.
+
 ## Version 0.8.0 (2024011600)
 * Improvement: "infinitescrollpage" new Argument for shortcodes.
 * Improvement: Add countlabel.

@@ -96,6 +96,23 @@ class userinformation implements renderable, templatable {
                 continue;
             }
             $localized = $DB->get_field('user_info_field', 'name', ['shortname' => $key]);
+
+            // Convert unix timestamps to rendered dates.
+            if (is_numeric($value)) {
+                if (strlen((string)$value) == 10) {
+                    // Localized time format.
+                    switch(current_language()) {
+                        case 'de':
+                            $format = "d.m.Y";
+                            break;
+                        default:
+                            $format = "Y-m-d";
+                            break;
+                    }
+                    $value = date($format, $value);
+                }
+            }
+
             $additionaldata[] = [
                 'key' => $localized,
                 'value' => $value,

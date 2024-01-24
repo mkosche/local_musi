@@ -67,6 +67,7 @@ $string['invisibleoption'] = '<i class="fa fa-eye-slash" aria-hidden="true"></i>
 $string['sportsdivision'] = 'Sports division';
 $string['sportsdivisions'] = 'Sports divisions';
 $string['titleprefix'] = 'Course number';
+$string['unknown'] = 'Unknown';
 
 // Errors.
 $string['error:starttime'] = 'Start has to be before end.';

@@ -92,6 +92,24 @@ if ($hassiteconfig) {
             new admin_setting_configcheckbox('local_musi/shortcodelists_showdescriptions',
                 get_string('shortcodelists_showdescriptions', 'local_musi'), '', 0));
 
+        $collapsedescriptionoptions = [
+            0 => get_string('collapsedescriptionoff', 'local_musi'),
+            100 => "100",
+            200 => "200",
+            300 => "300",
+            400 => "400",
+            500 => "500",
+            600 => "600",
+            700 => "700",
+            800 => "800",
+            900 => "900",
+        ];
+        $settings->add(
+            new admin_setting_configselect('local_musi/collapsedescriptionmaxlength',
+                get_string('collapsedescriptionmaxlength', 'local_musi'),
+                get_string('collapsedescriptionmaxlength_desc', 'local_musi'),
+                300, $collapsedescriptionoptions));
+
         // CONTRACT MANAGEMENT.
         // phpcs:ignore Squiz.PHP.CommentedOutCode.Found
         /* $settings->add(

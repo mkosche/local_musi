@@ -220,6 +220,41 @@ class musi_table extends wunderbyte_table {
         return $title;
     }
 
+    /**
+     * This function is called for each data row to allow processing of the
+     * description value.
+     *
+     * @param object $values Contains object with all the values of record.
+     * @return string $ret the return string
+     * @throws coding_exception
+     */
+    public function col_description($values) {
+
+        $fulldescription = $values->description;
+        $ret = $fulldescription;
+
+        if (!empty(get_config('local_musi', 'collapsedescriptionmaxlength'))) {
+
+            $maxlength = (int)get_config('local_musi', 'collapsedescriptionmaxlength');
+
+            // Show collapsible for long descriptions.
+            $shortdescription = strip_tags($fulldescription, '<br>');
+            if (strlen($shortdescription) > $maxlength) {
+                $shortdescription = substr($shortdescription, 0, $maxlength) . '...';
+
+                $ret =
+                    '<div>' . $shortdescription .
+                        '<a data-toggle="collapse" href="#collapseDescription' . $values->id . '" role="button"
+                            aria-expanded="false" aria-controls="collapseDescription"> ' . get_string('showmore', 'local_musi') . '</a>
+                    </div>
+                    <div class="collapse" id="collapseDescription' . $values->id . '">
+                        <div class="card card-body border-0">' . $fulldescription . '</div>
+                    </div>';
+            }
+        }
+
+        return $ret;
+    }
 
     /**
      * This function is called for each data row to allow processing of the

@@ -25,7 +25,7 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$string['pluginname'] = 'M:USI Dashboard';
+$string['pluginname'] = 'M:USI Plugin';
 
 $string['dashboard'] = 'Dashboard';
 $string['messageprovider:sendmessages'] = 'Verschicke Nachrichten';
@@ -51,6 +51,10 @@ $string['shortcodesshowallsports'] = "Liste aller sportarten";
 
 // General strings.
 $string['campaigns'] = 'Kampagnen';
+$string['collapsedescriptionoff'] = 'Beschreibungen nicht einklappen';
+$string['collapsedescriptionmaxlength'] = 'Beschreibungen einklappen (Zeichenanzahl)';
+$string['collapsedescriptionmaxlength_desc'] = 'Geben Sie die maximale Anzahl an Zeichen, die eine Beschreibung haben darf, ein.
+Beschreibungen, die länger sind werden eingeklappt.';
 $string['dayofweek'] = 'Wochentag';
 $string['editavailabilityanddescription'] = 'Verfügbarkeit & Beschreibung bearbeiten';
 $string['editavailability'] = 'Verfügbarkeit bearbeiten';
@@ -64,6 +68,7 @@ $string['substitutionspool:mailproblems'] = 'Hier klicken, wenn Sie Probleme bei
 $string['substitutionspool:copypastemails'] = 'Kopieren Sie die folgenden E-Mail-Adressen in das BCC-Feld Ihres E-Mail-Programms:';
 $string['gateway'] = 'Gateway';
 $string['invisibleoption'] = '<i class="fa fa-eye-slash" aria-hidden="true"></i>';
+$string['showmore'] = 'Zeige mehr';
 $string['sportsdivision'] = 'Sparte';
 $string['sportsdivisions'] = 'Sparten';
 $string['titleprefix'] = 'Kursnummer';

@@ -245,7 +245,8 @@ class musi_table extends wunderbyte_table {
                 $ret =
                     '<div>' . $shortdescription .
                         '<a data-toggle="collapse" href="#collapseDescription' . $values->id . '" role="button"
-                            aria-expanded="false" aria-controls="collapseDescription"> ' . get_string('showmore', 'local_musi') . '</a>
+                            aria-expanded="false" aria-controls="collapseDescription"> ' .
+                            get_string('showmore', 'local_musi') . '</a>
                     </div>
                     <div class="collapse" id="collapseDescription' . $values->id . '">
                         <div class="card card-body border-0">' . $fulldescription . '</div>

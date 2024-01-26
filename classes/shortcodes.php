@@ -344,7 +344,7 @@ class shortcodes {
      */
     public static function allcoursescards($shortcode, $args, $content, $env, $next) {
 
-        // TODO: Define capality.
+        // TODO: Define capability.
         // phpcs:ignore Squiz.PHP.CommentedOutCode.Found
         /* if (!has_capability('moodle/site:config', $env->context)) {
             return '';
@@ -941,7 +941,8 @@ class shortcodes {
             $table->add_classes_to_subcolumns('cardlist', ['columniclassbefore' => 'fa fa-fw fa-forward'], ['bookingopeningtime']);
         }
         if (get_config('local_musi', 'musishortcodesshowbookableuntil')) {
-            $table->add_classes_to_subcolumns('cardlist', ['columniclassbefore' => 'fa fa-fw fa-step-forward'], ['bookingclosingtime']);
+            $table->add_classes_to_subcolumns('cardlist', ['columniclassbefore' => 'fa fa-fw fa-step-forward'],
+                ['bookingclosingtime']);
         }
 
         $table->add_classes_to_subcolumns('cardlist', ['columniclassbefore' => 'fa fa-fw fa-clock-o'], ['dayofweektime']);

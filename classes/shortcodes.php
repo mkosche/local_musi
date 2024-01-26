@@ -738,7 +738,7 @@ class shortcodes {
     }
 
     private static function define_filtercolumns(&$table) {
-        $table->define_filtercolumns([
+        $filtercolumns = [
             'id',
             'sport' => [
                 'localizedname' => get_string('sport', 'local_musi')
@@ -758,10 +758,14 @@ class shortcodes {
             ],
             'location' => [
                 'localizedname' => get_string('location', 'mod_booking')
-            ],  'botags' => [
+            ],
+            'botags' => [
                 'localizedname' => get_string('tags', 'core')
             ],
-            'coursestarttime' => [
+        ];
+
+        if (get_config('local_musi', 'musishortcodesshowfiltercoursetime')) {
+            $filtercolumns['coursestarttime'] = [
                 'localizedname' => get_string('timefilter:coursetime', 'mod_booking'),
                 'datepicker' => [
                     'In between' => [
@@ -775,10 +779,13 @@ class shortcodes {
                         'labelendvalue' => get_string('until', 'mod_booking'),
                         'defaultvalueend' => strtotime('+ 1 year', time()), // Can also be Unix timestamp or string "now".
                         'checkboxlabel' => get_string('apply_filter', 'local_wunderbyte_table'),
-                    ]
-                ]
-            ],
-            'bookingopeningtime' => [
+                    ],
+                ],
+            ];
+        }
+
+        if (get_config('local_musi', 'musishortcodesshowfilterbookingtime')) {
+            $filtercolumns['bookingopeningtime'] = [
                 'localizedname' => get_string('timefilter:bookingtime', 'mod_booking'),
                 'datepicker' => [
                     'In between' => [
@@ -792,8 +799,10 @@ class shortcodes {
                         'checkboxlabel' => get_string('apply_filter', 'local_wunderbyte_table'),
                     ],
                 ],
-            ],
-        ]);
+            ];
+        }
+
+        $table->define_filtercolumns($filtercolumns);
     }
 
     private static function get_booking($args) {
@@ -832,17 +841,26 @@ class shortcodes {
         }
 
         if (!empty($args['sort'])) {
-            $table->define_sortablecolumns([
+            $sortablecolumns = [
                 'titleprefix' => get_string('titleprefix', 'local_musi'),
                 'text' => get_string('coursename', 'local_musi'),
                 'sportsdivision' => get_string('sportsdivision', 'local_musi'),
                 'sport' => get_string('sport', 'local_musi'),
                 'location' => get_string('location', 'local_musi'),
-                'coursestarttime' => get_string('coursestarttime', 'mod_booking'),
-                'courseendtime' => get_string('courseendtime', 'mod_booking'),
-                'bookingopeningtime' => get_string('bookingopeningtime', 'mod_booking'),
-                'bookingclosingtime' => get_string('bookingclosingtime', 'mod_booking'),
-            ]);
+            ];
+            if (get_config('local_musi', 'musishortcodesshowstart')) {
+                $sortablecolumns['coursestarttime'] = get_string('coursestarttime', 'mod_booking');
+            }
+            if (get_config('local_musi', 'musishortcodesshowend')) {
+                $sortablecolumns['courseendtime'] = get_string('courseendtime', 'mod_booking');
+            }
+            if (get_config('local_musi', 'musishortcodesshowbookablefrom')) {
+                $sortablecolumns['bookingopeningtime'] = get_string('bookingopeningtime', 'mod_booking');
+            }
+            if (get_config('local_musi', 'musishortcodesshowbookableuntil')) {
+                $sortablecolumns['bookingclosingtime'] = get_string('bookingclosingtime', 'mod_booking');
+            }
+            $table->define_sortablecolumns($sortablecolumns);
         }
 
         $defaultorder = SORT_ASC; // Default.
@@ -887,9 +905,21 @@ class shortcodes {
             ['sport']);
         $table->add_classes_to_subcolumns('cardbody', ['columnvalueclass' => 'm-0 mt-1 mb-1 h5'], ['text']);
 
-        $subcolumns = ['teacher', 'dayofweektime', 'location', 'institution',
-            'coursestarttime', 'courseendtime',
-            'bookingopeningtime', 'bookingclosingtime', 'bookings'];
+        // Subcolumns.
+        $subcolumns = ['teacher', 'dayofweektime', 'location', 'institution'];
+        if (get_config('local_musi', 'musishortcodesshowstart')) {
+            $subcolumns[] = 'coursestarttime';
+        }
+        if (get_config('local_musi', 'musishortcodesshowend')) {
+            $subcolumns[] = 'courseendtime';
+        }
+        if (get_config('local_musi', 'musishortcodesshowbookablefrom')) {
+            $subcolumns[] = 'bookingopeningtime';
+        }
+        if (get_config('local_musi', 'musishortcodesshowbookableuntil')) {
+            $subcolumns[] = 'bookingclosingtime';
+        }
+        $subcolumns[] = 'bookings';
         if (!empty($args['showminanswers'])) {
             $subcolumns[] = 'minanswers';
         }
@@ -900,10 +930,20 @@ class shortcodes {
         $table->add_classes_to_subcolumns('cardlist', ['columniclassbefore' => 'text-secondary']);
         $table->add_classes_to_subcolumns('cardlist', ['columniclassbefore' => 'fa fa-fw fa-map-marker'], ['location']);
         $table->add_classes_to_subcolumns('cardlist', ['columniclassbefore' => 'fa fa-fw fa-building-o'], ['institution']);
-        $table->add_classes_to_subcolumns('cardlist', ['columniclassbefore' => 'fa fa-fw fa-play'], ['coursestarttime']);
-        $table->add_classes_to_subcolumns('cardlist', ['columniclassbefore' => 'fa fa-fw fa-stop'], ['courseendtime']);
-        $table->add_classes_to_subcolumns('cardlist', ['columniclassbefore' => 'fa fa-fw fa-forward'], ['bookingopeningtime']);
-        $table->add_classes_to_subcolumns('cardlist', ['columniclassbefore' => 'fa fa-fw fa-step-forward'], ['bookingclosingtime']);
+
+        if (get_config('local_musi', 'musishortcodesshowstart')) {
+            $table->add_classes_to_subcolumns('cardlist', ['columniclassbefore' => 'fa fa-fw fa-play'], ['coursestarttime']);
+        }
+        if (get_config('local_musi', 'musishortcodesshowend')) {
+            $table->add_classes_to_subcolumns('cardlist', ['columniclassbefore' => 'fa fa-fw fa-stop'], ['courseendtime']);
+        }
+        if (get_config('local_musi', 'musishortcodesshowbookablefrom')) {
+            $table->add_classes_to_subcolumns('cardlist', ['columniclassbefore' => 'fa fa-fw fa-forward'], ['bookingopeningtime']);
+        }
+        if (get_config('local_musi', 'musishortcodesshowbookableuntil')) {
+            $table->add_classes_to_subcolumns('cardlist', ['columniclassbefore' => 'fa fa-fw fa-step-forward'], ['bookingclosingtime']);
+        }
+
         $table->add_classes_to_subcolumns('cardlist', ['columniclassbefore' => 'fa fa-fw fa-clock-o'], ['dayofweektime']);
         $table->add_classes_to_subcolumns('cardlist', ['columniclassbefore' => 'fa fa-fw fa-users'], ['bookings']);
         if (!empty($args['showminanswers'])) {
@@ -926,11 +966,24 @@ class shortcodes {
     }
 
     private static function generate_table_for_list(&$table, $args) {
+
         self::fix_args($args);
+
         $subcolumnsleftside = ['text'];
-        $subcolumnsinfo = ['teacher', 'dayofweektime', 'location', 'institution',
-            'coursestarttime', 'courseendtime',
-            'bookingopeningtime', 'bookingclosingtime', 'bookings'];
+        $subcolumnsinfo = ['teacher', 'dayofweektime', 'location', 'institution'];
+        if (get_config('local_musi', 'musishortcodesshowstart')) {
+            $subcolumnsinfo[] = 'coursestarttime';
+        }
+        if (get_config('local_musi', 'musishortcodesshowend')) {
+            $subcolumnsinfo[] = 'courseendtime';
+        }
+        if (get_config('local_musi', 'musishortcodesshowbookablefrom')) {
+            $subcolumnsinfo[] = 'bookingopeningtime';
+        }
+        if (get_config('local_musi', 'musishortcodesshowbookableuntil')) {
+            $subcolumnsinfo[] = 'bookingclosingtime';
+        }
+        $subcolumnsinfo[] = 'bookings';
 
         // Check if we should add the description.
         if (get_config('local_musi', 'shortcodelists_showdescriptions')) {
@@ -971,10 +1024,18 @@ class shortcodes {
         $table->add_classes_to_subcolumns('info', ['columniclassbefore' => 'fa fa-clock-o'], ['dayofweektime']);
         $table->add_classes_to_subcolumns('info', ['columniclassbefore' => 'fa fa-map-marker'], ['location']);
         $table->add_classes_to_subcolumns('info', ['columniclassbefore' => 'fa fa-building-o'], ['institution']);
-        $table->add_classes_to_subcolumns('info', ['columniclassbefore' => 'fa fa-play'], ['coursestarttime']);
-        $table->add_classes_to_subcolumns('info', ['columniclassbefore' => 'fa fa-stop'], ['courseendtime']);
-        $table->add_classes_to_subcolumns('info', ['columniclassbefore' => 'fa fa-forward'], ['bookingopeningtime']);
-        $table->add_classes_to_subcolumns('info', ['columniclassbefore' => 'fa fa-step-forward'], ['bookingclosingtime']);
+        if (get_config('local_musi', 'musishortcodesshowstart')) {
+            $table->add_classes_to_subcolumns('info', ['columniclassbefore' => 'fa fa-play'], ['coursestarttime']);
+        }
+        if (get_config('local_musi', 'musishortcodesshowend')) {
+            $table->add_classes_to_subcolumns('info', ['columniclassbefore' => 'fa fa-stop'], ['courseendtime']);
+        }
+        if (get_config('local_musi', 'musishortcodesshowbookablefrom')) {
+            $table->add_classes_to_subcolumns('info', ['columniclassbefore' => 'fa fa-forward'], ['bookingopeningtime']);
+        }
+        if (get_config('local_musi', 'musishortcodesshowbookableuntil')) {
+            $table->add_classes_to_subcolumns('info', ['columniclassbefore' => 'fa fa-step-forward'], ['bookingclosingtime']);
+        }
         $table->add_classes_to_subcolumns('info', ['columniclassbefore' => 'fa fa-ticket'], ['bookings']);
         if (!empty($args['showminanswers'])) {
             $table->add_classes_to_subcolumns('info', ['columniclassbefore' => 'fa fa-arrow-up'], ['minanswers']);

@@ -48,6 +48,12 @@ $string['shortcodeslistofmybookingoptionsaslist'] = 'Meine Kurse als Liste';
 $string['shortcodeslistofteachersascards'] = 'Liste aller Trainer als Karten';
 $string['shortcodeslistofmytaughtbookingoptionsascards'] = 'Kurse, die ich unterrichte, als Karten';
 $string['shortcodesshowallsports'] = "Liste aller sportarten";
+$string['musishortcodes:showstart'] = 'Kursbeginn anzeigen';
+$string['musishortcodes:showend'] = 'Kursende anzeigen';
+$string['musishortcodes:showbookablefrom'] = '"Buchbar ab" anzeigen';
+$string['musishortcodes:showbookableuntil'] = '"Buchbar bis" anzeigen';
+$string['musishortcodes:showfiltercoursetime'] = 'Filter "Kurszeiten" anzeigen';
+$string['musishortcodes:showfilterbookingtime'] = 'Filter "Anmeldezeiten" anzeigen';
 
 // General strings.
 $string['campaigns'] = 'Kampagnen';

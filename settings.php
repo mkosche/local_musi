@@ -92,6 +92,36 @@ if ($hassiteconfig) {
             new admin_setting_configcheckbox('local_musi/shortcodelists_showdescriptions',
                 get_string('shortcodelists_showdescriptions', 'local_musi'), '', 0));
 
+        $settings->add(
+            new admin_setting_configcheckbox('local_musi/musishortcodesshowstart',
+                get_string('musishortcodes:showstart', 'local_musi'), '', 0));
+
+        $settings->add(
+            new admin_setting_configcheckbox('local_musi/musishortcodesshowend',
+                get_string('musishortcodes:showend', 'local_musi'), '', 0));
+
+        $settings->add(
+            new admin_setting_configcheckbox('local_musi/musishortcodesshowbookablefrom',
+                get_string('musishortcodes:showbookablefrom', 'local_musi'), '', 0));
+
+        $settings->add(
+            new admin_setting_configcheckbox('local_musi/musishortcodesshowbookableuntil',
+                get_string('musishortcodes:showbookableuntil', 'local_musi'), '', 0));
+
+        $showfiltercoursetimesetting = new admin_setting_configcheckbox('local_musi/musishortcodesshowfiltercoursetime',
+            get_string('musishortcodes:showfiltercoursetime', 'local_musi'), '', 0);
+        $showfiltercoursetimesetting->set_updatedcallback(function() {
+            cache_helper::purge_by_event('setbackoptionstable');
+        });
+        $settings->add($showfiltercoursetimesetting);
+
+        $showfilterbookingtimesetting = new admin_setting_configcheckbox('local_musi/musishortcodesshowfilterbookingtime',
+            get_string('musishortcodes:showfilterbookingtime', 'local_musi'), '', 0);
+        $showfilterbookingtimesetting->set_updatedcallback(function() {
+            cache_helper::purge_by_event('setbackoptionstable');
+        });
+        $settings->add($showfilterbookingtimesetting);
+
         $collapsedescriptionoptions = [
             0 => get_string('collapsedescriptionoff', 'local_musi'),
             100 => "100",

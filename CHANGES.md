@@ -1,3 +1,7 @@
+## Version 0.8.2 (2024012900)
+* New feature: Add new setting to collapse descriptions with a certain length.
+* New feature: Add settings to (de)activate time filters, start time, end time, bookable from and bookable until.
+
 ## Version 0.8.1 (2024012400)
 * Bugfix: Improve infinitescrollpage attribute.
 * Bugfix: Use 30 as default for infinite scroll and cast to int earlier.

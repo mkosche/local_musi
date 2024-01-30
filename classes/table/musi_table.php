@@ -249,7 +249,7 @@ class musi_table extends wunderbyte_table {
                             get_string('showmore', 'local_musi') . '</a>
                     </div>
                     <div class="collapse" id="collapseDescription' . $values->id . '">
-                        <div class="card card-body border-0">' . $fulldescription . '</div>
+                        <div class="card card-body border-1 mt-1 mb-1 mr-3">' . $fulldescription . '</div>
                     </div>';
             }
         }

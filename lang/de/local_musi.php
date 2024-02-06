@@ -74,7 +74,7 @@ $string['substitutionspool:mailproblems'] = 'Hier klicken, wenn Sie Probleme bei
 $string['substitutionspool:copypastemails'] = 'Kopieren Sie die folgenden E-Mail-Adressen in das BCC-Feld Ihres E-Mail-Programms:';
 $string['gateway'] = 'Gateway';
 $string['invisibleoption'] = '<i class="fa fa-eye-slash" aria-hidden="true"></i>';
-$string['showmore'] = 'Zeige mehr';
+$string['showdescription'] = 'Zeige Beschreibung';
 $string['sportsdivision'] = 'Sparte';
 $string['sportsdivisions'] = 'Sparten';
 $string['titleprefix'] = 'Kursnummer';

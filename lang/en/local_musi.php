@@ -73,7 +73,7 @@ $string['substitutionspool:mailproblems'] = 'Click here if you have problems wit
 $string['substitutionspool:copypastemails'] = 'You can copy the emails manually and paste them into the BCC of your mail client:';
 $string['gateway'] = 'Gateway';
 $string['invisibleoption'] = '<i class="fa fa-eye-slash" aria-hidden="true"></i>';
-$string['showmore'] = 'Show more';
+$string['showdescription'] = 'Show description';
 $string['sportsdivision'] = 'Sports division';
 $string['sportsdivisions'] = 'Sports divisions';
 $string['titleprefix'] = 'Course number';

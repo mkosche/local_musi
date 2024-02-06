@@ -1,3 +1,7 @@
+## Version 0.8.3 (2024020600)
+* Improvement: Styling of booking description in musi_table.
+* Improvement: Collapse the full description and do not show it twice.
+
 ## Version 0.8.2 (2024012900)
 * New feature: Add new setting to collapse descriptions with a certain length.
 * New feature: Add settings to (de)activate time filters, start time, end time, bookable from and bookable until.

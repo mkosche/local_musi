@@ -456,7 +456,7 @@ class musi_table extends wunderbyte_table {
             // ...is a teacher of this option.
             // ...has the system-wide "updatebooking" capability (admins).
             $gotomoodlecourse = get_string('tocoursecontent', 'local_musi');
-            $ret = "<a href='$courseurl' target='_self' class='btn btn-primary mt-2 mb-2 w-100'>
+            $ret = "<a href='$courseurl' target='_self' class='btn btn-primary p-1 mt-2 mb-2 w-100'>
                 <i class='fa fa-graduation-cap fa-fw' aria-hidden='true'></i>&nbsp;&nbsp;$gotomoodlecourse
             </a>";
         }

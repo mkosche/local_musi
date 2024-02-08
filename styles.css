@@ -184,12 +184,6 @@
     .shortcodes_responsive_table td:last-child {
         border-bottom: 0;
     }
-
-    .wunderbyte-table-list .rows-container .row {
-        border: 1px solid #c3c3c3;
-        border-radius: 5px;
-        margin-bottom: 20px;
-    }
 }
 
 .wunderbyte-table-list .rows-container .row {

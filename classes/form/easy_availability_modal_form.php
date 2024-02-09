@@ -17,9 +17,7 @@
 namespace local_musi\form;
 
 use context_module;
-use MoodleQuickForm;
 use mod_booking\booking_option;
-use mod_booking\form\option_form;
 use mod_booking\singleton_service;
 use moodle_exception;
 use stdClass;
@@ -296,7 +294,7 @@ class easy_availability_modal_form extends \core_form\dynamic_form {
         }
 
         // Third param is 2 (MOD_BOOKING_UPDATE_OPTIONS_PARAM_REDUCED).
-        if (booking_update_options($optionvalues, $context, 2)) {
+        if (booking_option::update($optionvalues, $context, 2)) {
             return true;
         }
 

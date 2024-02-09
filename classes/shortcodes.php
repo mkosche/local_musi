@@ -906,7 +906,7 @@ class shortcodes {
         $table->add_classes_to_subcolumns('cardbody', ['columnvalueclass' => 'm-0 mt-1 mb-1 h5'], ['text']);
 
         // Subcolumns.
-        $subcolumns = ['teacher', 'dayofweektime', 'location', 'institution'];
+        $subcolumns = ['teacher', 'dayofweektime', 'location', 'institution', 'responsiblecontact'];
         if (get_config('local_musi', 'musishortcodesshowstart')) {
             $subcolumns[] = 'coursestarttime';
         }
@@ -930,6 +930,7 @@ class shortcodes {
         $table->add_classes_to_subcolumns('cardlist', ['columniclassbefore' => 'text-secondary']);
         $table->add_classes_to_subcolumns('cardlist', ['columniclassbefore' => 'fa fa-fw fa-map-marker'], ['location']);
         $table->add_classes_to_subcolumns('cardlist', ['columniclassbefore' => 'fa fa-fw fa-building-o'], ['institution']);
+        $table->add_classes_to_subcolumns('cardlist', ['columniclassbefore' => 'fa fa-user'], ['responsiblecontact']);
 
         if (get_config('local_musi', 'musishortcodesshowstart')) {
             $table->add_classes_to_subcolumns('cardlist', ['columniclassbefore' => 'fa fa-fw fa-play'], ['coursestarttime']);
@@ -971,7 +972,7 @@ class shortcodes {
         self::fix_args($args);
 
         $subcolumnsleftside = ['text'];
-        $subcolumnsinfo = ['teacher', 'dayofweektime', 'location', 'institution'];
+        $subcolumnsinfo = ['teacher', 'dayofweektime', 'location', 'institution', 'responsiblecontact'];
         if (get_config('local_musi', 'musishortcodesshowstart')) {
             $subcolumnsinfo[] = 'coursestarttime';
         }
@@ -1025,6 +1026,7 @@ class shortcodes {
         $table->add_classes_to_subcolumns('info', ['columniclassbefore' => 'fa fa-clock-o'], ['dayofweektime']);
         $table->add_classes_to_subcolumns('info', ['columniclassbefore' => 'fa fa-map-marker'], ['location']);
         $table->add_classes_to_subcolumns('info', ['columniclassbefore' => 'fa fa-building-o'], ['institution']);
+        $table->add_classes_to_subcolumns('info', ['columniclassbefore' => 'fa fa-user'], ['responsiblecontact']);
         if (get_config('local_musi', 'musishortcodesshowstart')) {
             $table->add_classes_to_subcolumns('info', ['columniclassbefore' => 'fa fa-play'], ['coursestarttime']);
         }

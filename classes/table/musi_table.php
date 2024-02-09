@@ -686,6 +686,34 @@ class musi_table extends wunderbyte_table {
 
     /**
      * This function is called for each data row to allow processing of the
+     * responsiblecontact value.
+     *
+     * @param object $values Contains object with all the values of record.
+     * @return string $string Return a link to the responsible contact's user profile.
+     * @throws dml_exception
+     */
+    public function col_responsiblecontact($values) {
+        $settings = singleton_service::get_instance_of_booking_option_settings($values->id);
+        $ret = '';
+        if (empty($settings->responsiblecontact)) {
+            return $ret;
+        }
+        if ($user = singleton_service::get_instance_of_user($settings->responsiblecontact)) {
+            $userstring = "$user->firstname $user->lastname";
+            $emailstring = " ($user->email)";
+            if ($this->is_downloading()) {
+                $ret = $userstring . $emailstring;
+            } else {
+                $profileurl = new moodle_url('/user/profile.php', ['id' => $settings->responsiblecontact]);
+                $ret = get_string('responsible', 'mod_booking')
+                    . ":&nbsp;" . html_writer::link($profileurl, $userstring);
+            }
+        }
+        return $ret;
+    }
+
+    /**
+     * This function is called for each data row to allow processing of the
      * action button.
      *
      * @param object $values Contains object with all the values of record.

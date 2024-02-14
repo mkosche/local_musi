@@ -1,3 +1,6 @@
+## Version 0.8.5 (2024021400)
+* Bugfix: Fixes for easy availability form.
+
 ## Version 0.8.4 (2024020900)
 * Improvement: Slightly smaller Moodle course button.
 * Improvement: Add responsible contact to MUSI shortcode.

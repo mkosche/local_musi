@@ -225,7 +225,7 @@ $string['action'] = 'Action';
 // Easy availability feature.
 $string['easyavailability:overbook'] = 'Even if the course is fully booked';
 $string['easyavailability:previouslybooked'] = 'Users who already booked a specific USI course are always allowed to book';
-$string['easyavailability:selectusers'] = 'Selected users are allowed to book outside this timespan';
+$string['easyavailability:selectusers'] = 'Selected users are allowed to book outside normal booking times';
 $string['easyavailability:formincompatible'] = '<div class="alert alert-warning">This form uses availability conditions
  that are incompatible with this form. Please contact a M:USI admin.</div>';
  $string['easyavailability:openingtime'] = 'Can be booked from';

@@ -778,13 +778,10 @@ class musi_table extends wunderbyte_table {
 
                 // The simplified availability menu.
                 $alloweditavailability = (
-                    // Admin capability.
-                    has_capability('mod/booking:updatebooking', $this->context) ||
-                    // Or: Everyone with the M:USI editavailability capability.
-                    has_capability('local/musi:editavailability', $this->context) ||
-                    // Or: Teachers can edit the availability of their own option.
+                    has_capability('local/musi:editavailability', $this->context) &&
+                    (has_capability('mod/booking:updatebooking', $this->context) ||
                     (has_capability('mod/booking:addeditownoption', $this->context) && booking_check_if_teacher($values)) ||
-                    (has_capability('mod/booking:limitededitownoption', $this->context) && booking_check_if_teacher($values))
+                    (has_capability('mod/booking:limitededitownoption', $this->context) && booking_check_if_teacher($values)))
                 );
                 if ($alloweditavailability) {
                     $data->editavailability = true;

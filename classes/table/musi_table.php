@@ -80,12 +80,7 @@ class musi_table extends wunderbyte_table {
         /* $this->outputbooking = $PAGE->get_renderer('mod_booking');
         $this->outputmusi = $PAGE->get_renderer('local_musi'); */
 
-        // We set buyforuser here for better performance.
-        if (empty($buyforuserid)) {
-            $this->buyforuser = price::return_user_to_buy_for();
-        } else {
-            $this->buyforuser = singleton_service::get_instance_of_user($buyforuserid);
-        }
+        $this->buyforuser = price::return_user_to_buy_for();
 
         // Columns and headers are not defined in constructor, in order to keep things as generic as possible.
     }
@@ -183,6 +178,8 @@ class musi_table extends wunderbyte_table {
         // Render col_price using a template.
         $settings = singleton_service::get_instance_of_booking_option_settings($values->id, $values);
 
+        $this->buyforuser = price::return_user_to_buy_for();
+
         return booking_bookit::render_bookit_button($settings, $this->buyforuser->id);
     }
 
@@ -199,6 +196,8 @@ class musi_table extends wunderbyte_table {
         if (!$this->booking) {
             $this->booking = singleton_service::get_instance_of_booking_by_bookingid($values->bookingid);
         }
+
+        $this->buyforuser = price::return_user_to_buy_for();
 
         if ($this->booking) {
             $url = new moodle_url('/mod/booking/optionview.php', ['optionid' => $values->id,
@@ -272,6 +271,9 @@ class musi_table extends wunderbyte_table {
 
         $settings = singleton_service::get_instance_of_booking_option_settings($values->id, $values);
         // Render col_bookings using a template.
+
+        $this->buyforuser = price::return_user_to_buy_for();
+
         $data = new col_availableplaces($values, $settings, $this->buyforuser);
         if (!empty($this->displayoptions['showmaxanwers'])) {
             $data->showmaxanswers = $this->displayoptions['showmaxanwers'];
@@ -430,7 +432,6 @@ class musi_table extends wunderbyte_table {
      * @throws coding_exception
      */
     public function col_course($values) {
-        global $USER;
 
         $settings = singleton_service::get_instance_of_booking_option_settings($values->id, $values);
         $ret = '';
@@ -442,8 +443,10 @@ class musi_table extends wunderbyte_table {
             return $courseurl;
         }
 
+        $this->buyforuser = price::return_user_to_buy_for();
+
         $answersobject = singleton_service::get_instance_of_booking_answers($settings);
-        $status = $answersobject->user_status($USER->id);
+        $status = $answersobject->user_status($this->buyforuser->id);
 
         $isteacherofthisoption = booking_check_if_teacher($values);
 
@@ -740,6 +743,9 @@ class musi_table extends wunderbyte_table {
         // This is in case we render modal.
         $data->modalcounter = $values->id;
         $data->modaltitle = $values->text;
+
+        $this->buyforuser = price::return_user_to_buy_for();
+
         $data->userid = $this->buyforuser->id;
 
         // Get the URL to edit the option.

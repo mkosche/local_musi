@@ -777,7 +777,7 @@ class shortcodes {
                         'labelstartvalue' => get_string('from', 'mod_booking'),
                         'defaultvaluestart' => 'now', // Can also be Unix timestamp or string "now".
                         'labelendvalue' => get_string('until', 'mod_booking'),
-                        'defaultvalueend' => strtotime('+ 1 year', time()), // Can also be Unix timestamp or string "now".
+                        'defaultvalueend' => 'now + 1 year', // Can also be Unix timestamp or string "now".
                         'checkboxlabel' => get_string('apply_filter', 'local_wunderbyte_table'),
                     ],
                 ],
@@ -795,7 +795,7 @@ class shortcodes {
                         'labelstartvalue' => get_string('bookingopeningtime', 'mod_booking'),
                         'defaultvaluestart' => 'now', // Can also be Unix timestamp or string "now".
                         'labelendvalue' => get_string('bookingclosingtime', 'mod_booking'),
-                        'defaultvalueend' => strtotime('+ 1 year', time()), // Can also be Unix timestamp or string "now".
+                        'defaultvalueend' => 'now + 1 year', // Can also be Unix timestamp or string "now".
                         'checkboxlabel' => get_string('apply_filter', 'local_wunderbyte_table'),
                     ],
                 ],

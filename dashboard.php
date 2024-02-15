@@ -38,7 +38,7 @@ if (!$context = context_system::instance()) {
 $PAGE->set_context($context);
 $PAGE->set_url('/local/musi/dashboard.php');
 
-if ((has_capability('mod/booking:updatebooking', $context) || has_capability('mod/booking:addeditownoption', $context)) == false) {
+if (!has_capability('mod/booking:updatebooking', $context)) {
     echo $OUTPUT->header();
     echo $OUTPUT->heading(get_string('accessdenied', 'mod_booking'), 4);
     echo get_string('nopermissiontoaccesspage', 'mod_booking');

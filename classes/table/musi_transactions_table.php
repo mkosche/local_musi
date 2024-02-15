@@ -35,19 +35,6 @@ defined('MOODLE_INTERNAL') || die();
  */
 class musi_transactions_table extends wunderbyte_table {
 
-
-    /**
-     * Constructor
-     * @param string $uniqueid all tables have to have a unique id, this is used
-     *      as a key when storing table properties like sort order in the session.
-     */
-    public function __construct(string $uniqueid) {
-        parent::__construct($uniqueid);
-
-        global $PAGE;
-
-    }
-
     /**
      * Changes integer values from status to meaningful strings
      *

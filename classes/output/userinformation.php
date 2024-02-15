@@ -99,7 +99,7 @@ class userinformation implements renderable, templatable {
 
             // Convert unix timestamps to rendered dates.
             if (is_numeric($value)) {
-                if (strlen((string)$value) == 10) {
+                if (strlen((string)$value) > 8 && strlen((string)$value) < 12) {
                     // Localized time format.
                     switch(current_language()) {
                         case 'de':

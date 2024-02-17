@@ -363,6 +363,10 @@ class musi_table extends wunderbyte_table {
         if (isset($settings->customfields) && isset($settings->customfields['botags'])) {
             $botagsarray = $settings->customfields['botags'];
             if (!empty($botagsarray)) {
+
+                if (!is_array($botagsarray)) {
+                    $botagsarray = (array)$botagsarray;
+                }
                 foreach ($botagsarray as $botag) {
                     if (!empty($botag)) {
                         $botagsstring .=

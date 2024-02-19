@@ -1,3 +1,14 @@
+## Version 0.8.7 (2024021900)
+* Improvement: Don't store any values in wb_table classes.
+* Improvement: Delete unused file editsports.php.
+* Improvement: New way of setting default values for wb_table
+* Bugfix: Fix capabilities in MUSI dashboard.php.
+* Bugfix: Convert any numeric value beween 9 and 11 characters to date in userinformation.php.
+* Bugfix: Make sure to cast botags on array.
+
+## Version 0.8.6 (2024021401)
+* Bugfix: Don't save userid in class.
+
 ## Version 0.8.5 (2024021400)
 * Bugfix: Fixes for easy availability form.
 

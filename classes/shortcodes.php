@@ -715,6 +715,14 @@ class shortcodes {
 
         global $PAGE, $USER;
 
+        // We must make sure that we are not on cachier.
+        $url = $PAGE->url;
+
+        $url = $url->out();
+        if (strpos($url, 'cashier.php') === false) {
+            shopping_cart::buy_for_user(0);
+        }
+
         $tablename = bin2hex(random_bytes(12));
 
         // It's important to have the baseurl defined, we use it as a return url at one point.

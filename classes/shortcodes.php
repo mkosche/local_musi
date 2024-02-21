@@ -28,6 +28,7 @@ namespace local_musi;
 
 use Closure;
 use context_system;
+use html_writer;
 use mod_booking\output\page_allteachers;
 use local_musi\output\userinformation;
 use local_musi\table\musi_table;
@@ -1088,6 +1089,62 @@ class shortcodes {
         );
 
         $table->is_downloading('', 'List of booking options');
+    }
+
+    /**
+     * Prints a link to subscribe to the newsletter
+     * Supported $args: 'button' => if true, the link will be shown as button.
+     *
+     * @param string $shortcode
+     * @param array $args
+     * @param string|null $content
+     * @param object $env
+     * @param Closure $next
+     * @return void
+     */
+    public static function newslettersubscribe($shortcode, $args, $content, $env, $next) {
+
+        self::fix_args($args);
+
+        $moodleurl = new moodle_url('/local/musi/newsletter.php?action=subscribe');
+        $link = $moodleurl->out(false);
+        $renderedlink = html_writer::link($link, get_string('newslettersubscribed:title', 'local_musi'), ['target' => '_blank']);
+        if (isset($args['button']) && ($args['button'] == 1 || $args['button'] == true || $args['button'] == "true")) {
+            $renderedlink = html_writer::link($link, get_string('newslettersubscribed:title', 'local_musi'), [
+                'class' => 'btn btn-sm btn-primary',
+                'target' => '_blank',
+            ]);
+        }
+
+        return $renderedlink;
+    }
+
+    /**
+     * Prints a link to unsubscribe from the newsletter
+     * Supported $args: 'button' => if true, the link will be shown as button.
+     *
+     * @param string $shortcode
+     * @param array $args
+     * @param string|null $content
+     * @param object $env
+     * @param Closure $next
+     * @return void
+     */
+    public static function newsletterunsubscribe($shortcode, $args, $content, $env, $next) {
+
+        self::fix_args($args);
+
+        $moodleurl = new moodle_url('/local/musi/newsletter.php?action=unsubscribe');
+        $link = $moodleurl->out(false);
+        $renderedlink = html_writer::link($link, get_string('newsletterunsubscribed:title', 'local_musi'), ['target' => '_blank']);
+        if (isset($args['button']) && ($args['button'] == 1 || $args['button'] == true || $args['button'] == "true")) {
+            $renderedlink = html_writer::link($link, get_string('newsletterunsubscribed:title', 'local_musi'), [
+                'class' => 'btn btn-sm btn-danger',
+                'target' => '_blank',
+            ]);
+        }
+
+        return $renderedlink;
     }
 
     /**

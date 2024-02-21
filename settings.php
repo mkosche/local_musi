@@ -140,6 +140,36 @@ if ($hassiteconfig) {
                 get_string('collapsedescriptionmaxlength_desc', 'local_musi'),
                 300, $collapsedescriptionoptions));
 
+        // Newsletter settings.
+        $settings->add(
+            new admin_setting_heading('newslettersettingsheading',
+                get_string('newslettersettingsheading', 'local_musi'), get_string('newslettersettingsdesc', 'local_musi')));
+
+        // Choose the user profile field which is used to store each user's price category.
+        $userprofilefieldsarray[0] = get_string('choose...', 'mod_booking');
+        $userprofilefields = profile_get_custom_fields();
+        if (!empty($userprofilefields)) {
+            // Create an array of key => value pairs for the dropdown.
+            foreach ($userprofilefields as $userprofilefield) {
+                $userprofilefieldsarray[$userprofilefield->shortname] = $userprofilefield->name;
+            }
+        }
+        $settings->add(
+            new admin_setting_configselect('local_musi/newsletterprofilefield',
+                get_string('newsletterprofilefield', 'local_musi'),
+                get_string('newsletterprofilefielddesc', 'local_musi'),
+                0, $userprofilefieldsarray));
+
+        $settings->add(
+            new admin_setting_configtext('local_musi/newslettersubscribed',
+                get_string('newslettersubscribed', 'local_musi'),
+                '', get_string('yes')));
+
+        $settings->add(
+            new admin_setting_configtext('local_musi/newsletterunsubscribed',
+                get_string('newsletterunsubscribed', 'local_musi'),
+                '', get_string('no')));
+
         // CONTRACT MANAGEMENT.
         // phpcs:ignore Squiz.PHP.CommentedOutCode.Found
         /* $settings->add(

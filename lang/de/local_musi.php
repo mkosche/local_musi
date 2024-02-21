@@ -37,6 +37,21 @@ $string['musi:viewsubstitutionspool'] = 'Kann den Vertretungspool für einzelne 
 // Caches.
 $string['cachedef_cachedpaymenttable'] = 'Zahlungstransaktionen (Cache)';
 
+// Settings.
+$string['newslettersettingsheading'] = 'Newsletter-Einstellungen';
+$string['newslettersettingsdesc'] = 'Nach korrekter Konfiguration können Sie folgende Shortcodes verwenden:<br>
+<b>[newslettersubscribe], [newsletterunsubscribe], [newslettersubscribe button=true], [newsletterunsubscribe button=true]</b>';
+$string['newsletterprofilefield'] = 'Profilfeld für die Newsletter-Anmeldung';
+$string['newsletterprofilefielddesc'] = 'Wählen Sie das benutzerdefinierte Nutzerprofilfeld, in dem gespeichert wird, ob ein:e Benutzer:in für den Newsletter angemeldet ist.';
+$string['newslettersubscribed'] = 'Wert für die Einschreibung in den Newsletter';
+$string['newsletterunsubscribed'] = 'Wert für die Ausschreibung aus dem Newsletter';
+$string['newslettersubscribed:title'] = 'Zum Newsletter anmelden';
+$string['newslettersubscribed:description'] = 'Sie wurden erfolgreich für den Newsletter angemeldet.';
+$string['newsletterunsubscribed:title'] = 'Vom Newsletter abmelden';
+$string['newsletterunsubscribed:description'] = 'Sie wurden erfolgreich vom Newsletter abgemeldet.';
+$string['newslettersubscribed:error'] = 'Bei der Newsletter-Anmeldung ist ein Fehler aufgetreten. Bitte wenden Sie sich an einen Admin.';
+$string['newsletterunsubscribed:error'] = 'Bei der Newsletter-Abmeldung ist ein Fehler aufgetreten. Bitte wenden Sie sich an einen Admin.';
+
 // Shortcodes.
 $string['shortcodelists'] = 'Shortcode-Listen';
 $string['shortcodelists_desc'] = 'Hier können Sie Listen konfigurieren, die durch Shortcodes (z.B. [allekurseliste]) generiert werden.';
@@ -47,7 +62,9 @@ $string['shortcodeslistofmybookingoptionsascards'] = 'Meine Kurse als Karten';
 $string['shortcodeslistofmybookingoptionsaslist'] = 'Meine Kurse als Liste';
 $string['shortcodeslistofteachersascards'] = 'Liste aller Trainer als Karten';
 $string['shortcodeslistofmytaughtbookingoptionsascards'] = 'Kurse, die ich unterrichte, als Karten';
-$string['shortcodesshowallsports'] = "Liste aller sportarten";
+$string['shortcodesshowallsports'] = "Liste aller Sportarten";
+$string['shortcodesnewslettersubscribe'] = "Zum Newsletter anmelden";
+$string['shortcodesnewsletterunsubscribe'] = "Vom Newsletter abmelden";
 $string['musishortcodes:showstart'] = 'Kursbeginn anzeigen';
 $string['musishortcodes:showend'] = 'Kursende anzeigen';
 $string['musishortcodes:showbookablefrom'] = '"Buchbar ab" anzeigen';

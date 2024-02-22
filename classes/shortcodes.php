@@ -139,12 +139,10 @@ class shortcodes {
             $args['countlabel'] = false;
         }
 
-        $infinitescrollpage = is_numeric($args['infinitescrollpage'] ?? '') ? (int)$args['infinitescrollpage'] : 30;
-
         if (
             !isset($args['perpage'])
             || !is_int((int)$args['perpage'])
-            || !$perpage = ($args['perpage'])
+            || !$perpage = ((int)$args['perpage'])
         ) {
             $perpage = 1000;
         }
@@ -184,9 +182,6 @@ class shortcodes {
 
         $table->cardsort = true;
 
-        // This allows us to use infinite scrolling, No pages will be used.
-        $table->infinitescroll = $infinitescrollpage;
-
         $table->tabletemplate = 'local_musi/table_list';
         $table->showcountlabel = true;
 
@@ -224,8 +219,6 @@ class shortcodes {
         if (!isset($args['category']) || !$category = ($args['category'])) {
             $category = '';
         }
-
-        $infinitescrollpage = is_numeric($args['infinitescrollpage'] ?? '') ? (int)$args['infinitescrollpage'] : 30;
 
         if (
             !isset($args['perpage'])
@@ -314,9 +307,6 @@ class shortcodes {
 
         self::set_table_options_from_arguments($table, $args);
 
-        // This allows us to use infinite scrolling, No pages will be used.
-        $table->infinitescroll = $infinitescrollpage;
-
         $table->tabletemplate = 'local_musi/table_grid_list';
 
         // If we find "nolazy='1'", we return the table directly, without lazy loading.
@@ -357,8 +347,6 @@ class shortcodes {
             $category = '';
         }
 
-        $infinitescrollpage = is_numeric($args['infinitescrollpage'] ?? '') ? (int)$args['infinitescrollpage'] : 30;
-
         if (
             !isset($args['perpage'])
             || !is_int((int)$args['perpage'])
@@ -393,9 +381,6 @@ class shortcodes {
         self::generate_table_for_cards($table, $args);
 
         self::set_table_options_from_arguments($table, $args);
-
-        // This allows us to use infinite scrolling, No pages will be used.
-        $table->infinitescroll = $infinitescrollpage;
 
         $table->tabletemplate = 'local_musi/table_card';
 
@@ -584,8 +569,6 @@ class shortcodes {
             $args['countlabel'] = false;
         }
 
-        $infinitescrollpage = is_numeric($args['infinitescrollpage'] ?? '') ? (int)$args['infinitescrollpage'] : 30;
-
         $table = self::inittableforcourses($booking);
 
         $table->showcountlabel = $args['countlabel'];
@@ -615,9 +598,6 @@ class shortcodes {
         self::set_table_options_from_arguments($table, $args);
 
         $table->cardsort = true;
-
-        // This allows us to use infinite scrolling, No pages will be used.
-        $table->infinitescroll = $infinitescrollpage;
 
         $table->tabletemplate = 'local_musi/table_list';
 
@@ -882,6 +862,17 @@ class shortcodes {
             $table->sortable(true, $args['sortby'], $defaultorder);
         } else {
             $table->sortable(true, 'text', $defaultorder);
+        }
+
+        if (isset($args['pageable']) && ($args['pageable'] == 1 || $args['pageable'] == true)) {
+            $table->pageable(true);
+            $table->stickyheader = true;
+        }
+
+        if (!isset($args['pageable']) || $args['pageable'] == 0 || $args['pageable'] == "false" || $args['pageable'] == false) {
+            $infinitescrollpage = is_numeric($args['infinitescrollpage'] ?? '') ? (int)$args['infinitescrollpage'] : 30;
+            // This allows us to use infinite scrolling, No pages will be used.
+            $table->infinitescroll = $infinitescrollpage;
         }
 
         if (isset($args['requirelogin']) && $args['requirelogin'] == "false") {

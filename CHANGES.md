@@ -1,3 +1,7 @@
+## Version 0.8.9 (2024022600)
+* Improvement: Better layout for table row.
+* Bugfix: Fix calls of newsletter functions (will always use $USER, so no param necessary).
+
 ## Version 0.8.8 (2024022300)
 * New feature: New shortcodes for easy (un-)subscription to/from newsletter profile field.
 * Improvement: Fix template for MUSI shortcodes table and add pageable and perpage to allcourseslist.

@@ -60,7 +60,7 @@ if (empty($newsletterprofilefield)) {
         'A config setting is missing. Please contact an admin';
     $alerttype = 'danger';
 } else if ($action == 'subscribe') {
-    if (subscribe_to_newsletter($user)) {
+    if (subscribe_to_newsletter()) {
         $title = get_string('newslettersubscribed:title', 'local_musi');
         $description = get_string('newslettersubscribed:description', 'local_musi');
         $alerttype = 'success';
@@ -70,7 +70,7 @@ if (empty($newsletterprofilefield)) {
         $alerttype = 'danger';
     }
 } else if ($action == 'unsubscribe') {
-    if (unsubscribe_from_newsletter($user)) {
+    if (unsubscribe_from_newsletter()) {
         $title = get_string('newsletterunsubscribed:title', 'local_musi');
         $description = get_string('newsletterunsubscribed:description', 'local_musi');
         $alerttype = 'success';
